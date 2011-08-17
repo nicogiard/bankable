@@ -39,9 +39,6 @@ public class Operation extends Model {
 
 	public String detail;
 
-	@Column(columnDefinition = "Decimal(10,2)")
-	public Float solde;
-
 	@Required
 	@Enumerated(EnumType.STRING)
 	public EEtatOperation etat;

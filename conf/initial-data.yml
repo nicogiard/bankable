@@ -15,6 +15,10 @@ Devise(dollar):
 Tag(tagSalaire):
   nom: Salaire
   showOnGraph: true
+  
+Tag(tagDAB):
+  nom: DAB
+  showOnGraph: true
 
 
 #-----------------------------------
@@ -36,9 +40,20 @@ Operation(op1):
   libelle: Retrait
   type: DEBIT
   montant: 100
-  solde: 0
   etat: NONPOINTEE
   compte: compteCourant
+  tags: 
+    - tagDAB
+
+Operation(op2):
+  date: 2011-08-06
+  libelle: Salaire
+  type: CREDIT
+  montant: 1000
+  etat: NONPOINTEE
+  compte: compteCourant
+  tags: 
+    - tagSalaire
 
 #-----------------------------------
 # Echeance

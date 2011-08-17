@@ -43,6 +43,7 @@ $(document).ready(function() {
 			#{form @Operations.enregistrer()}
 				#{if operation}
 				<input type="hidden" name="operation.id" value="${operation.id}"/>
+				<input type="hidden" name="oldMontant" value="${operation.montant}"/>
 				#{/if}
 				<input type="hidden" name="operation.compte.id" value="${compte.id}"/>
 				<p>

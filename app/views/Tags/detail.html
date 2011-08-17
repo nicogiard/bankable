@@ -46,15 +46,14 @@
         <table>
             <thead>
                 <tr>
-                	<th>Description</th><th class="debitCredit">Montant</th><th class="solde">Solde</th><th>Tags</th><th class="date">Date</th>
+                	<th>Description</th><th class="debitCredit">Montant</th><th>Tags</th><th class="date">Date</th>
                 </tr>
             </thead>
             <tbody>
                 #{list items:operations, as:'operation'}
 				<tr>
 					<td class="libelle">${operation.libelle}</td>
-					<td class="debitCredit">#{if operation.type.nom == "Débit"}<img src="@{'/public/images/minus.gif'}" title="D&eacute;bit" class="debitCredit">#{/if}#{else}<img src="@{'/public/images/plus.gif'}" title="Cr&eacute;dit" class="debitCredit">#{/else}${operation.montant.format('0.00')}&nbsp;${operation.compte.devise.symbole}</td>
-					<td class="solde">#{if operation.solde <= 0}<img src="@{'/public/images/minus.gif'}" title="D&eacute;bit" class="debitCredit">#{/if}#{else}<img src="@{'/public/images/plus.gif'}" title="Cr&eacute;dit" class="debitCredit">#{/else}${operation.solde.format('0.00')}&nbsp;${operation.compte.devise.symbole}</td>
+					<td class="debitCredit">#{if models.ETypeOperation.DEBIT == operation.type}<img src="@{'/public/images/minus.gif'}" title="D&eacute;bit" class="debitCredit">#{/if}#{else}<img src="@{'/public/images/plus.gif'}" title="Cr&eacute;dit" class="debitCredit">#{/else}${operation.montant.format('0.00')}&nbsp;${operation.compte.devise.symbole}</td>
 					<td class="tags">#{if operation.tags}${operation.tags.join('nom', ', ')}#{/if}#{else}<span class="noTag">(aucun)</span>#{/else}</td>
 					<td class="date"><span title="${operation.date.format('dd/MM/yyyy HH:mm:ss')}">${operation.date.format('dd/MM/yyyy')}</span></td>
 				</tr>
