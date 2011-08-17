@@ -12,6 +12,9 @@ Devise(dollar):
 #-----------------------------------
 # Tag
 #-----------------------------------
+Tag(tagSalaire):
+  nom: Salaire
+  showOnGraph: true
 
 
 #-----------------------------------
@@ -19,7 +22,7 @@ Devise(dollar):
 #-----------------------------------
 Compte(compteCourant):
   nom: Compte Courant
-  solde: 518.41
+  solde: 0
   devise: euro
   numero: 12
   etablissement: Caisse d'Epargne Normandie
@@ -28,17 +31,32 @@ Compte(compteCourant):
 #-----------------------------------
 # Operation
 #-----------------------------------
-
+Operation(op1):
+  date: 2011-08-17
+  libelle: Retrait
+  type: DEBIT
+  montant: 100
+  solde: 0
+  etat: NONPOINTEE
+  compte: compteCourant
 
 #-----------------------------------
 # Echeance
 #-----------------------------------
-
+Echeance(ec1):
+  description: Salaire
+  date: 2011-07-30
+  type: CREDIT
+  montant: 2700
+  compte: compteCourant
+  typeFrequence: MENSUELLE
+  tag: tagSalaire
 
 #-----------------------------------
 # Budget
 #-----------------------------------
-
+Budget(bc1):
+  compte: compteCourant
 
 #-----------------------------------
 # LigneBudget

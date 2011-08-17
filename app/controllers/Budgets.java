@@ -36,11 +36,12 @@ public class Budgets extends Controller {
 		Float totalActuel = 0F;
 		Float totalPrevisionnel = 0F;
 
-		for (LigneBudget ligneBudget : budget.lignes) {
-			totalActuel += ligneBudget.montantActuel;
-			totalPrevisionnel += ligneBudget.montantEcheance + ligneBudget.montantManuel;
+		if (budget != null) {
+			for (LigneBudget ligneBudget : budget.lignes) {
+				totalActuel += ligneBudget.montantActuel;
+				totalPrevisionnel += ligneBudget.montantEcheance + ligneBudget.montantManuel;
+			}
 		}
-
 		Date actualMonth = new Date();
 
 		render(compte, actualMonth, budget, totalActuel, totalPrevisionnel);
