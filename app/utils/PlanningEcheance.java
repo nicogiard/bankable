@@ -19,93 +19,18 @@ public class PlanningEcheance {
 		for (Echeance echeance : echeances) {
 			Logger.debug("echeance : [%s]", echeance.toString());
 
-			MutableDateTime dateEcheance = new MutableDateTime(echeance.date);
-			dateEcheance.setTime(0);
-
 			switch (echeance.typeFrequence) {
 			case JOURNALIERE:
-				// TODO : echeance journaliere
+				echeanceJournaliere(actualMonth, echeance);
 				break;
 			case HEBDOMADAIRE:
-				// TODO : echeance hebdomadaire
+				echeanceHebdomadaire(actualMonth, echeance);
 				break;
 			case MENSUELLE:
-				MutableDateTime firstDayOfMonth = new MutableDateTime(actualMonth);
-				firstDayOfMonth.setDayOfMonth(1);
-				Logger.debug("firstDayOfMonth : [%s]", firstDayOfMonth);
-
-				MutableDateTime lastDayOfMonth = new MutableDateTime(actualMonth);
-				lastDayOfMonth.setDayOfMonth(1);
-				lastDayOfMonth.addMonths(1);
-				lastDayOfMonth.addDays(-1);
-				Logger.debug("lastDayOfMonth : [%s]", lastDayOfMonth);
-
-				boolean isInMonth = isBetween(dateEcheance, firstDayOfMonth, lastDayOfMonth);
-				Logger.debug("isInMonth : [%s]", isInMonth);
-
-				if (isInMonth) {
-					models.PlanningEcheance planningEcheance = models.PlanningEcheance.find("echeance.id=? AND date=?", echeance.id, dateEcheance.toDate()).first();
-					if (planningEcheance == null) {
-						newPlanningEcheance(echeance, dateEcheance.toDate());
-						Logger.debug("ajout de l'écheance [%s] au jour [%s]", echeance, echeance.date);
-					}
-				} else {
-					if (dateEcheance.isBefore(firstDayOfMonth)) {
-						dateEcheance.setMonthOfYear(new DateTime(actualMonth).getMonthOfYear());
-
-						MutableDateTime dateFin = new MutableDateTime(echeance.dateFin);
-						if (echeance.dateFin == null || dateEcheance.isEqual(dateFin) || (dateEcheance.isBefore(dateFin))) {
-							models.PlanningEcheance planningEcheance = models.PlanningEcheance.find("echeance.id=? AND date=?", echeance.id, dateEcheance.toDate()).first();
-							if (planningEcheance == null) {
-								newPlanningEcheance(echeance, dateEcheance.toDate());
-								Logger.debug("ajout de l'écheance [%s] au jour [%s]", echeance, dateEcheance);
-							}
-						} else {
-							Logger.debug("dateEcheance [%s] est apres echeance.dateFin [%s]", dateEcheance, dateFin);
-						}
-					} else {
-						Logger.debug("dateEcheance [%s] est apres firstDayOfMonth [%s]", dateEcheance, firstDayOfMonth);
-					}
-				}
+				echeanceMensuelle(actualMonth, echeance);
 				break;
 			case ANNUELLE:
-				MutableDateTime firstDayOfYear = new MutableDateTime(actualMonth);
-				firstDayOfYear.setDayOfYear(1);
-				Logger.debug("firstDayOfYear : [%s]", firstDayOfYear);
-
-				MutableDateTime lastDayOfYear = new MutableDateTime(actualMonth);
-				lastDayOfYear.setDayOfYear(1);
-				lastDayOfYear.addYears(1);
-				lastDayOfYear.addDays(-1);
-				Logger.debug("lastDayOfYear : [%s]", lastDayOfYear);
-
-				boolean isInYear = isBetween(dateEcheance, firstDayOfYear, lastDayOfYear);
-				Logger.debug("isInYear : [%s]", isInYear);
-
-				if (isInYear) {
-					models.PlanningEcheance planningEcheance = models.PlanningEcheance.find("echeance.id=? AND date=?", echeance.id, dateEcheance.toDate()).first();
-					if (planningEcheance == null) {
-						newPlanningEcheance(echeance, dateEcheance.toDate());
-						Logger.debug("ajout de l'écheance [%s] au jour [%s]", echeance, echeance.date);
-					}
-				} else {
-					if (dateEcheance.isBefore(firstDayOfYear)) {
-						dateEcheance.setYear(new DateTime(actualMonth).getYear());
-
-						MutableDateTime dateFin = new MutableDateTime(echeance.dateFin);
-						if (echeance.dateFin == null || dateEcheance.isEqual(dateFin) || (dateEcheance.isBefore(dateFin))) {
-							models.PlanningEcheance planningEcheance = models.PlanningEcheance.find("echeance.id=? AND date=?", echeance.id, dateEcheance.toDate()).first();
-							if (planningEcheance == null) {
-								newPlanningEcheance(echeance, dateEcheance.toDate());
-								Logger.debug("ajout de l'écheance [%s] au jour [%s]", echeance, dateEcheance);
-							}
-						} else {
-							Logger.debug("dateEcheance [%s] est apres echeance.dateFin [%s]", dateEcheance, dateFin);
-						}
-					} else {
-						Logger.debug("dateEcheance [%s] est apres firstDayOfYear [%s]", dateEcheance, firstDayOfYear);
-					}
-				}
+				echeanceAnnuelle(actualMonth, echeance);
 				break;
 			default:
 				break;
@@ -171,13 +96,6 @@ public class PlanningEcheance {
 		return calendrier;
 	}
 
-	private static void newPlanningEcheance(Echeance echeance, Date dateEcheance) {
-		models.PlanningEcheance planningEcheance = new models.PlanningEcheance();
-		planningEcheance.echeance = echeance;
-		planningEcheance.date = dateEcheance;
-		planningEcheance.save();
-	}
-
 	public static boolean isBetween(MutableDateTime date, MutableDateTime from, MutableDateTime to) {
 		return date.isAfter(from) && date.isBefore(to);
 	}
@@ -198,5 +116,106 @@ public class PlanningEcheance {
 		date.setTime(0);
 		compare.setTime(0);
 		return date.isEqual(compare);
+	}
+
+	private static void echeanceJournaliere(Date actualMonth, Echeance echeance) {
+		// TODO : echeance journaliere
+	}
+
+	private static void echeanceHebdomadaire(Date actualMonth, Echeance echeance) {
+		// TODO : echeance hebdomadaire
+	}
+
+	private static void echeanceMensuelle(Date actualMonth, Echeance echeance) {
+		MutableDateTime firstDayOfMonth = new MutableDateTime(actualMonth);
+		firstDayOfMonth.setDayOfMonth(1);
+		Logger.debug("firstDayOfMonth : [%s]", firstDayOfMonth);
+
+		MutableDateTime lastDayOfMonth = new MutableDateTime(actualMonth);
+		lastDayOfMonth.setDayOfMonth(1);
+		lastDayOfMonth.addMonths(1);
+		lastDayOfMonth.addDays(-1);
+		Logger.debug("lastDayOfMonth : [%s]", lastDayOfMonth);
+
+		MutableDateTime dateEcheance = new MutableDateTime(echeance.date);
+		dateEcheance.setTime(0);
+
+		boolean isInMonth = isBetween(dateEcheance, firstDayOfMonth, lastDayOfMonth);
+		Logger.debug("isInMonth : [%s]", isInMonth);
+
+		if (isInMonth) {
+			models.PlanningEcheance planningEcheance = models.PlanningEcheance.find("echeance.id=? AND date=?", echeance.id, dateEcheance.toDate()).first();
+			if (planningEcheance == null) {
+				newPlanningEcheance(echeance, dateEcheance.toDate());
+				Logger.debug("ajout de l'écheance [%s] au jour [%s]", echeance, echeance.date);
+			}
+		} else {
+			if (dateEcheance.isBefore(firstDayOfMonth)) {
+				dateEcheance.setMonthOfYear(new DateTime(actualMonth).getMonthOfYear());
+
+				MutableDateTime dateFin = new MutableDateTime(echeance.dateFin);
+				if (echeance.dateFin == null || dateEcheance.isEqual(dateFin) || (dateEcheance.isBefore(dateFin))) {
+					models.PlanningEcheance planningEcheance = models.PlanningEcheance.find("echeance.id=? AND date=?", echeance.id, dateEcheance.toDate()).first();
+					if (planningEcheance == null) {
+						newPlanningEcheance(echeance, dateEcheance.toDate());
+						Logger.debug("ajout de l'écheance [%s] au jour [%s]", echeance, dateEcheance);
+					}
+				} else {
+					Logger.debug("dateEcheance [%s] est apres echeance.dateFin [%s]", dateEcheance, dateFin);
+				}
+			} else {
+				Logger.debug("dateEcheance [%s] est apres firstDayOfMonth [%s]", dateEcheance, firstDayOfMonth);
+			}
+		}
+	}
+
+	private static void echeanceAnnuelle(Date actualMonth, Echeance echeance) {
+		MutableDateTime firstDayOfYear = new MutableDateTime(actualMonth);
+		firstDayOfYear.setDayOfYear(1);
+		Logger.debug("firstDayOfYear : [%s]", firstDayOfYear);
+
+		MutableDateTime lastDayOfYear = new MutableDateTime(actualMonth);
+		lastDayOfYear.setDayOfYear(1);
+		lastDayOfYear.addYears(1);
+		lastDayOfYear.addDays(-1);
+		Logger.debug("lastDayOfYear : [%s]", lastDayOfYear);
+
+		MutableDateTime dateEcheance = new MutableDateTime(echeance.date);
+		dateEcheance.setTime(0);
+
+		boolean isInYear = isBetween(dateEcheance, firstDayOfYear, lastDayOfYear);
+		Logger.debug("isInYear : [%s]", isInYear);
+
+		if (isInYear) {
+			models.PlanningEcheance planningEcheance = models.PlanningEcheance.find("echeance.id=? AND date=?", echeance.id, dateEcheance.toDate()).first();
+			if (planningEcheance == null) {
+				newPlanningEcheance(echeance, dateEcheance.toDate());
+				Logger.debug("ajout de l'écheance [%s] au jour [%s]", echeance, echeance.date);
+			}
+		} else {
+			if (dateEcheance.isBefore(firstDayOfYear)) {
+				dateEcheance.setYear(new DateTime(actualMonth).getYear());
+
+				MutableDateTime dateFin = new MutableDateTime(echeance.dateFin);
+				if (echeance.dateFin == null || dateEcheance.isEqual(dateFin) || (dateEcheance.isBefore(dateFin))) {
+					models.PlanningEcheance planningEcheance = models.PlanningEcheance.find("echeance.id=? AND date=?", echeance.id, dateEcheance.toDate()).first();
+					if (planningEcheance == null) {
+						newPlanningEcheance(echeance, dateEcheance.toDate());
+						Logger.debug("ajout de l'écheance [%s] au jour [%s]", echeance, dateEcheance);
+					}
+				} else {
+					Logger.debug("dateEcheance [%s] est apres echeance.dateFin [%s]", dateEcheance, dateFin);
+				}
+			} else {
+				Logger.debug("dateEcheance [%s] est apres firstDayOfYear [%s]", dateEcheance, firstDayOfYear);
+			}
+		}
+	}
+
+	private static void newPlanningEcheance(Echeance echeance, Date dateEcheance) {
+		models.PlanningEcheance planningEcheance = new models.PlanningEcheance();
+		planningEcheance.echeance = echeance;
+		planningEcheance.date = dateEcheance;
+		planningEcheance.save();
 	}
 }
