@@ -54,11 +54,13 @@ $(document).ready(function() {
     <div class="title">Op&eacute;rations</div>
     <div class="content">
 		<section>
-			<ul class="actions">
-				<li><a href="@{Operations.ajouter(compte.id)}">Ajouter une op&eacute;ration</a></li>
-				<li><a href="@{Operations.importer(compte.id)}">Importer des op&eacute;rations</a></li>
-				<li><a href="@{Comptes.rapprocher(compte.id)}" id="linkRapprocher">Rapprocher les op&eacute;rations point&eacute;es</a></li>
-			</ul>
+			<div class="submit">
+				<ul class="actions">
+					<li><a href="@{Operations.ajouter(compte.id)}" class="button">Ajouter une op&eacute;ration</a></li>
+					<li><a href="@{Operations.importer(compte.id)}" class="button">Importer des op&eacute;rations</a></li>
+					<li><a href="@{Comptes.rapprocher(compte.id)}" id="linkRapprocher" class="button">Rapprocher les op&eacute;rations point&eacute;es</a></li>
+				</ul>
+			</div>
 			#{if compte.operations}
 	        <div class="pagination">
 	        	#{if page > 1}<a href="@{Comptes.resume(compte.id, page-1)}" class="prev">«</a>#{/if}
