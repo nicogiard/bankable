@@ -39,6 +39,11 @@ GET     /tag/{tagId}/compte/{compteId}/page/{pageNumber}                        
 GET     /tag/{tagId}/compte/{compteId}                                             Tags.detail
 GET     /tag/{tagId}/graph/{show}                                                  Tags.showTagOnGraph
 
+GET     /tiers                                                                     Tiers.index
+GET     /tiers/ajouter                                                             Tiers.ajouter
+GET     /tiers/{tiersId}/editer                                                    Tiers.editer
+POST    /tiers/{tiersId}/enregistrer                                               Tiers.enregistrer
+
 # Ignore favicon requests
 GET     /favicon.ico                                                               404
 

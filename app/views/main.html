@@ -46,7 +46,8 @@
 				<li><a href="@{Comptes.resume}"${request.action =~ "Comptes." ? "class='active'" : ""}>Comptes</a></li>
 				<li><a href="@{Budgets.index}"${request.action =~ "Budgets." ? "class='active'" : ""}>Budgets</a></li>
 				<li><a href="@{Echeances.index}"${request.action =~ "Echeances." ? "class='active'" : ""}>Ech&eacute;ances</a></li>
-				<li><a href="@{Tags.index}"${request.action =~ "Tags." ? "class='active'" : ""}>Tags</a></li>
+                                <li><a href="@{Tags.index}"${request.action =~ "Tags." ? "class='active'" : ""}>Tags</a></li>
+				<li><a href="@{Tiers.index}"${request.action =~ "Tiers." ? "class='active'" : ""}>Tiers</a></li>
 				#{if request.action =~ "Operations."}
 				<li><a href="#!" ${request.action =~ "Operations." ? "class='active'" : ""}>Op&eacute;rations</a></li>
 				#{/if}
