@@ -1,0 +1,16 @@
+#{extends 'main.html' /}
+
+<section id="sidebar">
+	<section>
+		#{if allComptes}
+			<select id="choixComptePourEcheance">
+				#{list items:allComptes, as:'unCompte'}
+				<option value="${unCompte.id}" #{if compte && compte.id == unCompte.id}selected="selected"#{/if}>${unCompte.nom}</option>
+				#{/list}
+			</select>
+		#{/if}
+	</section>
+</section>
+<section id="content">
+#{doLayout /}
+</section>

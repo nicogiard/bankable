@@ -1,0 +1,63 @@
+#{extends 'Budgets/template.html' /}
+#{set title:'Budget' /}
+
+#{set 'moreStyles'}
+#{/set}
+
+#{set 'moreScripts'}
+<script type="text/javascript" charset="UTF-8">
+	$(document).ready(function() {
+		$("a.supprimer").click(function(e){
+		e.preventDefault();
+		if (confirm('Etes vous sûr de vouloir supprimer cette ligne ?')) {
+	        document.location.href = $(this).attr("href");
+	    }
+	});
+}); 
+</script>
+#{/set}
+
+<div class="bloc">
+    <div class="title">Budget du mois ${actualMonth.format('MMMM yyyy', 'FR')}</div>
+    <div class="content">
+    	<section>
+    		<ul class="actions">
+				<li><a href="@{Budgets.ajouterLigne()}">Ajouter une ligne</a></li>
+			</ul>
+			#{if flash.success}
+			    <div class="notif success">
+		            <strong>Succ&eacute;s :</strong> ${flash.success} <a href="#!" class="close"></a>
+		        </div>
+			#{/if}
+			<table>
+			    <thead>
+			    	<tr><th>Tag</th><th>Pourcentage</th><th class="budgetActuel">Actuel</th><th class="budgetPrevisionnel">Pr&eacute;visionnel</th><th>&nbsp;</th><th>&nbsp;</th></tr>
+			    </thead>
+			    <tbody>
+			    	#{list items:budget.lignes, as:'ligne'}
+				    	<tr>
+				    		<td>${ligne.tag.nom}</td>
+				    		<td>
+					    		<div class="progressbar">
+								    <div class="bar" style="width:${((ligne.montantActuel * 100) / (ligne.montantEcheance + ligne.montantManuel)).format('00')}%">
+								        &nbsp;
+								    </div>
+								    <div class="text">
+								        ${((ligne.montantActuel * 100) / (ligne.montantEcheance + ligne.montantManuel)).format('00')}%
+								    </div>
+								</div>
+							</td>
+				    		<td class="budgetActuel">${ligne.montantActuel.format('0.00')}&nbsp;${ligne.budget.compte.devise.symbole}</td>
+				    		<td class="budgetPrevisionnel">${(ligne.montantEcheance + ligne.montantManuel).format('0.00')}&nbsp;${ligne.budget.compte.devise.symbole}</td>
+				    		<td class="budgetPrevisionnelRepartis">Ech&eacute;ance = ${ligne.montantEcheance.format('0.00')} ${ligne.budget.compte.devise.symbole} | Manuel = ${ligne.montantManuel.format('0.00')} ${ligne.budget.compte.devise.symbole}</td>
+				    		<td class="actions"><a href="@{Budgets.editerLigne(ligne.id)}" title="Editer"><img src="@{'/public/images/edit.png'}" alt="Editer" class="editer"></a><a href="@{Budgets.supprimerLigne(ligne.id)}" title="Supprimer" class="supprimer"><img src="@{'/public/images/delete.png'}" alt="Supprimer"></a></td>
+				    	</tr>
+				    #{/list}
+			    </tbody>
+			    <tfoot>
+			    	<tr><td colspan="2" class="budgetTotal">Total :</td><td class="budgetActuel">${totalActuel.format('0.00')}&nbsp;&euro;</td><td class="budgetPrevisionnel">${totalPrevisionnel.format('0.00')}&nbsp;&euro;</td><td colspan="2">&nbsp;</td></tr>
+			    </tfoot>
+		    </table>
+    	</section>
+    </div>
+</div>

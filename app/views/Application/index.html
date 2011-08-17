@@ -1,0 +1,62 @@
+#{extends 'Application/template.html' /}
+#{set title:'Résumé' /}
+
+<div class="bloc left">
+    <div class="title">R&eacute;sum&eacute;</a></div>
+    <div class="content">
+    &nbsp;
+    </div>
+</div>
+<div class="bloc right">
+    <div class="title">Informations</div>
+    <div class="content">
+       <div class="left">
+            <table class="noalt">
+                <thead>
+                    <tr>
+                        <th colspan="2"><em>Aujourd'hui</em></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>${resume.todayCredits ? resume.todayCredits : "0"}</td>
+                        <td>D&eacute;bit${resume.todayCredits > 0 ? "s" : ""}<img src="@{'/public/images/minus.gif'}" title="D&eacute;bit" class="debitCredit"></td>
+                    </tr>
+                    <tr>
+                        <td>${resume.todayDebits ? resume.todayDebits : "0"}</td>
+                        <td>Cr&eacute;dit${resume.todayDebits > 0 ? "s" : ""}<img src="@{'/public/images/plus.gif'}" title="Cr&eacute;dit" class="debitCredit"></td>
+                    </tr>
+                    <tr>
+                        <td>${resume.todayEcheances ? resume.todayEcheances : "0"}</td>
+                        <td>Ech&eacute;ance${resume.todayEcheances > 0 ? "s" : ""}</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="right">
+            <table class="noalt">
+                <thead>
+                    <tr>
+                        <th colspan="2"><em>Hier</em></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>${resume.yesterdayCredits ? resume.yesterdayCredits : "0"}</td>
+                        <td>D&eacute;bit${resume.yesterdayCredits > 0 ? "s" : ""}<img src="@{'/public/images/minus.gif'}" title="D&eacute;bit" class="debitCredit"></td>
+                    </tr>
+                    <tr>
+                        <td>${resume.yesterdayDebits ? resume.yesterdayDebits : "0"}</td>
+                        <td>Cr&eacute;dit${resume.yesterdayDebits > 0 ? "s" : ""}<img src="@{'/public/images/plus.gif'}" title="Cr&eacute;dit" class="debitCredit"></td>
+                    </tr>
+                    <tr>
+                        <td>${resume.yesterdayEcheances ? resume.yesterdayEcheances : "0"}</td>
+                        <td>Ech&eacute;ance${resume.yesterdayEcheances > 0 ? "s" : ""}</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="cb"></div>
+    </div>
+</div>
+<div class="cb"></div>

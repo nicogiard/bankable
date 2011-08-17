@@ -1,0 +1,8 @@
+#{extends 'Echeances/template.html' /}
+#{set title:'Echéances' /}
+
+<div class="bloc calendar">
+	<script type="text/javascript"> 
+		$('.calendar').load("@{Echeances.calendrier(compte.id)}");
+	</script>
+</div>

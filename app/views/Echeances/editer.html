@@ -1,0 +1,93 @@
+#{extends 'Echeances/template.html' /}
+#{set title: titre + ' une échéance' /}
+
+#{set 'moreStyles'}
+    <link rel="stylesheet" type="text/css" href="@{'/public/stylesheets/flick/jquery-ui-1.8.15.css'}">
+#{/set}
+
+#{set 'moreScripts'}
+<script src="@{'/public/javascripts/jquery-ui-1.8.15.min.js'}" type="text/javascript" charset="utf-8"></script>
+<script src="@{'/public/javascripts/jquery.ui-1.8.15.datepicker-fr.js'}" type="text/javascript" charset="utf-8"></script>
+<script type="text/javascript">
+$(document).ready(function() {
+	$.datepicker.setDefaults($.datepicker.regional["fr"]);
+	$(".datepicker").datepicker("option", $.datepicker.regional["fr"]);
+	$(".datepicker").datepicker({
+		showButtonPanel: true
+	});
+}); 
+</script>
+#{/set}
+
+<div class="bloc">
+    <div class="title">${titre} une &eacute;ch&eacute;ance</div>
+    <div class="content">
+		<section>
+			#{form @Echeances.enregistrer()}
+				#{ifErrors}
+					<div class="notif error">
+			            <strong>Erreur :</strong> Veuillez corriger les erreurs avant de continuer. <a href="#!" class="close"></a>
+			        </div>
+				#{/ifErrors}
+				#{if echeance}
+				<input type="hidden" name="echeance.id" value="${echeance.id}"/>
+				#{/if}
+				<p>
+					<label>Compte<span class="mandatory">*</span> :</label><select name="echeance.compte.id">
+						<option></option>
+						#{list items:comptes, as:'compte'}
+						<option value="${compte.id}" #{if echeance}#{if echeance.compte.id == compte.id}selected#{/if}#{/if}#{else}#{if flash.get("echeance.compte.id") == compte.id.toString()}selected#{/if}#{/else}>${compte.nom}</option>
+						#{/list}
+					</select>
+					<span class="error">#{error 'echeance.compte' /}</span>
+				</p>
+				<p>
+					<label for="description">Description<span class="mandatory">*</span> :</label><input type="text" id="description" name="echeance.description" value="#{if echeance}${echeance.description}#{/if}#{else}${flash.get("echeance.description")}#{/else}"/>
+					<span class="error">#{error 'echeance.description' /}</span>
+				</p>
+				<p>
+					<label for="date">Date<span class="mandatory">*</span> :</label><input type="text" id="date" name="echeance.date" class="datepicker" value="#{if echeance}${echeance.date ? echeance.date.format("dd/MM/yyyy") : ""}#{/if}#{else}${flash.get("echeance.date")}#{/else}"/>
+					<span class="error">#{error 'echeance.date' /}</span>
+				</p>
+				<p>
+					<label>Type<span class="mandatory">*</span> :</label><select name="echeance.type.id">
+						<option></option>
+						#{list items:models.ETypeEcheance, as:'typeEcheance'}
+						<option value="${typeEcheance}" #{if echeance}#{if typeEcheance == echeance.type}selected#{/if}#{/if}#{else}#{if flash.get("echeance.type") == typeEcheance}selected#{/if}#{/else}>&{'ETypeEcheance.' + typeEcheance}</option>
+						#{/list}
+					</select>
+					<span class="error">#{error 'echeance.type' /}</span>
+				</p>
+				<p>
+					<label for="montant">Montant<span class="mandatory">*</span> :</label><input type="text" id="montant" name="echeance.montant" value="#{if echeance}${echeance.montant}#{/if}#{else}${flash.get("echeance.montant")}#{/else}"/>
+					<span class="error">#{error 'echeance.montant' /}</span>
+				</p>
+				<p>
+					<label>Type de Fr&eacute;quence<span class="mandatory">*</span> :</label><select name="echeance.typeFrequence.id">
+						<option></option>
+						#{list items:models.ETypeFrequence, as:'typeFrequence'}
+						<option value="${typeFrequence}" #{if echeance}#{if typeFrequence == echeance.typeFrequence}selected#{/if}#{/if}#{else}#{if flash.get("echeance.typeFrequence") == typeFrequence}selected#{/if}#{/else}>&{'ETypeFrequence.' + typeFrequence}</option>
+						#{/list}
+					</select>
+					<span class="error">#{error 'echeance.typeFrequence' /}</span>
+				</p>
+				<p>
+					<label>Tag<span class="mandatory">*</span> :</label><select name="echeance.tag.id">
+						<option></option>
+						#{list items:tags, as:'tag'}
+						<option value="${tag.id}" #{if echeance}#{if echeance.tag.id == tag.id}selected#{/if}#{/if}#{else}#{if flash.get("echeance.tag.id") == tag.id.toString()}selected#{/if}#{/else}>${tag.nom}</option>
+						#{/list}
+					</select>
+					<span class="error">#{error 'echeance.tag' /}</span>
+				</p>
+				<p>
+					<label for="dateFin">Date de fin :</label><input type="text" id="dateFin" name="echeance.dateFin" class="datepicker" value="#{if echeance}${echeance.dateFin ? echeance.dateFin.format("dd/MM/yyyy") : ""}#{/if}#{else}${flash.get("echeance.dateFin")}#{/else}"/>
+					<span class="error">#{error 'echeance.dateFin' /}</span>
+				</p>
+				<div class="submit">
+		            <input type="submit" value="Valider" />&nbsp;<a href="#{if echeance}@{Echeances.index(echeance.compte.id)}#{/if}#{else}@{Echeances.index()}#{/else}" class="button white">Annuler</a>
+		        </div>
+			#{/form}
+		</section>
+	</div>
+</div>

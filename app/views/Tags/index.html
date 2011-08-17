@@ -1,0 +1,118 @@
+#{extends 'Tags/template.html' /}
+#{set title:'Tags' /}
+
+#{set 'moreStyles'}
+<script type="text/javascript" src="http://www.google.com/jsapi"></script>
+<script type="text/javascript">
+  google.load('visualization', '1', {packages: ['corechart']});
+</script>
+<script type="text/javascript">
+	function drawTagsDebitTotal() {
+	  var data = new google.visualization.DataTable();
+	  data.addColumn('string', 'Tag');
+	  data.addColumn('number', 'Total Débit');
+	  
+	  #{list items:tagsDebit, as:'unTag'}
+	  	data.addRow(["${unTag[0].nom.raw()}", ${unTag[1]}]);
+	  #{/list}
+	
+	  var formatter = new google.visualization.NumberFormat({suffix: ' €'});
+	  formatter.format(data, 1); 
+	
+	  var view = new google.visualization.DataView(data);
+	  view.setColumns([0, 1]);
+	  
+	  var chart = new google.visualization.BarChart(document.getElementById('chartTagsDebitTotal'));
+	  chart.draw(view, {backgroundColor: '#F7F7F7'});
+	}
+	
+	function drawTagsCreditTotal() {
+	  var data = new google.visualization.DataTable();
+	  data.addColumn('string', 'Tag');
+	  data.addColumn('number', 'Total Crédit');
+	  
+	  #{list items:tagsCredit, as:'unTag'}
+	  	data.addRow(["${unTag[0].nom.raw()}", ${unTag[1]}]);
+	  #{/list}
+	
+	  var formatter = new google.visualization.NumberFormat({suffix: ' €'});
+	  formatter.format(data, 1); 
+	
+	  var view = new google.visualization.DataView(data);
+	  view.setColumns([0, 1]);
+	  
+	  var chart = new google.visualization.BarChart(document.getElementById('chartTagsCreditTotal'));
+	  chart.draw(view, {backgroundColor: '#F7F7F7'});
+	}
+	
+	function drawTagsDebitPie() {
+	  var data = new google.visualization.DataTable();
+	  data.addColumn('string', 'Task');
+	  data.addColumn('number', 'Répartition');
+	  
+	  #{list items:tagsDebit, as:'tag'}
+	  	data.addRow(["${tag[0].nom.raw()}", ${tag[1]}]);
+	  #{/list}
+	  
+	  var formatter = new google.visualization.NumberFormat({suffix: ' €'});
+	  formatter.format(data, 1); 
+	
+	  var view = new google.visualization.DataView(data);
+	  view.setColumns([0, 1]);
+	  
+	  new google.visualization.PieChart(document.getElementById('chartTagDebitPie')).draw(view, {backgroundColor: '#F7F7F7', width:600, height:400, is3D: true});
+	}
+
+	function drawTagsCreditPie() {
+	  var data = new google.visualization.DataTable();
+	  data.addColumn('string', 'Task');
+	  data.addColumn('number', 'Répartition');
+	  
+	  #{list items:tagsCredit, as:'tag'}
+	  	data.addRow(["${tag[0].nom.raw()}", ${tag[1]}]);
+	  #{/list}
+	  	  
+	  var formatter = new google.visualization.NumberFormat({suffix: ' €'});
+	  formatter.format(data, 1); 
+	
+	  var view = new google.visualization.DataView(data);
+	  view.setColumns([0, 1]);
+	  
+	  new google.visualization.PieChart(document.getElementById('chartTagCreditPie')).draw(view, {backgroundColor: '#F7F7F7', width:600, height:400, is3D: true});
+	}
+	google.setOnLoadCallback(drawTagsDebitTotal);
+	google.setOnLoadCallback(drawTagsCreditTotal);
+	google.setOnLoadCallback(drawTagsDebitPie);
+	google.setOnLoadCallback(drawTagsCreditPie);
+</script>
+#{/set}
+
+<div class="bloc left">
+    <div class="title">R&eacute;partitions du total des Tags D&eacute;bit sur le mois en cours</div>
+    <div class="content">
+		<div id="chartTagsDebitTotal" style="height: 400px;"></div>
+	</div>
+</div>
+
+<div class="bloc right">
+    <div class="title">R&eacute;partition D&eacute;bit</div>
+    <div class="content">
+        <div id="chartTagDebitPie"></div>
+    </div>
+</div>
+<div class="cb"></div>
+
+<div class="bloc left">
+    <div class="title">R&eacute;partitions du total des Tags Cr&eacute;dit sur le mois en cours</div>
+    <div class="content">
+		<div id="chartTagsCreditTotal" style="height: 400px;"></div>
+	</div>
+</div>
+
+<div class="bloc right">
+    <div class="title">R&eacute;partition Cr&eacute;dit</div>
+    <div class="content">
+        <div id="chartTagCreditPie"></div>
+    </div>
+</div>
+<div class="cb"></div>

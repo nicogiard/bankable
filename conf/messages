@@ -1,0 +1,21 @@
+# You can specialize this file for each language.
+# For example, for French create a messages.fr file
+#
+
+validation.required = Requis
+
+
+EEtatOperation.NONPOINTEE = Non Pointée
+EEtatOperation.POINTEE = Pointée
+EEtatOperation.RAPPROCHEE = Rapprochée
+
+ETypeEcheance.CREDIT = Crédit
+ETypeEcheance.DEBIT = Débit
+
+ETypeOperation.CREDIT = Crédit
+ETypeOperation.DEBIT = Débit
+
+ETypeFrequence.JOURNALIERE = Journalière
+ETypeFrequence.HEBDOMADAIRE = Hebdomadaire
+ETypeFrequence.MENSUELLE = Mensuelle
+ETypeFrequence.ANNUELLE = Annuelle

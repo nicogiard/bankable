@@ -1,0 +1,163 @@
+#{extends 'Application/template.html' /}
+#{set title: compte != null ? compte.nom + ' | Résumé' : 'Comptes' /}
+
+#{if compte}
+
+#{if compte.operations && compte.operations.size() > 0}
+	#{set 'moreStyles'}
+	<script type="text/javascript" src="http://www.google.com/jsapi"></script>
+	<script type="text/javascript">google.load('visualization', '1', {packages: ['corechart']});</script>
+	<script type="text/javascript">
+		function drawBalance() {
+		  var data = new google.visualization.DataTable();
+		  data.addColumn('string', 'x');
+		  data.addColumn('number', 'Balance');
+		  
+		  #{list items:resume.operations, as:'operation'}
+		  	data.addRow(["${operation.date.format("dd/MM/yyyy")}", ${operation.solde}]);
+		  #{/list}
+				
+		  var formatter = new google.visualization.NumberFormat({suffix: ' €'});
+		  formatter.format(data, 1); 
+		
+		  var view = new google.visualization.DataView(data);
+		  view.setColumns([0, 1]);
+		 
+		  new google.visualization.LineChart(document.getElementById('chartBalance')).draw(view, {backgroundColor: '#F7F7F7', curveType: "function", width: 500, height: 400, vAxis: {maxValue: 10}});
+		  $("#chartBalanceNoData").hide();
+		}
+		
+		function drawCredit() {
+		  var data = new google.visualization.DataTable();
+		  data.addColumn('string', 'x');
+		  var data = new google.visualization.DataTable();
+		  data.addColumn('string', 'Tag');
+		  data.addColumn('number', 'Crédit');
+
+		  data.addRow(['Non taggée', ${resume.countNoTag}]);
+		  
+		  #{list items:resume.tagsCredit, as:'unTag'}
+		  	data.addRow(["${unTag[0].nom.raw()}", ${unTag[1]}]);
+		  #{/list}
+
+		  // Create and draw the visualization.
+		  new google.visualization.PieChart(document.getElementById('chartCredit')).draw(data, {backgroundColor: '#F7F7F7', width:600, height:400, is3D: true});
+		  $("#chartCreditNoData").hide();
+		}
+		
+		function drawDebit() {
+		  var data = new google.visualization.DataTable();
+		  data.addColumn('string', 'x');
+		  var data = new google.visualization.DataTable();
+		  data.addColumn('string', 'Tag');
+		  data.addColumn('number', 'Débit');
+
+		  data.addRow(['Non taggée', ${resume.countNoTag}]);
+		  
+		  #{list items:resume.tagsDebit, as:'unTag'}
+		  	data.addRow(["${unTag[0].nom.raw()}", ${unTag[1]}]);
+		  #{/list}
+
+		  // Create and draw the visualization.
+		  new google.visualization.PieChart(document.getElementById('chartDebit')).draw(data, {backgroundColor: '#F7F7F7', width:600, height:400, is3D: true});
+		  $("#chartDebitNoData").hide();
+		}
+		google.setOnLoadCallback(drawBalance);
+		google.setOnLoadCallback(drawCredit);
+		google.setOnLoadCallback(drawDebit);
+	</script>
+	#{/set}
+#{/if}
+
+<div class="left">
+	<div class="bloc">
+	    <div class="title">R&eacute;sum&eacute; : ${compte.nom}<a href="@{Comptes.resume(compte.id)}">Afficher</a></div>
+	    <div class="content">
+			<section id="infoCompte">
+				<p><label>Solde courant: </label>#{if compte.solde > 0}<img src="@{'/public/images/plus.gif'}" title="Cr&eacute;dit" class="debitCredit">#{/if}#{else}<img src="@{'/public/images/minus.gif'}" title="D&eacute;bit" class="debitCredit">#{/else}<span>${compte.solde.format('0.00')} ${compte.devise.symbole}</span></p>
+				<p><label>Devise: </label><span>${compte.devise.nom}</span></p>
+				<p><label>Num&eacute;ro: </label><span>${compte.numero}&nbsp;</span></p>
+				<p><label>Etablissement: </label><span>${compte.etablissement}&nbsp;</span></p>
+			</section>
+		</div>
+	</div>
+
+	<div class="bloc">
+	    <div class="title">Informations</div>
+	    <div class="content">
+	        <div class="left">
+	            <table class="noalt">
+	                <thead>
+	                    <tr>
+	                        <th colspan="2"><em>Aujourd'hui</em></th>
+	                    </tr>
+	                </thead>
+	                <tbody>
+	                    <tr>
+	                        <td>${resume.todayCredits ? resume.todayCredits : "0"}</td>
+	                        <td>D&eacute;bit${resume.todayCredits > 0 ? "s" : ""}<img src="@{'/public/images/minus.gif'}" title="D&eacute;bit" class="debitCredit"></td>
+	                    </tr>
+	                    <tr>
+	                        <td>${resume.todayDebits ? resume.todayDebits : "0"}</td>
+	                        <td>Cr&eacute;dit${resume.todayDebits > 0 ? "s" : ""}<img src="@{'/public/images/plus.gif'}" title="Cr&eacute;dit" class="debitCredit"></td>
+	                    </tr>
+	                    <tr>
+	                        <td>${resume.todayEcheances ? resume.todayEcheances : "0"}</td>
+	                        <td>Ech&eacute;ance${resume.todayEcheances > 0 ? "s" : ""}</td>
+	                    </tr>
+	                </tbody>
+	            </table>
+	        </div>
+	        <div class="right">
+	            <table class="noalt">
+	                <thead>
+	                    <tr>
+	                        <th colspan="2"><em>Hier</em></th>
+	                    </tr>
+	                </thead>
+	                <tbody>
+	                    <tr>
+	                        <td>${resume.yesterdayCredits ? resume.yesterdayCredits : "0"}</td>
+	                        <td>D&eacute;bit${resume.yesterdayCredits > 0 ? "s" : ""}<img src="@{'/public/images/minus.gif'}" title="D&eacute;bit" class="debitCredit"></td>
+	                    </tr>
+	                    <tr>
+	                        <td>${resume.yesterdayDebits ? resume.yesterdayDebits : "0"}</td>
+	                        <td>Cr&eacute;dit${resume.yesterdayDebits > 0 ? "s" : ""}<img src="@{'/public/images/plus.gif'}" title="Cr&eacute;dit" class="debitCredit"></td>
+	                    </tr>
+	                    <tr>
+	                        <td>${resume.yesterdayEcheances ? resume.yesterdayEcheances : "0"}</td>
+	                        <td>Ech&eacute;ance${resume.yesterdayEcheances > 0 ? "s" : ""}</td>
+	                    </tr>
+	                </tbody>
+	            </table>
+	        </div>
+	        <div class="cb"></div>
+	    </div>
+	</div>
+</div>
+
+<div class="bloc right">
+    <div class="title">Balance</div>
+    <div class="content">
+    	<p id="chartBalanceNoData">Aucune donn&eacute;e &agrave; afficher...</p>
+    	<div id="chartBalance" class="center"></div>
+	</div>
+</div>
+<div class="cb"></div>
+
+<div class="bloc left">
+    <div class="title">Cr&eacute;dit</div>
+    <div class="content">
+    	<p id="chartCreditNoData">Aucune donn&eacute;e &agrave; afficher...</p>
+    	<div id="chartCredit" class="center"></div>
+    </div>
+</div>
+<div class="bloc right">
+    <div class="title">D&eacute;bit</div>
+    <div class="content">
+    	<p id="chartDebitNoData">Aucune donn&eacute;e &agrave; afficher...</p>
+    	<div id="chartDebit" class="center"></div>
+	</div>
+</div>
+<div class="cb"></div>
+#{/if}

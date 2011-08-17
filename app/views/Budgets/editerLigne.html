@@ -1,0 +1,55 @@
+#{extends 'Budgets/template.html' /}
+#{set title: titre + ' une ligne de budget' /}
+
+#{set 'moreStyles'}
+#{/set}
+
+#{set 'moreScripts'}
+<script type="text/javascript">
+$(document).ready(function() {
+}); 
+</script>
+#{/set}
+
+<div class="bloc">
+    <div class="title">${titre} une ligne de budget</div>
+    <div class="content">
+		<section>
+			#{form @Budgets.enregistrerLigne()}
+				#{ifErrors}
+					<div class="notif error">
+			            <strong>Erreur :</strong> Veuillez corriger les erreurs avant de continuer. <a href="#!" class="close"></a>
+			        </div>
+				#{/ifErrors}
+				#{if ligneBudget}
+				<input type="hidden" name="ligneBudget.id" value="${ligneBudget.id}"/>
+				#{/if}
+				<p>
+					<label>Budget<span class="mandatory">*</span> :</label><select name="ligneBudget.budget.id">
+						<option></option>
+						#{list items:budgets, as:'budget'}
+						<option value="${budget.id}" #{if ligneBudget}#{if ligneBudget.budget.id == budget.id}selected#{/if}#{/if}#{else}#{if flash.get("ligneBudget.budget.id") == budget.id.toString()}selected#{/if}#{/else}>${budget.compte.nom}</option>
+						#{/list}
+					</select>
+					<span class="error">#{error 'ligneBudget.budget' /}</span>
+				</p>
+				<p>
+					<label>Tag<span class="mandatory">*</span> :</label><select name="ligneBudget.tag.id">
+						<option></option>
+						#{list items:tags, as:'tag'}
+						<option value="${tag.id}" #{if ligneBudget}#{if ligneBudget.tag.id == tag.id}selected#{/if}#{/if}#{else}#{if flash.get("ligneBudget.tag.id") == tag.id.toString()}selected#{/if}#{/else}>${tag.nom}</option>
+						#{/list}
+					</select>
+					<span class="error">#{error 'ligneBudget.tag' /}</span>
+				</p>
+				<p>
+					<label for="montantManuel">Montant Manuel<span class="mandatory">*</span> :</label><input type="text" id="montantManuel" name="ligneBudget.montantManuel" value="#{if ligneBudget}${ligneBudget.montantManuel}#{/if}#{else}${flash.get("ligneBudget.montantManuel")}#{/else}"/>
+					<span class="error">#{error 'ligneBudget.montantManuel' /}</span>
+				</p>
+				<div class="submit">
+		            <input type="submit" value="Valider" />&nbsp;<a href="#{if ligneBudget}@{Budgets.index(ligneBudget.budget.compte.id)}#{/if}#{else}@{Budgets.index()}#{/else}" class="button white">Annuler</a>
+		        </div>
+			#{/form}
+		</section>
+	</div>
+</div>

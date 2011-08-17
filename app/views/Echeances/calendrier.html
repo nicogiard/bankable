@@ -1,0 +1,49 @@
+<div class="title"><a href="#" class="prev" title="Mois pr&eacute;c&eacute;dent"></a>${calendrier.actualMonth.format('MMMM yyyy', 'FR')}<a href="#" class="next" title="Mois suivant"></a></div>
+<div class="content">
+	<table> 
+        <thead> 
+            <tr> 
+                <th>Lundi</th> 
+                <th>Mardi</th> 
+                <th>Mercredi</th> 
+                <th>Jeudi</th> 
+                <th>Vendredi</th> 
+                <th>Samedi</th> 
+                <th>Dimanche</th> 
+            </tr> 
+        </thead> 
+        <tbody> 
+			#{list items: calendrier.semaines, as:'semaine'}
+			<tr>
+				#{list items:semaine.jours, as:'jour'}
+					#{if jour.previousMonth || jour.nextMonth}
+					<td class="other-month padding">
+						<div class="day">${jour.date.dayOfMonth().get()}</div>
+					</td>
+					#{/if}
+					#{else}
+					<td class="#{if jour.date.dayOfWeek == 6 || jour.date.dayOfWeek == 7}week-end #{/if}#{if jour.today}today #{/if}">
+						<div class="day">${jour.date.dayOfMonth().get()}</div>
+                        <ul class="events"> 
+                        	#{list items:jour.echeances, as:'echeance'}
+                            <li><a href="@{Echeances.editer(echeance.id)}"><span>#{if models.ETypeEcheance.DEBIT == echeance.type}<img src="@{'/public/images/minus.gif'}" title="D&eacute;bit" class="debitCredit">#{/if}#{else}<img src="@{'/public/images/plus.gif'}" title="Cr&eacute;dit" class="debitCredit">#{/else}${echeance.description}</span></a></li> 
+                            #{/list} 
+                        </ul> 
+					</td>
+					#{/else}
+				#{/list}
+			</tr>
+			#{/list} 
+        </tbody> 
+    </table>
+</div>
+
+<script type="text/javascript"> 
+	$('.calendar .prev').click(function(){
+		$('.calendar').load("@{Echeances.calendrier(compte.id, calendrier.previousMonth)}");
+	});
+	
+	$('.calendar .next').click(function(){
+		$('.calendar').load("@{Echeances.calendrier(compte.id, calendrier.nextMonth)}");
+	});
+</script>
