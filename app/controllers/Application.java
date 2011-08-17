@@ -18,6 +18,9 @@ public class Application extends Controller {
 		List<Compte> comptes = Compte.findAll();
 
 		Double total = Compte.find("select sum(compte.solde) from Compte compte").first();
+		if (total == null) {
+			total = 0D;
+		}
 
 		renderArgs.put("comptes", comptes);
 		renderArgs.put("total", total);
@@ -36,6 +39,7 @@ public class Application extends Controller {
 		if (compteId != null && compteId > 0) {
 			compte = Compte.findById(compteId);
 		}
+		notFoundIfNull(compte);
 
 		ResumeCompte resume = new ResumeCompte();
 		resume.operations = Operation.find("compte.id = ? ORDER BY id ASC", compte.id).fetch();

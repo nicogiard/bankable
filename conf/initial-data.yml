@@ -17,6 +17,12 @@ Devise(dollar):
 #-----------------------------------
 # Compte
 #-----------------------------------
+Compte(compteCourant):
+  nom: Compte Courant
+  solde: 518.41
+  devise: euro
+  numero: 12
+  etablissement: Caisse d'Epargne Normandie
 
 
 #-----------------------------------
