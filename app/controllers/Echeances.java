@@ -26,8 +26,11 @@ public class Echeances extends Controller {
 		Compte compte = null;
 		if (compteId != null) {
 			compte = Compte.findById(compteId);
+			notFoundIfNull(compte);
 		} else {
 			compte = Compte.find("").first();
+			notFoundIfNull(compte);
+
 			index(compte.id);
 		}
 

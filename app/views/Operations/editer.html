@@ -43,6 +43,7 @@ $(document).ready(function() {
 			#{form @Operations.enregistrer()}
 				#{if operation}
 				<input type="hidden" name="operation.id" value="${operation.id}"/>
+				<input type="hidden" name="oldMontant" value="${operation.montant}"/>
 				#{/if}
 				<input type="hidden" name="operation.compte.id" value="${compte.id}"/>
 				<p>
@@ -58,7 +59,7 @@ $(document).ready(function() {
 					<span class="error">#{error 'operation.montant' /}</span>
 				</p>
 				<p>
-					<label>Type<span class="mandatory">*</span> :</label><select name="operation.type.id">
+					<label>Type<span class="mandatory">*</span> :</label><select name="operation.type">
 						<option></option>
 						#{list items:models.ETypeOperation, as:'typeOperation'}
 						<option value="${typeOperation}" #{if operation}#{if typeOperation == operation.type}selected#{/if}#{/if}#{else}#{if flash.get("operation.type") == typeOperation}selected#{/if}#{/else}>&{'ETypeOperation.' + typeOperation}</option>

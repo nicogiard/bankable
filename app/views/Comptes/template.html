@@ -9,9 +9,9 @@
 	<section>
 		<ul>
 		#{list items:comptes, as:'unCompte'}
-			<li #{if compte}${compte.id == unCompte.id ? "class='current'" : ""}#{/if}><a href="@{Comptes.resume(unCompte.id)}"><span class="nomCompte">${unCompte.nom} : </span><span class="soldeCompte">#{if unCompte.solde > 0}<img src="@{'/public/images/plus.gif'}" title="Cr&eacute;dit" class="debitCredit">#{/if}#{else}<img src="@{'/public/images/minus.gif'}" title="D&eacute;bit" class="debitCredit">#{/else}${unCompte.solde.format('0.00')} ${unCompte.devise.symbole}</span></a></li>
+			<li #{if compte}${compte.id == unCompte.id ? "class='current'" : ""}#{/if}><a href="@{Comptes.resume(unCompte.id)}"><span class="nomCompte">${unCompte.nom} : </span><span class="soldeCompte">#{if unCompte.solde > 0}<img src="@{'/public/images/plus.gif'}" title="Cr&eacute;dit" class="debitCredit">#{/if}#{else}<img src="@{'/public/images/minus.gif'}" title="D&eacute;bit" class="debitCredit">#{/else}${unCompte.solde.formatPositive('0.00')} ${unCompte.devise.symbole}</span></a></li>
 		#{/list}
-			<li class="noLink"><span class="nomCompte">Total : </span><span class="soldeCompte">#{if total > 0}<img src="@{'/public/images/plus.gif'}" title="Cr&eacute;dit" class="debitCredit">#{/if}#{else}<img src="@{'/public/images/minus.gif'}" title="D&eacute;bit" class="debitCredit">#{/else}${total.format('0.00')} &euro;</span></li>
+			<li class="noLink"><span class="nomCompte">Total : </span><span class="soldeCompte">#{if total > 0}<img src="@{'/public/images/plus.gif'}" title="Cr&eacute;dit" class="debitCredit">#{/if}#{else}<img src="@{'/public/images/minus.gif'}" title="D&eacute;bit" class="debitCredit">#{/else}${total.formatPositive('0.00')} &euro;</span></li>
 		</ul>
 	</section>
 </section>

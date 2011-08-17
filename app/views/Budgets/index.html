@@ -17,6 +17,7 @@
 </script>
 #{/set}
 
+#{if budget}
 <div class="bloc">
     <div class="title">Budget du mois ${actualMonth.format('MMMM yyyy', 'FR')}</div>
     <div class="content">
@@ -61,3 +62,4 @@
     	</section>
     </div>
 </div>
+#{/if}

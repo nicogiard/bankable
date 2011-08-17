@@ -39,12 +39,9 @@ public class Operation extends Model {
 
 	public String detail;
 
-	@Column(columnDefinition = "Decimal(10,2)")
-	public Float solde;
-
 	@Required
 	@Enumerated(EnumType.STRING)
-	public EEtatOperation etat;
+	public EEtatOperation etat = EEtatOperation.NONPOINTEE;
 
 	@ManyToMany
 	@JoinTable(name = "OPERATION_TAGS", joinColumns = @JoinColumn(name = "OPERATION_ID"), inverseJoinColumns = @JoinColumn(name = "TAG_ID"))

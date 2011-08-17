@@ -74,7 +74,7 @@
 	    <div class="title">R&eacute;sum&eacute; : ${compte.nom}<a href="@{Comptes.resume(compte.id)}">Afficher</a></div>
 	    <div class="content">
 			<section id="infoCompte">
-				<p><label>Solde courant: </label>#{if compte.solde > 0}<img src="@{'/public/images/plus.gif'}" title="Cr&eacute;dit" class="debitCredit">#{/if}#{else}<img src="@{'/public/images/minus.gif'}" title="D&eacute;bit" class="debitCredit">#{/else}<span>${compte.solde.format('0.00')} ${compte.devise.symbole}</span></p>
+				<p><label>Solde courant: </label>#{if compte.solde > 0}<img src="@{'/public/images/plus.gif'}" title="Cr&eacute;dit" class="debitCredit">#{/if}#{else}<img src="@{'/public/images/minus.gif'}" title="D&eacute;bit" class="debitCredit">#{/else}<span>${compte.solde.formatPositive('0.00')} ${compte.devise.symbole}</span></p>
 				<p><label>Devise: </label><span>${compte.devise.nom}</span></p>
 				<p><label>Num&eacute;ro: </label><span>${compte.numero}&nbsp;</span></p>
 				<p><label>Etablissement: </label><span>${compte.etablissement}&nbsp;</span></p>

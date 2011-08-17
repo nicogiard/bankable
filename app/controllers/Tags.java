@@ -35,8 +35,10 @@ public class Tags extends Controller {
 		Compte compte = null;
 		if (compteId != null) {
 			compte = Compte.findById(compteId);
+			notFoundIfNull(compte);
 		} else {
 			compte = Compte.find("").first();
+			notFoundIfNull(compte);
 			index(compte.id);
 		}
 
@@ -44,12 +46,12 @@ public class Tags extends Controller {
 				.em()
 				.createNativeQuery(
 						"select t.id as id, t.nom as nom, t.showOnGraph as showOnGraph, sum(o.montant) as count from tag t inner join operation_tags ot on t.id = ot.tag_id inner join operation o on ot.operation_id = o.id where o.compte_id=? and o.type=? and t.showOnGraph=true group by ot.tag_id",
-						"TagWithCount").setParameter(1, compte.id).setParameter(2, ETypeOperation.CREDIT).getResultList();
+						"TagWithCount").setParameter(1, compte.id).setParameter(2, ETypeOperation.CREDIT.toString()).getResultList();
 		List tagsDebit = JPA
 				.em()
 				.createNativeQuery(
 						"select t.id as id, t.nom as nom, t.showOnGraph as showOnGraph, sum(o.montant) as count from tag t inner join operation_tags ot on t.id = ot.tag_id inner join operation o on ot.operation_id = o.id where o.compte_id=? and o.type=? and t.showOnGraph=true group by ot.tag_id",
-						"TagWithCount").setParameter(1, compte.id).setParameter(2, ETypeOperation.DEBIT).getResultList();
+						"TagWithCount").setParameter(1, compte.id).setParameter(2, ETypeOperation.DEBIT.toString()).getResultList();
 		render(compte, tagsCredit, tagsDebit);
 	}
 
