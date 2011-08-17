@@ -1,10 +1,14 @@
 package templates;
 
 import java.lang.reflect.Field;
+import java.text.DecimalFormat;
+import java.text.DecimalFormatSymbols;
 import java.util.Collection;
 import java.util.Iterator;
+import java.util.Locale;
 
 import play.Logger;
+import play.i18n.Lang;
 import play.templates.BaseTemplate.RawData;
 import play.templates.JavaExtensions;
 
@@ -65,5 +69,11 @@ public class BankableExtensions extends JavaExtensions {
 			sb.append(text != null ? text : obj.toString());
 		}
 		return new RawData(sb.toString());
+	}
+
+	public static String formatPositive(Number number, String pattern) {
+		DecimalFormatSymbols symbols = new DecimalFormatSymbols(new Locale(Lang.get()));
+		symbols.setMinusSign(' ');
+		return new DecimalFormat(pattern, symbols).format(number);
 	}
 }
