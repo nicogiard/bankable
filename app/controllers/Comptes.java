@@ -23,6 +23,9 @@ public class Comptes extends Controller {
 		List<Compte> comptes = Compte.findAll();
 
 		Double total = Compte.find("select sum(compte.solde) from Compte compte").first();
+		if (total == null) {
+			total = 0D;
+		}
 
 		renderArgs.put("comptes", comptes);
 		renderArgs.put("total", total);
@@ -32,9 +35,7 @@ public class Comptes extends Controller {
 		Compte compte = null;
 		if (compteId != null) {
 			compte = Compte.findById(compteId);
-		} else {
-			compte = Compte.find("").first();
-			resume(compte.id, null);
+			notFoundIfNull(compte);
 		}
 
 		if (compte != null) {
