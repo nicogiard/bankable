@@ -4,18 +4,22 @@
 #{set 'moreStyles'}
     <link rel="stylesheet" type="text/css" href="@{'/public/stylesheets/flick/jquery-ui-1.8.15.css'}">
     <link rel="stylesheet" type="text/css" href="@{'/public/stylesheets/jquery.tagit.css'}">
+<link rel="stylesheet" type="text/css" href="@{'/public/stylesheets/chosen.css'}" />
 #{/set}
 
 #{set 'moreScripts'}
 <script src="@{'/public/javascripts/jquery-ui-1.8.15.min.js'}" type="text/javascript" charset="utf-8"></script>
 <script src="@{'/public/javascripts/jquery.ui-1.8.15.datepicker-fr.js'}" type="text/javascript" charset="utf-8"></script>
 <script src="@{'/public/javascripts/tag-it.js'}" type="text/javascript" charset="UTF-8"></script>
+<script src="@{'/public/javascripts/chosen.jquery.min.js'}" type="text/javascript" charset="utf-8"></script>
 <script type="text/javascript">
 $(document).ready(function() {
     var sampleTags = ['${allTags.joinWithRaw("nom", "', '")}'];
     $('#tags').tagit({
         availableTags: sampleTags
     });
+    
+	$(".chzn-select").chosen();
 }); 
 </script>
 #{/set}
@@ -44,7 +48,7 @@ $(document).ready(function() {
 			#{/bankable.textField}
 			
 			#{field 'tags'}
-			<p>
+			<p class="fat">
 			  <label for="${field.id}">Tags :</label>
 			  <input type="text" id="${field.id}" name="${field.name}" value="${tiers && tiers.tags != null ? tiers.tags.join('nom', ', ') : field.value}"/>
 			  <span class="error">#{error field.name /}</span>
@@ -52,9 +56,9 @@ $(document).ready(function() {
 			#{/field}
           
 			#{field 'tiers.civilite'}
-			<p>
-			  <label for="${field.id}">Civilité</label>
-			  <select id="${field.id}" name="${field.name}.id">
+			<p class="fat">
+			  <label for="${field.id}">Civilit&eacute;</label>
+			  <select id="${field.id}" name="${field.name}.id" class="chzn-select" data-placeholder="Choisissez une Civilit&eacute;...">
 			    <option></option>
 			    #{list items: civilities, as: 'civility'}
 			    <option value="${civility.id}" #{if field.value?.id == civility.id}selected="selected"#{/if}>${civility.nom} (${civility.abreviation})</option>

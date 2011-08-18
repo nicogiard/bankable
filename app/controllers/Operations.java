@@ -28,8 +28,9 @@ public class Operations extends Controller {
 		notFoundIfNull(compte);
 
 		List<Tag> allTags = Tag.find("ORDER BY nom ASC").fetch();
+		List<models.Tiers> allTiers = models.Tiers.find("ORDER BY designation ASC").fetch();
 
-		render("Operations/editer.html", titre, compte, allTags);
+		render("Operations/editer.html", titre, compte, allTags, allTiers);
 	}
 
 	public static void editer(Long compteId, Long operationId) {
@@ -41,8 +42,9 @@ public class Operations extends Controller {
 		notFoundIfNull(operation);
 
 		List<Tag> allTags = Tag.find("ORDER BY nom ASC").fetch();
+		List<models.Tiers> allTiers = models.Tiers.find("ORDER BY designation ASC").fetch();
 
-		render(titre, compte, operation, allTags);
+		render(titre, compte, operation, allTags, allTiers);
 	}
 
 	public static void enregistrer(@Required @Valid Operation operation, String tags, Float oldMontant) {
@@ -53,14 +55,16 @@ public class Operations extends Controller {
 				notFoundIfNull(compte);
 
 				List<Tag> allTags = Tag.find("ORDER BY nom ASC").fetch();
-				render("Operations/editer.html", titre, compte, operation, allTags);
+				List<models.Tiers> allTiers = models.Tiers.find("ORDER BY designation ASC").fetch();
+				render("Operations/editer.html", titre, compte, operation, allTags, allTiers);
 			} else {
 				String titre = "Ajouter";
 				Compte compte = operation.compte;
 				notFoundIfNull(compte);
 
 				List<Tag> allTags = Tag.find("ORDER BY nom ASC").fetch();
-				render("Operations/editer.html", titre, compte, operation, allTags);
+				List<models.Tiers> allTiers = models.Tiers.find("ORDER BY designation ASC").fetch();
+				render("Operations/editer.html", titre, compte, operation, allTags, allTiers);
 			}
 		}
 

@@ -50,4 +50,7 @@ public class Operation extends Model {
 	@Required
 	@ManyToOne
 	public Compte compte;
+
+	@ManyToOne
+	public Tiers tiers;
 }
