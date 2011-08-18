@@ -120,7 +120,7 @@ $(document).ready(function() {
            <li><a href="@{Tiers.ajouter()}" class="button">Ajouter un Tiers</a></li>
         </ul>
         #{/if}
-      
+              
 		<table>
 		<thead>
 		  <tr>
@@ -151,7 +151,17 @@ $(document).ready(function() {
 		  #{/list}
 		</tbody>
 		</table>
-       
+		
+        <div class="pagination">
+           #{if pagination.page > 1}<a href="@{Tiers.index()}?tiersPagination.page=${pagination.page-1}" class="prev">«</a>#{/if}
+           #{else}<span class="prev">«</span>#{/else}
+           #{list items:1..pagination.pageCount, as:'nb'}
+           <a href="@{Tiers.index()}?tiersPagination.page=${nb}" #{if pagination.page == nb}class="current"#{/if}>${nb}</a>
+           #{/list}
+           #{if pagination.page < pagination.pageCount}<a href="@{Tiers.index()}?tiersPagination.page=${pagination.page+1}" class="next">»</a>#{/if}
+           #{else}<span class="next">»</span>#{/else}
+        </div>
+        
       </section>
 	</div>
 </div>

@@ -12,12 +12,15 @@ import play.data.validation.Required;
 import play.data.validation.Valid;
 import play.mvc.Before;
 import play.mvc.Controller;
+import controllers.utils.Pagination;
 
 /**
  * 
  * @author f.meurisse
  */
 public class Tiers extends Controller {
+
+    private static final Pagination tiersPagination = new Pagination();
 
     @Before
     public static void before() {
@@ -32,6 +35,18 @@ public class Tiers extends Controller {
 
         List<Tag> allTags = Tag.find("ORDER BY nom ASC").fetch();
         renderArgs.put("allTags", allTags);
+
+        // Récupération de la pagination
+        // Dans l'ordre params puis session
+        String pageParam = params.get("tiersPagination.page");
+        if (pageParam == null) {
+            pageParam = session.get("tiersPagination.page");
+        }
+        if (pageParam == null) {
+            pageParam = "1";
+        }
+        tiersPagination.setPage(Integer.valueOf(pageParam));
+        session.put("tiersPagination.page", pageParam);
     }
 
     public static void supprimerFiltre() {
@@ -104,23 +119,43 @@ public class Tiers extends Controller {
     private static void afficherListeTiers(models.Tiers tiers) {
         String filtreTiers = session.get("filtreTiers");
         Logger.debug("Tiers - index: filtre = %s", filtreTiers);
+        if (filtreTiers != null) {
+            filtreTiers += "%";
+        }
+
+        String requeteListTiers = null;
+        if (StringUtils.isNotBlank(filtreTiers)) {
+            requeteListTiers = "designation like ? OR nom like ? OR prenom like ?";
+        }
+
+        // Dénombrement des tiers
+        long nombreTiers = 0;
+        if (requeteListTiers != null) {
+            nombreTiers = models.Tiers.count(requeteListTiers, filtreTiers,
+                    filtreTiers, filtreTiers);
+        }
+        else {
+            nombreTiers = models.Tiers.count();
+        }
+        tiersPagination.setElementCount(nombreTiers);
 
         // Chargement de la liste des tiers.
         List<models.Tiers> tiersListe = null;
         if (StringUtils.isBlank(filtreTiers)) {
-            tiersListe = models.Tiers.all().fetch();
+            tiersListe = models.Tiers.all().fetch(tiersPagination.getPage(),
+                    tiersPagination.getPageSize());
         }
         else {
-            String filtre = filtreTiers + "%";
-            tiersListe = models.Tiers.find(
-                    "designation like ? OR nom like ? OR prenom like ?",
-                    filtre, filtre, filtre).fetch();
+            tiersListe = models.Tiers.find(requeteListTiers, filtreTiers,
+                    filtreTiers, filtreTiers).fetch(tiersPagination.getPage(),
+                    tiersPagination.getPageSize());
         }
 
         // Chargement de la liste des civilités
         List<Civilite> civilities = Civilite.find("ORDER BY nom").fetch();
 
-        render("Tiers/index.html", civilities, tiersListe, tiers);
+        Pagination pagination = tiersPagination;
+        render("Tiers/index.html", civilities, tiersListe, tiers, pagination);
 
     }
 }
