@@ -41,7 +41,7 @@ public class Comptes extends Controller {
 		session.put("comptesPagination.page", pageParam);
 	}
 
-	public static void resume(Long compteId) {
+	public static void index(Long compteId) {
 		Compte compte = null;
 		if (compteId != null) {
 			compte = Compte.findById(compteId);
@@ -85,7 +85,7 @@ public class Comptes extends Controller {
 			}
 		}
 		compte.save();
-		resume(compte.id);
+		index(compte.id);
 	}
 
 	public static void rapprocher(Long compteId) {
@@ -97,7 +97,7 @@ public class Comptes extends Controller {
 			operation.etat = EEtatOperation.RAPPROCHEE;
 			operation.save();
 		}
-		Comptes.resume(compte.id);
+		Comptes.index(compte.id);
 	}
 
 	public static void vider(Long compteId) {
@@ -116,6 +116,6 @@ public class Comptes extends Controller {
 		JPA.em().createNativeQuery("DELETE FROM Operation_Tags WHERE operation_id in (SELECT id FROM Operation WHERE compte_id=?)").setParameter(1, compteId).executeUpdate();
 		JPA.em().createNativeQuery("DELETE FROM Operation WHERE compte_id=?").setParameter(1, compteId).executeUpdate();
 
-		Comptes.resume(compteId);
+		Comptes.index(compteId);
 	}
 }

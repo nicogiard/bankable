@@ -7,8 +7,8 @@ GET     /                                                                       
 GET     /resume/compte/{compteId}                                                  Application.resume
 
 GET     /compte/ajouter                                                            Comptes.ajouter
-GET     /compte/{compteId}                                                         Comptes.resume
-GET     /compte                                                                    Comptes.resume
+GET     /compte/{compteId}                                                         Comptes.index
+GET     /compte                                                                    Comptes.index
 GET     /compte/{compteId}/editer                                                  Comptes.editer
 GET     /compte/{compteId}/vider                                                   Comptes.vider
 GET     /compte/{compteId}/rapprocher                                              Comptes.rapprocher
@@ -40,6 +40,7 @@ GET     /tag/{tagId}/graph/{show}                                               
 GET     /tiers                                                                     Tiers.index
 GET     /tiers/ajouter                                                             Tiers.ajouter
 GET     /tiers/{tiersId}/editer                                                    Tiers.editer
+GET     /tiers/{tiersId}/supprimer                                                 Tiers.supprimer
 POST    /tiers/{tiersId}/enregistrer                                               Tiers.enregistrer
 
 # Ignore favicon requests

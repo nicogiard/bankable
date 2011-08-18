@@ -61,7 +61,7 @@ $(document).ready(function() {
 				</ul>
 			</div>
 			#{if compte.operations}
-			#{pagination pagination, url:actionBridge.Comptes.resume(compte.id) /}
+			#{pagination pagination, url:actionBridge.Comptes.index(compte.id) /}
 			<table>
 				<thead>
 					<tr>
@@ -83,7 +83,7 @@ $(document).ready(function() {
 				</tbody>
 				<tfoot></tfoot>
 			</table>
-			#{pagination pagination, url:actionBridge.Comptes.resume(compte.id) /}
+			#{pagination pagination, url:actionBridge.Comptes.index(compte.id) /}
 			#{/if}
 			#{else}
 				<p>Aucune opération</p>

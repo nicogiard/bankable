@@ -39,7 +39,7 @@ $(document).ready(function() {
 					#{textFieldBody field, label:'Etablissement' /}
 				#{/bankable.textField}
 				<div class="submit">
-		            <input type="submit" value="Valider" />&nbsp;<a href="#{if compte}@{Comptes.resume(compte.id)}#{/if}#{else}@{Comptes.resume()}#{/else}" class="button white">Annuler</a>
+		            <input type="submit" value="Valider" />&nbsp;<a href="#{if compte}@{Comptes.index(compte.id)}#{/if}#{else}@{Comptes.index()}#{/else}" class="button white">Annuler</a>
 		        </div>
 			#{/form}
 		</section>
