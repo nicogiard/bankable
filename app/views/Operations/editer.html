@@ -4,12 +4,15 @@
 #{set 'moreStyles'}
     <link rel="stylesheet" type="text/css" href="@{'/public/stylesheets/flick/jquery-ui-1.8.15.css'}">
     <link rel="stylesheet" type="text/css" href="@{'/public/stylesheets/jquery.tagit.css'}">
+    <link rel="stylesheet" type="text/css" href="@{'/public/stylesheets/jquery.calculator.css'}">
 #{/set}
 
 #{set 'moreScripts'}
 <script src="@{'/public/javascripts/jquery-ui-1.8.15.min.js'}" type="text/javascript" charset="utf-8"></script>
 <script src="@{'/public/javascripts/jquery.ui-1.8.15.datepicker-fr.js'}" type="text/javascript" charset="utf-8"></script>
 <script src="@{'/public/javascripts/tag-it.js'}" type="text/javascript" charset="UTF-8"></script>
+<script src="@{'/public/javascripts/jquery.calculator.pack.js'}" type="text/javascript" charset="utf-8"></script>
+<script src="@{'/public/javascripts/jquery.calculator-fr.js'}" type="text/javascript" charset="utf-8"></script>
 <script type="text/javascript">
 $(document).ready(function() {
 	$.datepicker.setDefaults($.datepicker.regional["fr"]);
@@ -22,12 +25,16 @@ $(document).ready(function() {
 	$('#tags').tagit({
 		availableTags: sampleTags
 	});
+	
+	$('.calculator').calculator({
+		useThemeRoller: true, showOn: 'button', buttonImageOnly: true, buttonImage: '@{'/public/images/calculator.png'}'
+	});
 }); 
 </script>
 #{/set}
 
 <div class="bloc">
-    <div class="title">${compte.nom} | ${titre} une opération</div>
+    <div class="title">${compte.nom} | ${titre} une op&eacute;ration</div>
     <div class="content">
 		<section>
 			#{if flash.success}
@@ -55,7 +62,7 @@ $(document).ready(function() {
 					<span class="error">#{error 'operation.libelle' /}</span>
 				</p>
 				<p>
-					<label for="montant">Montant<span class="mandatory">*</span> :</label><input type="text" id="montant" name="operation.montant" value="#{if operation}${operation.montant}#{/if}#{else}${flash.get("operation.montant")}#{/else}"/>
+					<label for="montant">Montant<span class="mandatory">*</span> :</label><input type="text" id="montant" name="operation.montant" value="#{if operation}${operation.montant}#{/if}#{else}${flash.get("operation.montant")}#{/else}" class="calculator"/>
 					<span class="error">#{error 'operation.montant' /}</span>
 				</p>
 				<p>

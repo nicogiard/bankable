@@ -2,11 +2,19 @@
 #{set title: titre + ' une ligne de budget' /}
 
 #{set 'moreStyles'}
+    <link rel="stylesheet" type="text/css" href="@{'/public/stylesheets/flick/jquery-ui-1.8.15.css'}">
+    <link rel="stylesheet" type="text/css" href="@{'/public/stylesheets/jquery.calculator.css'}">
 #{/set}
 
 #{set 'moreScripts'}
+<script src="@{'/public/javascripts/jquery-ui-1.8.15.min.js'}" type="text/javascript" charset="utf-8"></script>
+<script src="@{'/public/javascripts/jquery.calculator.pack.js'}" type="text/javascript" charset="utf-8"></script>
+<script src="@{'/public/javascripts/jquery.calculator-fr.js'}" type="text/javascript" charset="utf-8"></script>
 <script type="text/javascript">
 $(document).ready(function() {
+	$('.calculator').calculator({
+		useThemeRoller: true, showOn: 'button', buttonImageOnly: true, buttonImage: '@{'/public/images/calculator.png'}'
+	});
 }); 
 </script>
 #{/set}
@@ -43,7 +51,7 @@ $(document).ready(function() {
 					<span class="error">#{error 'ligneBudget.tag' /}</span>
 				</p>
 				<p>
-					<label for="montantManuel">Montant Manuel<span class="mandatory">*</span> :</label><input type="text" id="montantManuel" name="ligneBudget.montantManuel" value="#{if ligneBudget}${ligneBudget.montantManuel}#{/if}#{else}${flash.get("ligneBudget.montantManuel")}#{/else}"/>
+					<label for="montantManuel">Montant Manuel<span class="mandatory">*</span> :</label><input type="text" id="montantManuel" name="ligneBudget.montantManuel" value="#{if ligneBudget}${ligneBudget.montantManuel}#{/if}#{else}${flash.get("ligneBudget.montantManuel")}#{/else}" class="calculator"/>
 					<span class="error">#{error 'ligneBudget.montantManuel' /}</span>
 				</p>
 				<div class="submit">
