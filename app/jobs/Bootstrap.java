@@ -1,6 +1,6 @@
 package jobs;
 
-import models.Devise;
+import models.Compte;
 import play.Play;
 import play.Play.Mode;
 import play.jobs.Job;
@@ -15,7 +15,7 @@ public class Bootstrap extends Job {
 			Play.ctxPath = "/bankable";
 			Router.load("/bankable");
 		}
-		if (Devise.count() == 0) {
+		if (Compte.count() == 0) {
 			Fixtures.loadModels("initial-data.yml");
 		}
 	}

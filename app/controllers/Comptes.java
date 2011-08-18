@@ -3,7 +3,6 @@ package controllers;
 import java.util.List;
 
 import models.Compte;
-import models.Devise;
 import models.EEtatOperation;
 import models.ETypeOperation;
 import models.Operation;
@@ -56,8 +55,7 @@ public class Comptes extends Controller {
 
 	public static void ajouter() {
 		String titre = "Ajouter";
-		List<Devise> devises = Devise.findAll();
-		render("Comptes/editer.html", titre, devises);
+		render("Comptes/editer.html", titre);
 	}
 
 	public static void editer(Long compteId) {
@@ -65,19 +63,18 @@ public class Comptes extends Controller {
 		notFoundIfNull(compte);
 
 		String titre = "Editer";
-		List<Devise> devises = Devise.findAll();
 
-		render(titre, compte, devises);
+		render(titre, compte);
 	}
 
 	public static void enregistrer(@Required @Valid Compte compte) {
 		if (validation.hasErrors()) {
-			params.flash();
-			validation.keep();
 			if (compte.id != null && compte.id > 0) {
-				editer(compte.id);
+				String titre = "Editer";
+				render(titre, compte);
 			} else {
-				ajouter();
+				String titre = "Ajouter";
+				render("Comptes/editer.html", titre);
 			}
 		}
 		compte.save();

@@ -2,9 +2,9 @@
 #{set title: compte.nom + ' | ' + titre + ' une opération' /}
 
 #{set 'moreStyles'}
-    <link rel="stylesheet" type="text/css" href="@{'/public/stylesheets/flick/jquery-ui-1.8.15.css'}">
-    <link rel="stylesheet" type="text/css" href="@{'/public/stylesheets/jquery.tagit.css'}">
-    <link rel="stylesheet" type="text/css" href="@{'/public/stylesheets/jquery.calculator.css'}">
+<link rel="stylesheet" type="text/css" href="@{'/public/stylesheets/flick/jquery-ui-1.8.15.css'}">
+<link rel="stylesheet" type="text/css" href="@{'/public/stylesheets/jquery.tagit.css'}">
+<link rel="stylesheet" type="text/css" href="@{'/public/stylesheets/jquery.calculator.css'}">
 #{/set}
 
 #{set 'moreScripts'}
@@ -53,39 +53,47 @@ $(document).ready(function() {
 				<input type="hidden" name="oldMontant" value="${operation.montant}"/>
 				#{/if}
 				<input type="hidden" name="operation.compte.id" value="${compte.id}"/>
+				
+				#{bankable.textField 'operation.date'}
+					#{textFieldBody field, label:'Date', datepicker:true, mandatory:true /}
+				#{/bankable.textField}
+				
+				#{bankable.textField 'operation.libelle'}
+					#{textFieldBody field, label:'Libell&eacute;', mandatory:true /}
+				#{/bankable.textField}
+				
+				#{bankable.textField 'operation.montant'}
+					#{textFieldBody field, label:'Montant', mandatory:true, calculator:true /}
+				#{/bankable.textField}
+				
+				#{field 'operation.type'}
 				<p>
-					<label for="date">Date<span class="mandatory">*</span> :</label><input type="text" id="date" name="operation.date" class="datepicker" value="#{if operation}${operation.date.format("dd/MM/yyyy")}#{/if}#{else}${flash.get("operation.date)")}#{/else}"/>
-					<span class="error">#{error 'operation.date' /}</span>
-				</p>
-				<p>
-					<label for="libelle">Libell&eacute;<span class="mandatory">*</span> :</label><input type="text" id="libelle" name="operation.libelle" value="#{if operation}${operation.libelle}#{/if}#{else}${flash.get("operation.libelle")}#{/else}"/>
-					<span class="error">#{error 'operation.libelle' /}</span>
-				</p>
-				<p>
-					<label for="montant">Montant<span class="mandatory">*</span> :</label><input type="text" id="montant" name="operation.montant" value="#{if operation}${operation.montant}#{/if}#{else}${flash.get("operation.montant")}#{/else}" class="calculator"/>
-					<span class="error">#{error 'operation.montant' /}</span>
-				</p>
-				<p>
-					<label>Type<span class="mandatory">*</span> :</label><select name="operation.type">
+					<label for="${field.id}">Type<span class="mandatory">*</span> :</label>
+					<select id="${field.id}" name="${field.name}">
 						<option></option>
 						#{list items:models.ETypeOperation, as:'typeOperation'}
 						<option value="${typeOperation}" #{if operation}#{if typeOperation == operation.type}selected#{/if}#{/if}#{else}#{if flash.get("operation.type") == typeOperation}selected#{/if}#{/else}>&{'ETypeOperation.' + typeOperation}</option>
 						#{/list}
 					</select>
-					<span class="error">#{error 'operation.type' /}</span>
+					<span class="error">#{error field.name /}</span>
 				</p>
+				#{/field}
+				#{field 'tags'}
 				<p>
-					<label for="tags">Tags :</label><input type="text" id="tags" name="tags" value="#{if operation}${operation.tags.join('nom', ', ')}#{/if}#{else}${flash.get("tags")}#{/else}"/>
-					<span class="error">#{error 'tags' /}</span>
+				  <label for="${field.id}">Tags :</label>
+				  <input type="text" id="${field.id}" name="${field.name}" value="${operation && operation.tags != null ? operation.tags.join('nom', ', ') : field.value}"/>
+				  <span class="error">#{error field.name /}</span>
 				</p>
-				<p>
-					<label for="numero">Num&eacute;ro :</label><input type="text" id="numero" name="operation.numero" value="#{if operation}${operation.numero}#{/if}#{else}${flash.get("operation.numero")}#{/else}" />
-					<span class="error">#{error 'operation.numero' /}</span>
-				</p>
-				<p>
-					<label for="detail">D&eacute;tail :</label><input type="text" id="detail" name="operation.detail" value="#{if operation}${operation.detail}#{/if}#{else}${flash.get("operation.detail")}#{/else}" />
-					<span class="error">#{error 'operation.detail' /}</span>
-				</p>
+				#{/field}
+				
+				#{bankable.textField 'operation.numero'}
+					#{textFieldBody field, label:'Num&eacute;ro' /}
+				#{/bankable.textField}
+				
+				#{bankable.textField 'operation.detail'}
+					#{textFieldBody field, label:'D&eacute;tail' /}
+				#{/bankable.textField}
+				
 				<div class="submit">
 		            <input type="submit" name="valid"  value="Valider" />&nbsp;
 					<input type="submit" name="validQuit" value="Valider & Fermer" class="white" />&nbsp;<a href="@{Comptes.resume(compte.id)}" class="button white">Annuler</a>

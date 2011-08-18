@@ -48,9 +48,9 @@
 								    </div>
 								</div>
 							</td>
-				    		<td class="budgetActuel">${ligne.montantActuel.format('0.00')}&nbsp;${ligne.budget.compte.devise.symbole}</td>
-				    		<td class="budgetPrevisionnel">${(ligne.montantEcheance + ligne.montantManuel).format('0.00')}&nbsp;${ligne.budget.compte.devise.symbole}</td>
-				    		<td class="budgetPrevisionnelRepartis">Ech&eacute;ance = ${ligne.montantEcheance.format('0.00')} ${ligne.budget.compte.devise.symbole} | Manuel = ${ligne.montantManuel.format('0.00')} ${ligne.budget.compte.devise.symbole}</td>
+				    		<td class="budgetActuel">${ligne.montantActuel.format('0.00')}&nbsp;&euro;</td>
+				    		<td class="budgetPrevisionnel">${(ligne.montantEcheance + ligne.montantManuel).format('0.00')}&nbsp;&euro;</td>
+				    		<td class="budgetPrevisionnelRepartis">Ech&eacute;ance = ${ligne.montantEcheance.format('0.00')}&nbsp;&euro; | Manuel = ${ligne.montantManuel.format('0.00')}&nbsp;&euro;</td>
 				    		<td class="actions"><a href="@{Budgets.editerLigne(ligne.id)}" title="Editer"><img src="@{'/public/images/edit.png'}" alt="Editer" class="editer"></a><a href="@{Budgets.supprimerLigne(ligne.id)}" title="Supprimer" class="supprimer"><img src="@{'/public/images/delete.png'}" alt="Supprimer"></a></td>
 				    	</tr>
 				    #{/list}

@@ -1,4 +1,5 @@
 body {background: url(../images/bg.png); font-family: Arial, Helvetica, Sans-serif; font-size: 12px;}
+select {margin-left: 0px;}
 .cb, .clear {clear: both;}
 .relative {position: relative;}
 .center {text-align: center;}
