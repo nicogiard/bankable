@@ -61,15 +61,7 @@ $(document).ready(function() {
 				</ul>
 			</div>
 			#{if compte.operations}
-	        <div class="pagination">
-	        	#{if page > 1}<a href="@{Comptes.resume(compte.id, page-1)}" class="prev">«</a>#{/if}
-	            #{else}<span class="prev">«</span>#{/else}
-	            #{list items:1..numberOfPage, as:'nb'}
-	            <a href="@{Comptes.resume(compte.id, nb)}" #{if page && page == nb}class="current"#{/if}>${nb}</a>
-	            #{/list}
-	            #{if page < numberOfPage}<a href="@{Comptes.resume(compte.id, page+1)}" class="next">»</a>#{/if}
-	            #{else}<span class="next">»</span>#{/else}
-	        </div>
+			#{pagination pagination, url:actionBridge.Comptes.resume(compte.id) /}
 			<table>
 				<thead>
 					<tr>
@@ -91,15 +83,7 @@ $(document).ready(function() {
 				</tbody>
 				<tfoot></tfoot>
 			</table>
-			<div class="pagination">
-	        	#{if page > 1}<a href="@{Comptes.resume(compte.id, page-1)}" class="prev">«</a>#{/if}
-	            #{else}<span class="prev">«</span>#{/else}
-	            #{list items:1..numberOfPage, as:'nb'}
-	            <a href="@{Comptes.resume(compte.id, nb)}" #{if page && page == nb}class="current"#{/if}>${nb}</a>
-	            #{/list}
-	            #{if page < numberOfPage}<a href="@{Comptes.resume(compte.id, page+1)}" class="next">»</a>#{/if}
-	            #{else}<span class="next">»</span>#{/else}
-	        </div>
+			#{pagination pagination, url:actionBridge.Comptes.resume(compte.id) /}
 			#{/if}
 			#{else}
 				<p>Aucune opération</p>

@@ -5,61 +5,62 @@ package controllers.utils;
  * @author f.meurisse
  */
 public class Pagination {
-    private int page;
-    private int pageSize;
-    private int pageCount;
-    private long elementCount;
+	private int page;
+	private int pageSize;
+	private int pageCount;
+	private long elementCount;
 
-    public Pagination() {
-        this(15);
-    }
+	public static final int DEFAULT_PER_PAGE = 15;
 
-    public Pagination(int pageSize) {
-        this.pageSize = pageSize;
-        this.page = 1;
-    }
+	public Pagination() {
+		this(DEFAULT_PER_PAGE);
+	}
 
-    public void setElementCount(long elementCount) {
-        this.elementCount = elementCount;
-        updatePageCount();
-    }
+	public Pagination(int pageSize) {
+		this.pageSize = pageSize;
+		this.page = 1;
+	}
 
-    public long getElementCount() {
-        return this.elementCount;
-    }
+	public void setElementCount(long elementCount) {
+		this.elementCount = elementCount;
+		updatePageCount();
+	}
 
-    public void setPageSize(int pageSize) {
-        this.pageSize = pageSize;
-        updatePageCount();
-    }
+	public long getElementCount() {
+		return this.elementCount;
+	}
 
-    public int getPageSize() {
-        return this.pageSize;
-    }
+	public void setPageSize(int pageSize) {
+		this.pageSize = pageSize;
+		updatePageCount();
+	}
 
-    public int getPageCount() {
-        return this.pageCount;
-    }
+	public int getPageSize() {
+		return this.pageSize;
+	}
 
-    public void setPage(int page) {
-        this.page = page;
-        if (this.page < 1) {
-            this.page = 1;
-        }
-        if (this.page > this.pageCount) {
-            this.page = this.pageCount;
-        }
-    }
+	public int getPageCount() {
+		return this.pageCount;
+	}
 
-    public int getPage() {
-        return this.page;
-    }
+	public void setPage(int page) {
+		this.page = page;
+		if (this.page < 1) {
+			this.page = 1;
+		}
+		if (this.page > this.pageCount) {
+			this.page = this.pageCount;
+		}
+	}
 
-    private void updatePageCount() {
-        this.pageCount = (int) (this.elementCount / this.pageSize + 1L);
-        if (this.page > this.pageCount) {
-            this.page = this.pageCount;
-        }
-    }
+	public int getPage() {
+		return this.page;
+	}
 
+	private void updatePageCount() {
+		this.pageCount = (int) Math.ceil((double) this.elementCount / this.pageSize);
+		if (this.page > this.pageCount) {
+			this.page = this.pageCount;
+		}
+	}
 }

@@ -13,14 +13,14 @@ import models.Tag;
 
 import org.joda.time.MutableDateTime;
 
-import play.Logger;
 import play.db.jpa.JPA;
 import play.mvc.Before;
 import play.mvc.Controller;
+import controllers.utils.Pagination;
 
 public class Tags extends Controller {
 
-	public static final Long OPERATION_PAR_PAGE = 15L;
+	private static final Pagination tagsPagination = new Pagination();
 
 	@Before
 	static void defaultData() {
@@ -29,6 +29,18 @@ public class Tags extends Controller {
 
 		renderArgs.put("allComptes", allComptes);
 		renderArgs.put("allTags", allTags);
+
+		// Récupération de la pagination
+		// Dans l'ordre params puis session
+		String pageParam = params.get("page");
+		if (pageParam == null) {
+			pageParam = session.get("tagsPagination.page");
+		}
+		if (pageParam == null) {
+			pageParam = "1";
+		}
+		tagsPagination.setPage(Integer.valueOf(pageParam));
+		session.put("tagsPagination.page", pageParam);
 	}
 
 	public static void index(Long compteId) {
@@ -55,21 +67,17 @@ public class Tags extends Controller {
 		render(compte, tagsCredit, tagsDebit);
 	}
 
-	public static void detail(Long compteId, Long tagId, Long pageNumber) {
+	public static void detail(Long compteId, Long tagId) {
 		Compte compte = Compte.findById(compteId);
 		notFoundIfNull(compte);
 
 		Tag currentTag = Tag.findById(tagId);
 		notFoundIfNull(currentTag);
 
-		Long page = (pageNumber == null || pageNumber == 0) ? 1L : pageNumber;
 		Long countOperation = Compte.find("select count(o) from Operation o join o.tags t where t.id=?", currentTag.id).first();
-		Double tempNumberOfPage = countOperation.doubleValue() / OPERATION_PAR_PAGE;
-		Long numberOfPage = tempNumberOfPage < 1 ? 1L : Math.round(tempNumberOfPage);
+		tagsPagination.setElementCount(countOperation);
 
-		Logger.info("page : %s | count : %s | numberOfPage : %s", page.toString(), countOperation.toString(), numberOfPage.toString());
-
-		List<Operation> operations = Operation.find("select o from Operation o join o.tags t where o.compte.id=? AND t.id=? ORDER BY date DESC", compte.id, currentTag.id).fetch(page.intValue(), OPERATION_PAR_PAGE.intValue());
+		List<Operation> operations = Operation.find("select o from Operation o join o.tags t where o.compte.id=? AND t.id=? ORDER BY date DESC", compte.id, currentTag.id).fetch(tagsPagination.getPage(), tagsPagination.getPageSize());
 
 		SimpleDateFormat sdf = new SimpleDateFormat("MM/yyyy");
 		MutableDateTime dateTime = new MutableDateTime(new Date());
@@ -101,7 +109,8 @@ public class Tags extends Controller {
 			}
 		}
 
-		render(compte, currentTag, operations, countOperation, numberOfPage, page, datas, color);
+		Pagination pagination = tagsPagination;
+		render(compte, currentTag, operations, pagination, datas, color);
 	}
 
 	public static void showTagOnGraph(Long tagId, boolean show) {

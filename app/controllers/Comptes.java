@@ -6,31 +6,42 @@ import models.Compte;
 import models.EEtatOperation;
 import models.ETypeOperation;
 import models.Operation;
-import play.Logger;
 import play.data.validation.Required;
 import play.data.validation.Valid;
 import play.db.jpa.JPA;
 import play.mvc.Before;
 import play.mvc.Controller;
+import controllers.utils.Pagination;
 
 public class Comptes extends Controller {
 
-	public static final Long OPERATION_PAR_PAGE = 15L;
+	private static final Pagination comptesPagination = new Pagination();
 
 	@Before
 	static void defaultData() {
 		List<Compte> comptes = Compte.findAll();
+		renderArgs.put("comptes", comptes);
 
 		Double total = Compte.find("select sum(compte.solde) from Compte compte").first();
 		if (total == null) {
 			total = 0D;
 		}
-
-		renderArgs.put("comptes", comptes);
 		renderArgs.put("total", total);
+
+		// Récupération de la pagination
+		// Dans l'ordre params puis session
+		String pageParam = params.get("page");
+		if (pageParam == null) {
+			pageParam = session.get("comptesPagination.page");
+		}
+		if (pageParam == null) {
+			pageParam = "1";
+		}
+		comptesPagination.setPage(Integer.valueOf(pageParam));
+		session.put("comptesPagination.page", pageParam);
 	}
 
-	public static void resume(Long compteId, Long pageNumber) {
+	public static void resume(Long compteId) {
 		Compte compte = null;
 		if (compteId != null) {
 			compte = Compte.findById(compteId);
@@ -38,18 +49,14 @@ public class Comptes extends Controller {
 		}
 
 		if (compte != null) {
-			Long page = (pageNumber == null || pageNumber == 0) ? 1L : pageNumber;
 			Long countOperation = Compte.find("select count(operation) from Operation operation where operation.compte.id=?", compte.id).first();
-			Double tempNumberOfPage = countOperation.doubleValue() / OPERATION_PAR_PAGE;
-			Long numberOfPage = tempNumberOfPage < 1 ? 1L : Math.round(tempNumberOfPage);
+			comptesPagination.setElementCount(countOperation);
 
-			Logger.debug("page : %s | count : %s | numberOfPage : %s", page.toString(), countOperation.toString(), numberOfPage.toString());
+			List<Operation> operations = Operation.find("compte.id=? ORDER BY date DESC, id DESC", compte.id).fetch(comptesPagination.getPage(), comptesPagination.getPageSize());
 
-			List<Operation> operations = Operation.find("compte.id=? ORDER BY date DESC, id DESC", compte.id).fetch(page.intValue(), OPERATION_PAR_PAGE.intValue());
-
-			render(compte, operations, countOperation, numberOfPage, page);
+			Pagination pagination = comptesPagination;
+			render(compte, operations, pagination);
 		}
-
 		render(compte);
 	}
 
@@ -78,7 +85,7 @@ public class Comptes extends Controller {
 			}
 		}
 		compte.save();
-		resume(compte.id, null);
+		resume(compte.id);
 	}
 
 	public static void rapprocher(Long compteId) {
@@ -90,7 +97,7 @@ public class Comptes extends Controller {
 			operation.etat = EEtatOperation.RAPPROCHEE;
 			operation.save();
 		}
-		Comptes.resume(compte.id, null);
+		Comptes.resume(compte.id);
 	}
 
 	public static void vider(Long compteId) {
@@ -109,6 +116,6 @@ public class Comptes extends Controller {
 		JPA.em().createNativeQuery("DELETE FROM Operation_Tags WHERE operation_id in (SELECT id FROM Operation WHERE compte_id=?)").setParameter(1, compteId).executeUpdate();
 		JPA.em().createNativeQuery("DELETE FROM Operation WHERE compte_id=?").setParameter(1, compteId).executeUpdate();
 
-		Comptes.resume(compteId, null);
+		Comptes.resume(compteId);
 	}
 }

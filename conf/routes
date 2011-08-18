@@ -7,7 +7,6 @@ GET     /                                                                       
 GET     /resume/compte/{compteId}                                                  Application.resume
 
 GET     /compte/ajouter                                                            Comptes.ajouter
-GET     /compte/{compteId}/page/{pageNumber}                                       Comptes.resume
 GET     /compte/{compteId}                                                         Comptes.resume
 GET     /compte                                                                    Comptes.resume
 GET     /compte/{compteId}/editer                                                  Comptes.editer
@@ -35,7 +34,6 @@ GET     /echeance/compte/{compteId}/date/{date}                                 
 
 GET     /tags/compte/{compteId}                                                    Tags.index
 GET     /tags                                                                      Tags.index
-GET     /tag/{tagId}/compte/{compteId}/page/{pageNumber}                           Tags.detail
 GET     /tag/{tagId}/compte/{compteId}                                             Tags.detail
 GET     /tag/{tagId}/graph/{show}                                                  Tags.showTagOnGraph
 

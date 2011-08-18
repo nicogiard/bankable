@@ -95,7 +95,7 @@ public class Operations extends Controller {
 			ajouter(operation.compte.id);
 		}
 		if (params._contains("validQuit")) {
-			Comptes.resume(operation.compte.id, null);
+			Comptes.resume(operation.compte.id);
 		}
 	}
 
@@ -114,7 +114,7 @@ public class Operations extends Controller {
 		compte.save();
 		operation.delete();
 
-		Comptes.resume(compteId, null);
+		Comptes.resume(compteId);
 	}
 
 	public static void pointer(Long compteId, Long operationId) {
@@ -186,6 +186,6 @@ public class Operations extends Controller {
 
 		JPA.em().createNativeQuery("DELETE FROM OperationImport WHERE compte_id=?").setParameter(1, compte.id).executeUpdate();
 
-		Comptes.resume(compte.id, null);
+		Comptes.resume(compte.id);
 	}
 }
