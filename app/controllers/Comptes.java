@@ -107,9 +107,9 @@ public class Comptes extends Controller {
 		// Update du Solde du compte a partir de la première opération
 		Operation operation = Operation.find("compte.id=? ORDER BY date ASC, id ASC", compte.id).first();
 		if (operation.type == ETypeOperation.CREDIT) {
-			operation.compte.solde = operation.compte.solde + operation.montant;
+			compte.solde = compte.solde - operation.montant;
 		} else {
-			operation.compte.solde = operation.compte.solde - operation.montant;
+			compte.solde = compte.solde + operation.montant;
 		}
 		compte.save();
 
