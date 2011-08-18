@@ -5,7 +5,6 @@ import java.util.List;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
-import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.OrderBy;
 import javax.persistence.Table;
@@ -27,10 +26,6 @@ public class Compte extends Model {
 	public String numero;
 
 	public String etablissement;
-
-	@Required
-	@ManyToOne
-	public Devise devise;
 
 	@OneToMany(mappedBy = "compte", fetch = FetchType.LAZY)
 	@OrderBy("id DESC")

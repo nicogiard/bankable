@@ -42,8 +42,7 @@ $(document).ready(function() {
     <div class="title">${compte.nom}<a href="@{Comptes.editer(compte.id)}">Editer</a></div>
     <div class="content">
 		<section id="infoCompte">
-			<p><label>Solde courant: </label>#{if compte.solde > 0}<img src="@{'/public/images/plus.gif'}" title="Cr&eacute;dit" class="debitCredit">#{/if}#{else}<img src="@{'/public/images/minus.gif'}" title="D&eacute;bit" class="debitCredit">#{/else}<span>${compte.solde.formatPositive('0.00')} ${compte.devise.symbole}</span></p>
-			<p><label>Devise: </label><span>${compte.devise.nom}</span></p>
+			<p><label>Solde courant: </label>#{if compte.solde > 0}<img src="@{'/public/images/plus.gif'}" title="Cr&eacute;dit" class="debitCredit">#{/if}#{else}<img src="@{'/public/images/minus.gif'}" title="D&eacute;bit" class="debitCredit">#{/else}<span>${compte.solde.formatPositive('0.00')}&nbsp;&euro;</span></p>
 			<p><label>Num&eacute;ro: </label><span>${compte.numero}&nbsp;</span></p>
 			<p><label>Etablissement: </label><span>${compte.etablissement}&nbsp;</span></p>
 		</section>
@@ -83,7 +82,7 @@ $(document).ready(function() {
 						<td class="check"><input type="checkbox"></td>
 						<td class="rapproche"><a href="#!" value="${operation.id}" class="linkRapproche #{if models.EEtatOperation.NONPOINTEE == operation.etat}" title="Non Point&eacute;e"#{/if}#{if models.EEtatOperation.POINTEE == operation.etat}pointee" title="Point&eacute;e"#{/if}#{if models.EEtatOperation.RAPPROCHEE == operation.etat}rapprochee" title="Rapproch&eacute;e"#{/if}>&nbsp;</a></td>
 						<td class="libelle">${operation.libelle}</td>
-						<td class="debitCredit">#{if models.ETypeOperation.DEBIT == operation.type}<img src="@{'/public/images/minus.gif'}" title="D&eacute;bit" class="debitCredit">#{/if}#{else}<img src="@{'/public/images/plus.gif'}" title="Cr&eacute;dit" class="debitCredit">#{/else}${operation.montant.format('0.00')}&nbsp;${operation.compte.devise.symbole}</td>
+						<td class="debitCredit">#{if models.ETypeOperation.DEBIT == operation.type}<img src="@{'/public/images/minus.gif'}" title="D&eacute;bit" class="debitCredit">#{/if}#{else}<img src="@{'/public/images/plus.gif'}" title="Cr&eacute;dit" class="debitCredit">#{/else}${operation.montant.format('0.00')}&nbsp;&euro;</td>
 						<td class="tags">#{if operation.tags.size() > 0}${operation.tags.join('nom', ', ')}#{/if}#{else}<span class="noTag">(aucun)</span>#{/else}</td>
 						<td class="date"><span title="${operation.date.format('dd/MM/yyyy HH:mm:ss')}">${operation.date.format('dd/MM/yyyy')}</span></td>
 						<td class="actions"><a href="@{Operations.editer(operation.compte.id, operation.id)}" title="Editer"><img src="@{'/public/images/edit.png'}" alt="Editer" class="editer"></a><a href="@{Operations.supprimer(operation.compte.id, operation.id)}" title="Supprimer" class="supprimer"><img src="@{'/public/images/delete.png'}" alt="Supprimer"></a></td>

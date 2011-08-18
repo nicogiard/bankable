@@ -1,15 +1,4 @@
 #-----------------------------------
-# Devise
-#-----------------------------------
-Devise(euro):
-  nom: Euro
-  symbole: €
-  
-Devise(dollar):
-  nom: Dollar
-  symbole: $
-
-#-----------------------------------
 # Tag
 #-----------------------------------
 Tag(tagSalaire):
@@ -20,7 +9,6 @@ Tag(tagDAB):
   nom: DAB
   showOnGraph: true
 
-
 #-----------------------------------
 # Compte
 #-----------------------------------
@@ -30,7 +18,6 @@ Compte(compteCourant):
   devise: euro
   numero: 12
   etablissement: Caisse d'Epargne Normandie
-
 
 #-----------------------------------
 # Operation
