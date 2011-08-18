@@ -2,6 +2,8 @@ package controllers;
 
 import java.util.List;
 
+import models.Civilite;
+
 import org.apache.commons.lang.StringUtils;
 
 import play.Logger;
@@ -34,40 +36,23 @@ public class Tiers extends Controller {
     }
 
     public static void index() {
-        String filtreTiers = session.get("filtreTiers");
-        Logger.debug("Tiers - index: filtre = %s", filtreTiers);
-
-        List<models.Tiers> tiersListe = null;
-        if (StringUtils.isBlank(filtreTiers)) {
-            tiersListe = models.Tiers.all().fetch();
-        }
-        else {
-            String filtre = filtreTiers + "%";
-            tiersListe = models.Tiers.find(
-                    "designation like ? OR nom like ? OR prenom like ?",
-                    filtre, filtre, filtre).fetch();
-        }
-
-        render(filtreTiers, tiersListe);
+        afficherListeTiers(null);
     }
 
     public static void ajouter() {
-        List<models.Tiers> tiersListe = models.Tiers.all().fetch();
         models.Tiers tiers = new models.Tiers();
-        render("Tiers/index.html", tiersListe, tiers);
+        afficherListeTiers(tiers);
     }
 
     public static void editer(Long tiersId) {
-        List<models.Tiers> tiersListe = models.Tiers.all().fetch();
         models.Tiers tiers = models.Tiers.findById(tiersId);
         notFoundIfNull(tiers);
-        render("Tiers/index.html", tiersListe, tiers);
+        afficherListeTiers(tiers);
     }
 
     public static void enregistrer(@Required @Valid models.Tiers tiers) {
         if (validation.hasErrors()) {
-            List<models.Tiers> tiersListe = models.Tiers.all().fetch();
-            render("Tiers/index.html", tiersListe, tiers);
+            afficherListeTiers(tiers);
         }
 
         tiers.save();
@@ -87,5 +72,34 @@ public class Tiers extends Controller {
         tiers.delete();
         flash.success("Le tiers a été supprimé avec succès");
         index();
+    }
+
+    /**
+     * Affiche la liste des tiers.
+     * 
+     * @param tiers
+     *            Le tiers en cours d'edition.
+     */
+    private static void afficherListeTiers(models.Tiers tiers) {
+        String filtreTiers = session.get("filtreTiers");
+        Logger.debug("Tiers - index: filtre = %s", filtreTiers);
+
+        // Chargement de la liste des tiers.
+        List<models.Tiers> tiersListe = null;
+        if (StringUtils.isBlank(filtreTiers)) {
+            tiersListe = models.Tiers.all().fetch();
+        }
+        else {
+            String filtre = filtreTiers + "%";
+            tiersListe = models.Tiers.find(
+                    "designation like ? OR nom like ? OR prenom like ?",
+                    filtre, filtre, filtre).fetch();
+        }
+
+        // Chargement de la liste des civilités
+        List<Civilite> civilities = Civilite.find("ORDER BY nom").fetch();
+
+        render("Tiers/index.html", civilities, tiersListe, tiers);
+
     }
 }
