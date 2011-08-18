@@ -20,17 +20,29 @@ public class PlanningEcheance {
 			Logger.debug("echeance : [%s]", echeance.toString());
 
 			switch (echeance.typeFrequence) {
-			case JOURNALIERE:
-				echeanceJournaliere(actualMonth, echeance);
-				break;
 			case HEBDOMADAIRE:
 				echeanceHebdomadaire(actualMonth, echeance);
+				break;
+			case BIMENSUELLE:
+				echeanceBiMensuelle(actualMonth, echeance);
 				break;
 			case MENSUELLE:
 				echeanceMensuelle(actualMonth, echeance);
 				break;
+			case BIMESTRIELLE:
+				echeanceBiMestrielle(actualMonth, echeance);
+				break;
+			case TRIMESTRIELLE:
+				echeanceTriMestrielle(actualMonth, echeance);
+				break;
+			case SEMESTRIELLE:
+				echeanceSemestrielle(actualMonth, echeance);
+				break;
 			case ANNUELLE:
 				echeanceAnnuelle(actualMonth, echeance);
+				break;
+			case UNEFOIS:
+				echeanceUneFois(actualMonth, echeance);
 				break;
 			default:
 				break;
@@ -118,12 +130,12 @@ public class PlanningEcheance {
 		return date.isEqual(compare);
 	}
 
-	private static void echeanceJournaliere(Date actualMonth, Echeance echeance) {
-		// TODO : echeance journaliere
-	}
-
 	private static void echeanceHebdomadaire(Date actualMonth, Echeance echeance) {
 		// TODO : echeance hebdomadaire
+	}
+
+	private static void echeanceBiMensuelle(Date actualMonth, Echeance echeance) {
+		// TODO : echeance bi mensuelle
 	}
 
 	private static void echeanceMensuelle(Date actualMonth, Echeance echeance) {
@@ -169,6 +181,18 @@ public class PlanningEcheance {
 		}
 	}
 
+	private static void echeanceBiMestrielle(Date actualMonth, Echeance echeance) {
+		// TODO : echeance bi mensuelle
+	}
+
+	private static void echeanceTriMestrielle(Date actualMonth, Echeance echeance) {
+		// TODO : echeance tri mensuelle
+	}
+
+	private static void echeanceSemestrielle(Date actualMonth, Echeance echeance) {
+		// TODO : echeance semestrielle
+	}
+
 	private static void echeanceAnnuelle(Date actualMonth, Echeance echeance) {
 		MutableDateTime firstDayOfYear = new MutableDateTime(actualMonth);
 		firstDayOfYear.setDayOfYear(1);
@@ -210,6 +234,10 @@ public class PlanningEcheance {
 				Logger.debug("dateEcheance [%s] est apres firstDayOfYear [%s]", dateEcheance, firstDayOfYear);
 			}
 		}
+	}
+
+	private static void echeanceUneFois(Date actualMonth, Echeance echeance) {
+		// TODO : echeance une fois
 	}
 
 	private static void newPlanningEcheance(Echeance echeance, Date dateEcheance) {
