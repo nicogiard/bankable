@@ -1,167 +1,63 @@
 #{extends 'Tiers/template.html' /}
 #{set title:'Tiers' /}
 
-#{set 'moreStyles'}
-    <link rel="stylesheet" type="text/css" href="@{'/public/stylesheets/flick/jquery-ui-1.8.15.css'}">
-    <link rel="stylesheet" type="text/css" href="@{'/public/stylesheets/jquery.tagit.css'}">
-#{/set}
-
 #{set 'moreScripts'}
-<script src="@{'/public/javascripts/jquery-ui-1.8.15.min.js'}" type="text/javascript" charset="utf-8"></script>
-<script src="@{'/public/javascripts/jquery.ui-1.8.15.datepicker-fr.js'}" type="text/javascript" charset="utf-8"></script>
-<script src="@{'/public/javascripts/tag-it.js'}" type="text/javascript" charset="UTF-8"></script>
-<script type="text/javascript">
+<script type="text/javascript" charset="UTF-8">
 $(document).ready(function() {
-    
-    var sampleTags = ['${allTags.joinWithRaw("nom", "', '")}'];
-    $('#tags').tagit({
-        availableTags: sampleTags
-    });
-    
+	$("a.supprimer").click(function(e){
+		e.preventDefault();
+		if (confirm('Etes vous sûr de vouloir supprimer ce tiers ?')) {
+            document.location.href = $(this).attr("href");
+        }
+	});
 }); 
 </script>
 #{/set}
 
-#{if tiers != null}
 <div class="bloc">
-    
-    <div class="title">
-      #{if tiers.id != null}Editer#{/if}#{else}Ajouter#{/else} un Tiers
-    </div>
-    
+    <div class="title">Tiers</div>
     <div class="content">
       <section>
-      
-        #{form @Tiers.enregistrer(), method:'POST'}
-        
-          #{if tiers.id != null}
-            <input type="hidden" name="tiers.id" value="${tiers.id}"/>
-          #{/if}
-         
-          #{field 'tiers.designation'}
-          <p>
-            <label for="${field.id}">Désignation<span class="mandatory">*</span></label>
-            <input id="${field.id}" name="${field.name}" type="text" value="${field.value}"/>
-            <span class="error">#{error field.name /}</span>
-          </p>
-          #{/field}
-          
-          <p>
-            <label for="tags">Tags :</label><input type="text" id="tags" name="tags" value="${tiers.tags.join('nom', ', ')}"/>
-            <span class="error">#{error 'tags' /}</span>
-          </p>
-          
-          #{field 'tiers.civilite'}
-          <p>
-            <label for="${field.id}">Civilité</label>
-            <select id="${field.id}" name="${field.name}.id">
-              <option></option>
-              #{list items: civilities, as: 'civility'}
-              <option value="${civility.id}" #{if field.value?.id == civility.id}selected="selected"#{/if}>${civility.nom} (${civility.abreviation})</option>
-              #{/list}
-            </select>
-            <span class="error">#{error field.name /}</span>
-          </p>
-          #{/field}
-          
-          #{field 'tiers.nom'}
-          <p>
-            <label for="${field.id}">Nom</label>
-            <input id="${field.id}" name="${field.name}" type="text" value="${field.value}"/>
-            <span class="error">#{error field.name /}</span>
-          </p>
-          #{/field}
-          
-          #{field 'tiers.prenom'}
-          <p>
-            <label for="${field.id}">Prénom</label>
-            <input id="${field.id}" name="${field.name}" type="text" value="${field.value}"/>
-            <span class="error">#{error field.name /}</span>
-          </p>
-          #{/field}          
-          #{field 'tiers.commentaires'}
-          <p>
-            <label for="${field.id}">Commentaires</label>
-            <textarea id="${field.id}" name="${field.name}" rows="4" cols="55">${field.value}</textarea>
-            <span class="error">#{error field.name /}</span>
-          </p>
-          #{/field}
-          
-          <div class="submit">
-            <input type="submit" name="valid"  value="Valider" />&nbsp;
-            <input type="submit" name="validQuit" value="Valider & Fermer" class="white" />&nbsp;
-            <a href="@{Tiers.index()}" class="button white">Annuler</a>
-          </div>
-          
-        #{/form}
-      
-      </section>
-    </div>
-</div>
-#{/if}
-
-<div class="bloc">
-
-    <div class="title">
-      Liste des Tiers
-    </div>
-    
-    <div class="content">
-      <section>
-      
         #{if flash.success}
 		  <div class="notif success">
 		     <strong>Succ&eacute;s :</strong> ${flash.success} <a href="#!" class="close"></a>
 		  </div>
 		#{/if}
-      
         #{if tiers == null}
         <ul class="actions">
            <li><a href="@{Tiers.ajouter()}" class="button">Ajouter un Tiers</a></li>
         </ul>
         #{/if}
-              
-		<table>
-		<thead>
-		  <tr>
-		    <th>Désignation</th>
-            <th>Tags</th>
-            <th>Civilité</th>
-		    <th>Nom</th>
-            <th>Prénom</th>
-            <th>Commentaires</th>
-		    <th></th>
-		  </tr>
-		</thead>
-		<tfoot></tfoot>
-		<tbody>
-		  #{list items:tiersListe, as:'ligne'}
-		  <tr>
-            <td>${ligne?.designation}</td>
-            <td class="tags">#{if ligne?.tags?.size() > 0}${ligne?.tags?.join('nom', ', ')}#{/if}#{else}<span class="noTag">(aucun)</span>#{/else}</td>
-		    <td>${ligne?.civilite?.abreviation}</td>
-		    <td>${ligne?.nom}</td>
-            <td>${ligne?.prenom}</td>
-            <td>${ligne?.commentaires?.nl2br()}</td>
-		    <td>
-		      <a href="@{Tiers.editer(ligne.id)}" title="Editer"><img src="@{'/public/images/edit.png'}" alt="Editer" class="editer"></a>
-		      <a href="@{Tiers.supprimer(ligne.id)}" title="Supprimer" class="supprimer"><img src="@{'/public/images/delete.png'}" alt="Supprimer"></a>
-		    </td>
-		  </tr>
-		  #{/list}
-		</tbody>
-		</table>
-		
-        <div class="pagination">
-           #{if pagination.page > 1}<a href="@{Tiers.index()}?tiersPagination.page=${pagination.page-1}" class="prev">«</a>#{/if}
-           #{else}<span class="prev">«</span>#{/else}
-           #{list items:1..pagination.pageCount, as:'nb'}
-           <a href="@{Tiers.index()}?tiersPagination.page=${nb}" #{if pagination.page == nb}class="current"#{/if}>${nb}</a>
-           #{/list}
-           #{if pagination.page < pagination.pageCount}<a href="@{Tiers.index()}?tiersPagination.page=${pagination.page+1}" class="next">»</a>#{/if}
-           #{else}<span class="next">»</span>#{/else}
-        </div>
         
+        #{if tiersListe}
+        #{pagination pagination, url:actionBridge.Tiers.index() /}
+		<table>
+			<thead>
+			  <tr>
+			    <th>D&eacute;signation</th><th>Tags</th><th>Civilit&eacute;</th><th>Nom</th><th>Pr&eacute;nom</th><th>Commentaires</th><th>&nbsp;</th>
+			  </tr>
+			</thead>
+			<tbody>
+			  #{list items:tiersListe, as:'ligne'}
+			  <tr>
+	            <td>${ligne?.designation}</td>
+	            <td class="tags">#{if ligne?.tags?.size() > 0}${ligne?.tags?.join('nom', ', ')}#{/if}#{else}<span class="noTag">(aucun)</span>#{/else}</td>
+			    <td>${ligne?.civilite?.abreviation}</td>
+			    <td>${ligne?.nom}</td>
+	            <td>${ligne?.prenom}</td>
+	            <td>${ligne?.commentaires?.nl2br()}</td>
+			    <td class="actions"><a href="@{Tiers.editer(ligne.id)}" title="Editer"><img src="@{'/public/images/edit.png'}" alt="Editer" class="editer"></a><a href="@{Tiers.supprimer(ligne.id)}" title="Supprimer" class="supprimer"><img src="@{'/public/images/delete.png'}" alt="Supprimer"></a>
+			    </td>
+			  </tr>
+			  #{/list}
+			</tbody>
+			<tfoot></tfoot>
+		</table>
+		#{pagination pagination, url:actionBridge.Tiers.index() /}
+        #{/if}
+		#{else}
+			<p>Aucun tiers</p>
+		#{/else}
       </section>
 	</div>
 </div>

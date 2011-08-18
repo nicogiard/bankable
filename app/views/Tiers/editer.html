@@ -1,0 +1,91 @@
+#{extends 'Tiers/template.html' /}
+#{set title: titre + ' un Tiers' /}
+
+#{set 'moreStyles'}
+    <link rel="stylesheet" type="text/css" href="@{'/public/stylesheets/flick/jquery-ui-1.8.15.css'}">
+    <link rel="stylesheet" type="text/css" href="@{'/public/stylesheets/jquery.tagit.css'}">
+#{/set}
+
+#{set 'moreScripts'}
+<script src="@{'/public/javascripts/jquery-ui-1.8.15.min.js'}" type="text/javascript" charset="utf-8"></script>
+<script src="@{'/public/javascripts/jquery.ui-1.8.15.datepicker-fr.js'}" type="text/javascript" charset="utf-8"></script>
+<script src="@{'/public/javascripts/tag-it.js'}" type="text/javascript" charset="UTF-8"></script>
+<script type="text/javascript">
+$(document).ready(function() {
+    var sampleTags = ['${allTags.joinWithRaw("nom", "', '")}'];
+    $('#tags').tagit({
+        availableTags: sampleTags
+    });
+}); 
+</script>
+#{/set}
+
+<div class="bloc">
+    <div class="title">${titre} un Tiers</div>
+    <div class="content">
+      <section>
+        #{if flash.success}
+		  <div class="notif success">
+		     <strong>Succ&eacute;s :</strong> ${flash.success} <a href="#!" class="close"></a>
+		  </div>
+		#{/if}
+		#{ifErrors}
+			<div class="notif error">
+	            <strong>Erreur :</strong> Veuillez corriger les erreurs avant de continuer. <a href="#!" class="close"></a>
+	        </div>
+		#{/ifErrors}
+        #{form @Tiers.enregistrer(), method:'POST'}
+			#{if tiers}
+			  <input type="hidden" name="tiers.id" value="${tiers.id}"/>
+			#{/if}
+          
+			#{bankable.textField 'tiers.designation'}
+				#{textFieldBody field, label:'D&eacute;signation', mandatory:true /}
+			#{/bankable.textField}
+			
+			#{field 'tags'}
+			<p>
+			  <label for="${field.id}">Tags :</label>
+			  <input type="text" id="${field.id}" name="${field.name}" value="${tiers && tiers.tags != null ? tiers.tags.join('nom', ', ') : field.value}"/>
+			  <span class="error">#{error field.name /}</span>
+			</p>
+			#{/field}
+          
+			#{field 'tiers.civilite'}
+			<p>
+			  <label for="${field.id}">Civilité</label>
+			  <select id="${field.id}" name="${field.name}.id">
+			    <option></option>
+			    #{list items: civilities, as: 'civility'}
+			    <option value="${civility.id}" #{if field.value?.id == civility.id}selected="selected"#{/if}>${civility.nom} (${civility.abreviation})</option>
+			    #{/list}
+			  </select>
+			  <span class="error">#{error field.name /}</span>
+			</p>
+			#{/field}
+                    
+			#{bankable.textField 'tiers.nom'}
+				#{textFieldBody field, label:'Nom' /}
+			#{/bankable.textField}
+          
+			#{bankable.textField 'tiers.prenom'}
+				#{textFieldBody field, label:'Pr&eacute;nom' /}
+			#{/bankable.textField}
+
+			#{field 'tiers.commentaires'}
+			<p>
+			  <label for="${field.id}">Commentaires</label>
+			  <textarea id="${field.id}" name="${field.name}" rows="4" cols="55">${field.value}</textarea>
+			  <span class="error">#{error field.name /}</span>
+			</p>
+			#{/field}
+			
+			<div class="submit">
+			  <input type="submit" name="valid"  value="Valider" />&nbsp;
+			  <input type="submit" name="validQuit" value="Valider & Fermer" class="white" />&nbsp;
+			  <a href="@{Tiers.index()}" class="button white">Annuler</a>
+			</div>
+		#{/form}
+      </section>
+    </div>
+</div>
