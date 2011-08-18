@@ -3,7 +3,7 @@
 
 #{if tiers != null}
 <div class="bloc">
-    <div class="title">#{if tiers.id != null}Editer#{/if}#{else}Ajouter#{/else} un Tiers</div>
+    
     <div class="content">
       <section>
       
@@ -51,7 +51,12 @@
 #{/if}
 
 <div class="bloc">
-    <div class="title">Liste des Tiers</div>
+
+    <div class="title">
+      Liste des Tiers
+      #{if filtre && filtre != ''}<a href="@{Tiers.index()}">Supprimer le filtre: ${filtre}</a>#{/if}
+    </div>
+    
     <div class="content">
       <section>
       
