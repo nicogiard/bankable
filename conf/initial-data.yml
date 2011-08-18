@@ -1,4 +1,27 @@
 #-----------------------------------
+# Civilite
+#-----------------------------------
+Civilite(mr):
+  code: mr
+  nom: Monsieur
+  abreviation: M
+  
+Civilite(mme):
+  code: mme
+  nom: Madame
+  abreviation: Mme
+  
+Civilite(mlle):
+  code: mlle
+  nom: Mademoiselle
+  abreviation: Mlle
+  
+Civilite(soc):
+  code: soc
+  nom: Société
+  abreviation: Soc
+
+#-----------------------------------
 # Tag
 #-----------------------------------
 Tag(tagSalaire):
