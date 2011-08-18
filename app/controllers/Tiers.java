@@ -3,6 +3,7 @@ package controllers;
 import java.util.List;
 
 import models.Civilite;
+import models.Tag;
 
 import org.apache.commons.lang.StringUtils;
 
@@ -28,6 +29,9 @@ public class Tiers extends Controller {
         }
         session.put("filtreTiers", filtre);
         renderArgs.put("filtreTiers", filtre);
+
+        List<Tag> allTags = Tag.find("ORDER BY nom ASC").fetch();
+        renderArgs.put("allTags", allTags);
     }
 
     public static void supprimerFiltre() {
@@ -50,13 +54,29 @@ public class Tiers extends Controller {
         afficherListeTiers(tiers);
     }
 
-    public static void enregistrer(@Required @Valid models.Tiers tiers) {
+    public static void enregistrer(@Required @Valid models.Tiers tiers,
+            String tags) {
         if (validation.hasErrors()) {
             afficherListeTiers(tiers);
         }
 
+        tiers.tags.clear();
+        if (StringUtils.isNotBlank(tags)) {
+            String[] tabTags = tags.split(",");
+            for (String stringTag : tabTags) {
+                Tag tag = Tag.find("nom=?", stringTag.trim()).first();
+                if (tag == null) {
+                    tag = new Tag();
+                    tag.nom = stringTag.trim();
+                    tag.save();
+                }
+                tiers.tags.add(tag);
+            }
+        }
+
         tiers.save();
-        flash.success("Le tiers a été enregistrée avec succès");
+        flash.success("Le tiers '%s' a été enregistrée avec succès",
+                tiers.designation);
 
         if (params._contains("valid")) {
             ajouter();
@@ -70,7 +90,8 @@ public class Tiers extends Controller {
         models.Tiers tiers = models.Tiers.findById(tiersId);
         notFoundIfNull(tiers);
         tiers.delete();
-        flash.success("Le tiers a été supprimé avec succès");
+        flash.success("Le tiers '%s' a été supprimé avec succès",
+                tiers.designation);
         index();
     }
 

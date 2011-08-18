@@ -1,6 +1,27 @@
 #{extends 'Tiers/template.html' /}
 #{set title:'Tiers' /}
 
+#{set 'moreStyles'}
+    <link rel="stylesheet" type="text/css" href="@{'/public/stylesheets/flick/jquery-ui-1.8.15.css'}">
+    <link rel="stylesheet" type="text/css" href="@{'/public/stylesheets/jquery.tagit.css'}">
+#{/set}
+
+#{set 'moreScripts'}
+<script src="@{'/public/javascripts/jquery-ui-1.8.15.min.js'}" type="text/javascript" charset="utf-8"></script>
+<script src="@{'/public/javascripts/jquery.ui-1.8.15.datepicker-fr.js'}" type="text/javascript" charset="utf-8"></script>
+<script src="@{'/public/javascripts/tag-it.js'}" type="text/javascript" charset="UTF-8"></script>
+<script type="text/javascript">
+$(document).ready(function() {
+    
+    var sampleTags = ['${allTags.joinWithRaw("nom", "', '")}'];
+    $('#tags').tagit({
+        availableTags: sampleTags
+    });
+    
+}); 
+</script>
+#{/set}
+
 #{if tiers != null}
 <div class="bloc">
     
@@ -19,11 +40,16 @@
          
           #{field 'tiers.designation'}
           <p>
-            <label for="${field.id}">Désignation</label>
+            <label for="${field.id}">Désignation<span class="mandatory">*</span></label>
             <input id="${field.id}" name="${field.name}" type="text" value="${field.value}"/>
             <span class="error">#{error field.name /}</span>
           </p>
           #{/field}
+          
+          <p>
+            <label for="tags">Tags :</label><input type="text" id="tags" name="tags" value="${tiers.tags.join('nom', ', ')}"/>
+            <span class="error">#{error 'tags' /}</span>
+          </p>
           
           #{field 'tiers.civilite'}
           <p>
@@ -99,7 +125,8 @@
 		<thead>
 		  <tr>
 		    <th>Désignation</th>
-		    <th>Civilité</th>
+            <th>Tags</th>
+            <th>Civilité</th>
 		    <th>Nom</th>
             <th>Prénom</th>
             <th>Commentaires</th>
@@ -110,7 +137,8 @@
 		<tbody>
 		  #{list items:tiersListe, as:'ligne'}
 		  <tr>
-		    <td>${ligne?.designation}</td>
+            <td>${ligne?.designation}</td>
+            <td class="tags">#{if ligne?.tags?.size() > 0}${ligne?.tags?.join('nom', ', ')}#{/if}#{else}<span class="noTag">(aucun)</span>#{/else}</td>
 		    <td>${ligne?.civilite?.abreviation}</td>
 		    <td>${ligne?.nom}</td>
             <td>${ligne?.prenom}</td>
