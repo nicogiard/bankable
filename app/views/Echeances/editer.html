@@ -3,17 +3,24 @@
 
 #{set 'moreStyles'}
     <link rel="stylesheet" type="text/css" href="@{'/public/stylesheets/flick/jquery-ui-1.8.15.css'}">
+    <link rel="stylesheet" type="text/css" href="@{'/public/stylesheets/jquery.calculator.css'}">
 #{/set}
 
 #{set 'moreScripts'}
 <script src="@{'/public/javascripts/jquery-ui-1.8.15.min.js'}" type="text/javascript" charset="utf-8"></script>
 <script src="@{'/public/javascripts/jquery.ui-1.8.15.datepicker-fr.js'}" type="text/javascript" charset="utf-8"></script>
+<script src="@{'/public/javascripts/jquery.calculator.pack.js'}" type="text/javascript" charset="utf-8"></script>
+<script src="@{'/public/javascripts/jquery.calculator-fr.js'}" type="text/javascript" charset="utf-8"></script>
 <script type="text/javascript">
 $(document).ready(function() {
 	$.datepicker.setDefaults($.datepicker.regional["fr"]);
 	$(".datepicker").datepicker("option", $.datepicker.regional["fr"]);
 	$(".datepicker").datepicker({
 		showButtonPanel: true
+	});
+	
+	$('.calculator').calculator({
+		useThemeRoller: true, showOn: 'button', buttonImageOnly: true, buttonImage: '@{'/public/images/calculator.png'}'
 	});
 }); 
 </script>
@@ -59,7 +66,7 @@ $(document).ready(function() {
 					<span class="error">#{error 'echeance.type' /}</span>
 				</p>
 				<p>
-					<label for="montant">Montant<span class="mandatory">*</span> :</label><input type="text" id="montant" name="echeance.montant" value="#{if echeance}${echeance.montant}#{/if}#{else}${flash.get("echeance.montant")}#{/else}"/>
+					<label for="montant">Montant<span class="mandatory">*</span> :</label><input type="text" id="montant" name="echeance.montant" value="#{if echeance}${echeance.montant}#{/if}#{else}${flash.get("echeance.montant")}#{/else}" class="calculator"/>
 					<span class="error">#{error 'echeance.montant' /}</span>
 				</p>
 				<p>

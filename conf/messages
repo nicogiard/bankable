@@ -15,7 +15,11 @@ ETypeEcheance.DEBIT = Débit
 ETypeOperation.CREDIT = Crédit
 ETypeOperation.DEBIT = Débit
 
-ETypeFrequence.JOURNALIERE = Journalière
 ETypeFrequence.HEBDOMADAIRE = Hebdomadaire
+ETypeFrequence.BIMENSUELLE = Bimensuelle
 ETypeFrequence.MENSUELLE = Mensuelle
+ETypeFrequence.BIMESTRIELLE = Bimestrielle
+ETypeFrequence.TRIMESTRIELLE = Trimestrielle
+ETypeFrequence.SEMESTRIELLE =  Semestrielle
 ETypeFrequence.ANNUELLE = Annuelle
+ETypeFrequence.UNEFOIS = Une Fois
