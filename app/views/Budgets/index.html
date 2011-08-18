@@ -22,9 +22,11 @@
     <div class="title">Budget du mois ${actualMonth.format('MMMM yyyy', 'FR')}</div>
     <div class="content">
     	<section>
-    		<ul class="actions">
-				<li><a href="@{Budgets.ajouterLigne()}">Ajouter une ligne</a></li>
-			</ul>
+			<div class="submit">
+	    		<ul class="actions">
+					<li><a href="@{Budgets.ajouterLigne()}" class="button">Ajouter une ligne</a></li>
+				</ul>
+			</div>
 			#{if flash.success}
 			    <div class="notif success">
 		            <strong>Succ&eacute;s :</strong> ${flash.success} <a href="#!" class="close"></a>
