@@ -69,12 +69,12 @@ public class Comptes extends Controller {
 
 	public static void enregistrer(@Required @Valid Compte compte) {
 		if (validation.hasErrors()) {
-			params.flash();
-			validation.keep();
 			if (compte.id != null && compte.id > 0) {
-				editer(compte.id);
+				String titre = "Editer";
+				render(titre, compte);
 			} else {
-				ajouter();
+				String titre = "Ajouter";
+				render("Comptes/editer.html", titre);
 			}
 		}
 		compte.save();

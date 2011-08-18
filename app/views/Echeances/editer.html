@@ -48,14 +48,15 @@ $(document).ready(function() {
 					</select>
 					<span class="error">#{error 'echeance.compte' /}</span>
 				</p>
-				<p>
-					<label for="description">Description<span class="mandatory">*</span> :</label><input type="text" id="description" name="echeance.description" value="#{if echeance}${echeance.description}#{/if}#{else}${flash.get("echeance.description")}#{/else}"/>
-					<span class="error">#{error 'echeance.description' /}</span>
-				</p>
-				<p>
-					<label for="date">Date<span class="mandatory">*</span> :</label><input type="text" id="date" name="echeance.date" class="datepicker" value="#{if echeance}${echeance.date ? echeance.date.format("dd/MM/yyyy") : ""}#{/if}#{else}${flash.get("echeance.date")}#{/else}"/>
-					<span class="error">#{error 'echeance.date' /}</span>
-				</p>
+				
+				#{bankable.textField 'echeance.description'}
+					#{textFieldBody field, label:'Description', mandatory:true /}
+				#{/bankable.textField}
+				
+				#{bankable.textField 'echeance.date'}
+					#{textFieldBody field, label:'Date', mandatory:true, datePicker:true/}
+				#{/bankable.textField}
+				
 				<p>
 					<label>Type<span class="mandatory">*</span> :</label><select name="echeance.type.id">
 						<option></option>
@@ -65,10 +66,11 @@ $(document).ready(function() {
 					</select>
 					<span class="error">#{error 'echeance.type' /}</span>
 				</p>
-				<p>
-					<label for="montant">Montant<span class="mandatory">*</span> :</label><input type="text" id="montant" name="echeance.montant" value="#{if echeance}${echeance.montant}#{/if}#{else}${flash.get("echeance.montant")}#{/else}" class="calculator"/>
-					<span class="error">#{error 'echeance.montant' /}</span>
-				</p>
+				
+				#{bankable.textField 'echeance.montant'}
+					#{textFieldBody field, label:'Montant', mandatory:true, calculator:true/}
+				#{/bankable.textField}
+				
 				<p>
 					<label>Type de Fr&eacute;quence<span class="mandatory">*</span> :</label><select name="echeance.typeFrequence.id">
 						<option></option>
@@ -87,10 +89,11 @@ $(document).ready(function() {
 					</select>
 					<span class="error">#{error 'echeance.tag' /}</span>
 				</p>
-				<p>
-					<label for="dateFin">Date de fin :</label><input type="text" id="dateFin" name="echeance.dateFin" class="datepicker" value="#{if echeance}${echeance.dateFin ? echeance.dateFin.format("dd/MM/yyyy") : ""}#{/if}#{else}${flash.get("echeance.dateFin")}#{/else}"/>
-					<span class="error">#{error 'echeance.dateFin' /}</span>
-				</p>
+				
+				#{bankable.textField 'echeance.dateFin'}
+					#{textFieldBody field, label:'Date de fin', datePicker:true/}
+				#{/bankable.textField}
+				
 				<div class="submit">
 		            <input type="submit" value="Valider" />&nbsp;<a href="#{if echeance}@{Echeances.index(echeance.compte.id)}#{/if}#{else}@{Echeances.index()}#{/else}" class="button white">Annuler</a>
 		        </div>

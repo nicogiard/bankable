@@ -62,12 +62,16 @@ public class Echeances extends Controller {
 
 	public static void enregistrer(@Required @Valid Echeance echeance) {
 		if (validation.hasErrors()) {
-			params.flash();
-			validation.keep();
 			if (echeance.id != null && echeance.id > 0) {
-				editer(echeance.id);
+				String titre = "Editer";
+				List<Compte> comptes = Compte.findAll();
+				List<Tag> tags = Tag.findAll();
+				render(titre, echeance, comptes, tags);
 			} else {
-				ajouter();
+				String titre = "Ajouter";
+				List<Compte> comptes = Compte.findAll();
+				List<Tag> tags = Tag.findAll();
+				render("Echeances/editer.html", titre, echeance, comptes, tags);
 			}
 		}
 		echeance.save();

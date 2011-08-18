@@ -47,12 +47,20 @@ public class Operations extends Controller {
 
 	public static void enregistrer(@Required @Valid Operation operation, String tags, Float oldMontant) {
 		if (validation.hasErrors()) {
-			params.flash();
-			validation.keep();
 			if (operation.id != null && operation.id > 0) {
-				editer(operation.compte.id, operation.id);
+				String titre = "Editer";
+				Compte compte = operation.compte;
+				notFoundIfNull(compte);
+
+				List<Tag> allTags = Tag.find("ORDER BY nom ASC").fetch();
+				render("Operations/editer.html", titre, compte, operation, allTags);
 			} else {
-				ajouter(operation.compte.id);
+				String titre = "Ajouter";
+				Compte compte = operation.compte;
+				notFoundIfNull(compte);
+
+				List<Tag> allTags = Tag.find("ORDER BY nom ASC").fetch();
+				render("Operations/editer.html", titre, compte, operation, allTags);
 			}
 		}
 

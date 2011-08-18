@@ -69,12 +69,16 @@ public class Budgets extends Controller {
 
 	public static void enregistrerLigne(@Required @Valid LigneBudget ligneBudget) {
 		if (validation.hasErrors()) {
-			params.flash();
-			validation.keep();
 			if (ligneBudget.id != null && ligneBudget.id > 0) {
-				editerLigne(ligneBudget.id);
+				String titre = "Editer";
+				List<Budget> budgets = Budget.findAll();
+				List<Tag> tags = Tag.findAll();
+				render(titre, ligneBudget, budgets, tags);
 			} else {
-				ajouterLigne();
+				String titre = "Ajouter";
+				List<Budget> budgets = Budget.findAll();
+				List<Tag> tags = Tag.findAll();
+				render("Budgets/editerLigne.html", titre, ligneBudget, budgets, tags);
 			}
 		}
 		// TODO : calculer le montantEcheance
