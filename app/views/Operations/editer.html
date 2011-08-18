@@ -5,6 +5,7 @@
 <link rel="stylesheet" type="text/css" href="@{'/public/stylesheets/flick/jquery-ui-1.8.15.css'}">
 <link rel="stylesheet" type="text/css" href="@{'/public/stylesheets/jquery.tagit.css'}">
 <link rel="stylesheet" type="text/css" href="@{'/public/stylesheets/jquery.calculator.css'}">
+<link rel="stylesheet" type="text/css" href="@{'/public/stylesheets/chosen.css'}" />
 #{/set}
 
 #{set 'moreScripts'}
@@ -13,6 +14,7 @@
 <script src="@{'/public/javascripts/tag-it.js'}" type="text/javascript" charset="UTF-8"></script>
 <script src="@{'/public/javascripts/jquery.calculator.pack.js'}" type="text/javascript" charset="utf-8"></script>
 <script src="@{'/public/javascripts/jquery.calculator-fr.js'}" type="text/javascript" charset="utf-8"></script>
+<script src="@{'/public/javascripts/chosen.jquery.min.js'}" type="text/javascript" charset="utf-8"></script>
 <script type="text/javascript">
 $(document).ready(function() {
 	$.datepicker.setDefaults($.datepicker.regional["fr"]);
@@ -29,6 +31,8 @@ $(document).ready(function() {
 	$('.calculator').calculator({
 		useThemeRoller: true, showOn: 'button', buttonImageOnly: true, buttonImage: '@{'/public/images/calculator.png'}'
 	});
+	
+	 $(".chzn-select").chosen();
 }); 
 </script>
 #{/set}
@@ -67,22 +71,35 @@ $(document).ready(function() {
 				#{/bankable.textField}
 				
 				#{field 'operation.type'}
-				<p>
+				<p class="fat">
 					<label for="${field.id}">Type<span class="mandatory">*</span> :</label>
-					<select id="${field.id}" name="${field.name}">
+					<select id="${field.id}" name="${field.name}" class="chzn-select" data-placeholder="Choisissez un Type...">
 						<option></option>
 						#{list items:models.ETypeOperation, as:'typeOperation'}
-						<option value="${typeOperation}" #{if operation}#{if typeOperation == operation.type}selected#{/if}#{/if}#{else}#{if flash.get("operation.type") == typeOperation}selected#{/if}#{/else}>&{'ETypeOperation.' + typeOperation}</option>
+						<option value="${typeOperation}" #{if operation}#{if typeOperation == operation.type}selected#{/if}#{/if}>&{'ETypeOperation.' + typeOperation}</option>
 						#{/list}
 					</select>
 					<span class="error">#{error field.name /}</span>
 				</p>
 				#{/field}
 				#{field 'tags'}
-				<p>
+				<p class="fat">
 				  <label for="${field.id}">Tags :</label>
 				  <input type="text" id="${field.id}" name="${field.name}" value="${operation && operation.tags != null ? operation.tags.join('nom', ', ') : field.value}"/>
 				  <span class="error">#{error field.name /}</span>
+				</p>
+				#{/field}
+				
+				#{field 'operation.tiers'}
+				<p class="fat">
+					<label for="${field.id}">Tiers :</label>
+					<select id="${field.id}" name="${field.name}" class="chzn-select" data-placeholder="Choisissez un Tiers...">
+						<option></option>
+						#{list items:allTiers, as:'tiers'}
+						<option value="${tiers.id}" #{if operation}#{if tiers == operation.tiers}selected#{/if}#{/if}>${tiers.designation}</option>
+						#{/list}
+					</select>
+					<span class="error">#{error field.name /}</span>
 				</p>
 				#{/field}
 				

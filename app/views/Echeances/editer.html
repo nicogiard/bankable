@@ -4,6 +4,7 @@
 #{set 'moreStyles'}
     <link rel="stylesheet" type="text/css" href="@{'/public/stylesheets/flick/jquery-ui-1.8.15.css'}">
     <link rel="stylesheet" type="text/css" href="@{'/public/stylesheets/jquery.calculator.css'}">
+<link rel="stylesheet" type="text/css" href="@{'/public/stylesheets/chosen.css'}" />
 #{/set}
 
 #{set 'moreScripts'}
@@ -11,6 +12,7 @@
 <script src="@{'/public/javascripts/jquery.ui-1.8.15.datepicker-fr.js'}" type="text/javascript" charset="utf-8"></script>
 <script src="@{'/public/javascripts/jquery.calculator.pack.js'}" type="text/javascript" charset="utf-8"></script>
 <script src="@{'/public/javascripts/jquery.calculator-fr.js'}" type="text/javascript" charset="utf-8"></script>
+<script src="@{'/public/javascripts/chosen.jquery.min.js'}" type="text/javascript" charset="utf-8"></script>
 <script type="text/javascript">
 $(document).ready(function() {
 	$.datepicker.setDefaults($.datepicker.regional["fr"]);
@@ -22,6 +24,8 @@ $(document).ready(function() {
 	$('.calculator').calculator({
 		useThemeRoller: true, showOn: 'button', buttonImageOnly: true, buttonImage: '@{'/public/images/calculator.png'}'
 	});
+    
+	$(".chzn-select").chosen();
 }); 
 </script>
 #{/set}
@@ -39,8 +43,8 @@ $(document).ready(function() {
 				#{if echeance}
 				<input type="hidden" name="echeance.id" value="${echeance.id}"/>
 				#{/if}
-				<p>
-					<label>Compte<span class="mandatory">*</span> :</label><select name="echeance.compte.id">
+				<p class="fat">
+					<label>Compte<span class="mandatory">*</span> :</label><select name="echeance.compte.id" class="chzn-select" data-placeholder="Choisissez un Compte...">
 						<option></option>
 						#{list items:comptes, as:'compte'}
 						<option value="${compte.id}" #{if echeance}#{if echeance.compte.id == compte.id}selected#{/if}#{/if}#{else}#{if flash.get("echeance.compte.id") == compte.id.toString()}selected#{/if}#{/else}>${compte.nom}</option>
@@ -57,8 +61,8 @@ $(document).ready(function() {
 					#{textFieldBody field, label:'Date', mandatory:true, datePicker:true/}
 				#{/bankable.textField}
 				
-				<p>
-					<label>Type<span class="mandatory">*</span> :</label><select name="echeance.type.id">
+				<p class="fat">
+					<label>Type<span class="mandatory">*</span> :</label><select name="echeance.type.id" class="chzn-select" data-placeholder="Choisissez un Type...">
 						<option></option>
 						#{list items:models.ETypeEcheance, as:'typeEcheance'}
 						<option value="${typeEcheance}" #{if echeance}#{if typeEcheance == echeance.type}selected#{/if}#{/if}#{else}#{if flash.get("echeance.type") == typeEcheance}selected#{/if}#{/else}>&{'ETypeEcheance.' + typeEcheance}</option>
@@ -71,8 +75,8 @@ $(document).ready(function() {
 					#{textFieldBody field, label:'Montant', mandatory:true, calculator:true/}
 				#{/bankable.textField}
 				
-				<p>
-					<label>Type de Fr&eacute;quence<span class="mandatory">*</span> :</label><select name="echeance.typeFrequence.id">
+				<p class="fat">
+					<label>Type de Fr&eacute;quence<span class="mandatory">*</span> :</label><select name="echeance.typeFrequence.id" class="chzn-select" data-placeholder="Choisissez une Fr&eacute;quence...">
 						<option></option>
 						#{list items:models.ETypeFrequence, as:'typeFrequence'}
 						<option value="${typeFrequence}" #{if echeance}#{if typeFrequence == echeance.typeFrequence}selected#{/if}#{/if}#{else}#{if flash.get("echeance.typeFrequence") == typeFrequence}selected#{/if}#{/else}>&{'ETypeFrequence.' + typeFrequence}</option>
@@ -80,8 +84,8 @@ $(document).ready(function() {
 					</select>
 					<span class="error">#{error 'echeance.typeFrequence' /}</span>
 				</p>
-				<p>
-					<label>Tag<span class="mandatory">*</span> :</label><select name="echeance.tag.id">
+				<p class="fat">
+					<label>Tag<span class="mandatory">*</span> :</label><select name="echeance.tag.id" class="chzn-select" data-placeholder="Choisissez un Tag...">
 						<option></option>
 						#{list items:tags, as:'tag'}
 						<option value="${tag.id}" #{if echeance}#{if echeance.tag.id == tag.id}selected#{/if}#{/if}#{else}#{if flash.get("echeance.tag.id") == tag.id.toString()}selected#{/if}#{/else}>${tag.nom}</option>

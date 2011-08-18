@@ -1,5 +1,6 @@
 body {background: url(../images/bg.png); font-family: Arial, Helvetica, Sans-serif; font-size: 12px;}
 select, textarea {margin-left: 0px;}
+form p.fat {height: 32px; margin-bottom: 3px;}
 .cb, .clear {clear: both;}
 .relative {position: relative;}
 .center {text-align: center;}
@@ -59,7 +60,7 @@ header .tabs a.active, header .tabs a:hover {background-color: #F7F7F7; border: 
 #content a {color: #0A93CC;}
 #content h1 {color: black; height: 32px; font-family: HattoriHanzoLight; font-size: 27px; font-weight: normal; letter-spacing: 1px; padding-top: 35px; text-shadow: 0px 1px 0px #EDEDED; -moz-text-shadow: 0px 1px 0px #EDEDED; -webkit-text-shadow: 0px 1px 0px #EDEDED; -o-text-shadow: 0px 1px 0px #EDEDED;}
 
-#content .bloc {background-color: white; box-shadow: 0px 5px 10px #AFAEAE; -moz-box-shadow: 0px 5px 10px #AFAEAE; -webkit-box-shadow: 0px 5px 10px #AFAEAE; -o-box-shadow: 0px 5px 10px #AFAEAE; margin: 20px 0px 0px; overflow: hidden;}
+#content .bloc {background-color: white; box-shadow: 0px 5px 10px #AFAEAE; -moz-box-shadow: 0px 5px 10px #AFAEAE; -webkit-box-shadow: 0px 5px 10px #AFAEAE; -o-box-shadow: 0px 5px 10px #AFAEAE; margin: 20px 0px 0px;}
 #content .bloc .title {background: url(../images/white-title.png); border: none; color: #2C2C2C; line-height: 34px; font-size: 15px; font-weight: bold; height: 35px; padding: 0 10px; position: relative; text-shadow: 0px 1px white; -moz-text-shadow: 0px 1px #FFFFFF; -webkit-text-shadow: 0px 1px #FFFFFF; -o-text-shadow: 0px 1px #FFFFFF;}
 #content .bloc .title a {display: block; position: absolute; right: 10px; top: 0; text-shadow: none; -moz-text-shadow: none; -webkit-text-shadow: none; -o-text-shadow: none;}
 #content .bloc .content {background-color: #F7F7F7; padding: 10px;}
@@ -160,6 +161,7 @@ header .tabs a.active, header .tabs a:hover {background-color: #F7F7F7; border: 
 .progressbar .text {color: black; left: 5px; position: relative; top:-14px;}
 
 
+select.chzn-select {width:350px;}
 
 #choixComptePourTag, #choixComptePourEcheance {margin-bottom: 7px; width: 100%;}
 
