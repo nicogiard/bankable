@@ -29,6 +29,30 @@ header .tabs a.active, header .tabs a:hover {background-color: #F7F7F7; border: 
 #sidebar ul.tagList li a, #sidebar ul.echeanceList li a {background: #494949 url(../images/arrow.png) no-repeat 96% -15px; font-size: 1em; height: 20px; line-height: 20px;}
 #sidebar ul.tagList li input {float: left;}
 
+#sidebar .bloc { }
+#sidebar .bloc .title { color: #AAAAAA; font-weight: bold; font-size: 1.1em; text-align: center; padding: 4px; background: #494949; border-bottom: 1px solid #313131; border-top: 1px solid #606060; }
+#sidebar .bloc .content { padding: 4px; margin: 4px;}
+
+/*Submit*/
+#sidebar .submit {margin-top: 8px;}
+#sidebar .submit input, #content .button {background: url(../images/buttons.png) left -68px; border: 1px solid #3580A9; border-radius: 3px 3px 3px 3px; -moz-border-radius: 3px; -webkit-border-radius: 3px; -khtml-border-radius: 3px; box-shadow: 0px 1px 5px #B2B2B2; -moz-box-shadow: 0px 1px 5px #B2B2B2; -webkit-box-shadow: 0px 1px 5px #B2B2B2; -o-box-shadow: 0px 1px 5px #B2B2B2; color: #D4E6EF; cursor: pointer; display: inline-block; font-weight: bold; padding: 5px 10px; text-decoration: none; text-shadow: 0px -1px 0px #2C6AA3; -moz-text-shadow: 0px -1px 0px #2C6AA3; -webkit-text-shadow: 0px -1px 0px #2C6AA3; -o-text-shadow: 0px -1px 0px #2C6AA3;}
+#sidebar .button img {filter: alpha(opacity=65); -ms-filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=65); -moz-opacity: 0.65; opacity: 0.65; vertical-align: text-top;}
+#sidebar .button:hover img {filter: alpha(opacity=100); -ms-filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=100); -moz-opacity: 1; opacity: 1;}
+#sidebar .submit input:hover, #content .button:hover {background: #3786B9; color: #FFFFFF; box-shadow: none; -moz-box-shadow: none; -webkit-box-shadow: none; -o-box-shadow: none; text-decoration: none;}
+#sidebar .submit .button.black, #content .submit input.black {background: url(../images/buttons.png); border: 1px solid #151515; color: #929292; text-shadow: 0px -1px 0px #050505; -moz-text-shadow: 0px -1px 0px #050505; -webkit-text-shadow: 0px -1px 0px #050505; -o-text-shadow: 0px -1px 0px #050505;}
+#sidebar .submit .button.black:hover, #content .submit input.black:hover {background: #323232; color: #FFFFFF; text-decoration: none;}
+#sidebar .submit .button.white, #content .submit input.white {background: url(../images/buttons.png) left -34px; border: 1px solid #CCC; box-shadow: 0px 1px 5px #EAEAEA; -moz-box-shadow: 0px 1px 5px #EAEAEA; -webkit-box-shadow: 0px 1px 5px #EAEAEA; -o-box-shadow: 0px 1px 5px #EAEAEA; color: #606060; text-shadow: 0px -1px #FFFFFF; -moz-text-shadow: 0px -1px #FFFFFF; -webkit-text-shadow: 0px -1px #FFFFFF; -o-text-shadow: 0px -1px #FFFFFF;}
+#sidebar .submit .button.white:hover, #content .submit input.white:hover {background: #EAEAEA; background-image: none; color: #555555; text-decoration: none;}
+
+/*Filtre*/
+#sidebar .filtre {}
+#sidebar .filtre .valeur { position: relative; margin: 0 0 3px 0; }
+#sidebar .filtre .valeur a { position: absolute; right: 0px; top: 0px; }
+#sidebar .filtre .formulaire {}
+#sidebar .filtre .formulaire input { width: 220px; }
+#sidebar .filtre .formulaire input.button { width: 220px; }
+
+
 /*********************************************** CONTENT ***********************************************************/
 #content {margin: 60px 40px 0px 260px;color: #6D6D6D;padding: 0px 0px 20px;}
 #content a {color: #0A93CC;}

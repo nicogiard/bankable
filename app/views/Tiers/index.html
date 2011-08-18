@@ -54,7 +54,6 @@
 
     <div class="title">
       Liste des Tiers
-      #{if filtre && filtre != ''}<a href="@{Tiers.index()}">Supprimer le filtre: ${filtre}</a>#{/if}
     </div>
     
     <div class="content">
@@ -68,7 +67,7 @@
       
         #{if tiers == null}
         <ul class="actions">
-           <li><a href="@{Tiers.ajouter()}">Ajouter un Tiers</a></li>
+           <li><a href="@{Tiers.ajouter()}" class="button">Ajouter un Tiers</a></li>
         </ul>
         #{/if}
       

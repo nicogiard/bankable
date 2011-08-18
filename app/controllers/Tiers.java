@@ -7,6 +7,7 @@ import org.apache.commons.lang.StringUtils;
 import play.Logger;
 import play.data.validation.Required;
 import play.data.validation.Valid;
+import play.mvc.Before;
 import play.mvc.Controller;
 
 /**
@@ -15,21 +16,39 @@ import play.mvc.Controller;
  */
 public class Tiers extends Controller {
 
-    public static void index(String filtre) {
-        Logger.debug("Tiers - index: filtre = %s", filtre);
+    @Before
+    public static void before() {
+        // Récupération de la valeur du filter sur les tiers
+        // Dans l'ordre params puis session
+        String filtre = params.get("filtreTiers");
+        if (filtre == null) {
+            filtre = session.get("filtreTiers");
+        }
+        session.put("filtreTiers", filtre);
+        renderArgs.put("filtreTiers", filtre);
+    }
+
+    public static void supprimerFiltre() {
+        session.remove("filtreTiers");
+        index();
+    }
+
+    public static void index() {
+        String filtreTiers = session.get("filtreTiers");
+        Logger.debug("Tiers - index: filtre = %s", filtreTiers);
 
         List<models.Tiers> tiersListe = null;
-        if (StringUtils.isBlank(filtre)) {
+        if (StringUtils.isBlank(filtreTiers)) {
             tiersListe = models.Tiers.all().fetch();
         }
         else {
-            filtre += "%";
+            String filtre = filtreTiers + "%";
             tiersListe = models.Tiers.find(
                     "designation like ? OR nom like ? OR prenom like ?",
                     filtre, filtre, filtre).fetch();
         }
 
-        render(filtre, tiersListe);
+        render(filtreTiers, tiersListe);
     }
 
     public static void ajouter() {
@@ -47,8 +66,6 @@ public class Tiers extends Controller {
 
     public static void enregistrer(@Required @Valid models.Tiers tiers) {
         if (validation.hasErrors()) {
-            params.flash();
-            validation.keep();
             List<models.Tiers> tiersListe = models.Tiers.all().fetch();
             render("Tiers/index.html", tiersListe, tiers);
         }
@@ -60,7 +77,7 @@ public class Tiers extends Controller {
             ajouter();
         }
         if (params._contains("validQuit")) {
-            index(null);
+            index();
         }
     }
 
@@ -69,6 +86,6 @@ public class Tiers extends Controller {
         notFoundIfNull(tiers);
         tiers.delete();
         flash.success("Le tiers a été supprimé avec succès");
-        index(null);
+        index();
     }
 }
