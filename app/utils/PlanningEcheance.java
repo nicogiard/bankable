@@ -182,11 +182,11 @@ public class PlanningEcheance {
 	}
 
 	private static void echeanceBiMestrielle(Date actualMonth, Echeance echeance) {
-		// TODO : echeance bi mensuelle
+		// TODO : echeance bi mestrielle
 	}
 
 	private static void echeanceTriMestrielle(Date actualMonth, Echeance echeance) {
-		// TODO : echeance tri mensuelle
+		// TODO : echeance tri mestrielle
 	}
 
 	private static void echeanceSemestrielle(Date actualMonth, Echeance echeance) {
