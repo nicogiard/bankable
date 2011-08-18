@@ -44,6 +44,17 @@ public class Application extends Controller {
 		ResumeCompte resume = new ResumeCompte();
 		resume.operations = Operation.find("compte.id = ? ORDER BY id ASC", compte.id).fetch();
 
+		Float solde = compte.solde;
+		List<Operation> operationsPourBalance = Operation.find("compte.id = ? ORDER BY id DESC", compte.id).fetch();
+		for (Operation operation : operationsPourBalance) {
+			if (operation.type == ETypeOperation.CREDIT) {
+				solde = solde - operation.montant;
+			} else {
+				solde = solde + operation.montant;
+			}
+			resume.soldes.put(operation.date, solde);
+		}
+
 		resume.countNoTag = (BigInteger) JPA.em().createNativeQuery("select count(o.id) from operation o where o.compte_id=? and o.id not in (select distinct operation_id from operation_tags)").setParameter(1, compte.id).getSingleResult();
 
 		resume.tagsCredit = JPA

@@ -13,8 +13,8 @@
 		  data.addColumn('string', 'x');
 		  data.addColumn('number', 'Balance');
 		  
-		  #{list items:resume.operations, as:'operation'}
-		  	data.addRow(["${operation.date.format("dd/MM/yyyy")}", ${operation.solde}]);
+		  #{list items:resume.soldes.entrySet(), as:'solde'}
+		    data.addRow(["${solde.key.format("dd/MM/yyyy")}", ${solde.value}]);
 		  #{/list}
 				
 		  var formatter = new google.visualization.NumberFormat({suffix: ' €'});
