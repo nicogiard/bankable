@@ -43,7 +43,7 @@
 								<td>${operation.date.format("dd/MM/yyyy")}</td>
 								<td>${operation.numero}</td>
 								<td>${operation.libelle}</td>
-								<td>#{if models.ETypeOperation.DEBIT == operation.type}<img src="@{'/public/images/minus.gif'}" title="D&eacute;bit" class="debitCredit">#{/if}#{else}<img src="@{'/public/images/plus.gif'}" title="Cr&eacute;dit" class="debitCredit">#{/else}${operation.montant}</td>
+								<td>#{if models.ETypeOperation.DEBIT == operation.type}#{plusMinus -1 /}#{/if}#{else}#{plusMinus 1 /}#{/else}${operation.montant}</td>
 								<td>&{'ETypeOperation.' + operation.type}</td>
 								<td>${operation.detail}</td>
 							</tr>
