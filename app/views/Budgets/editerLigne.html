@@ -2,19 +2,23 @@
 #{set title: titre + ' une ligne de budget' /}
 
 #{set 'moreStyles'}
-    <link rel="stylesheet" type="text/css" href="@{'/public/stylesheets/flick/jquery-ui-1.8.15.css'}">
-    <link rel="stylesheet" type="text/css" href="@{'/public/stylesheets/jquery.calculator.css'}">
+<link rel="stylesheet" type="text/css" href="@{'/public/stylesheets/flick/jquery-ui-1.8.15.css'}">
+<link rel="stylesheet" type="text/css" href="@{'/public/stylesheets/jquery.calculator.css'}">
+<link rel="stylesheet" type="text/css" href="@{'/public/stylesheets/chosen.css'}" />
 #{/set}
 
 #{set 'moreScripts'}
 <script src="@{'/public/javascripts/jquery-ui-1.8.15.min.js'}" type="text/javascript" charset="utf-8"></script>
 <script src="@{'/public/javascripts/jquery.calculator.pack.js'}" type="text/javascript" charset="utf-8"></script>
 <script src="@{'/public/javascripts/jquery.calculator-fr.js'}" type="text/javascript" charset="utf-8"></script>
+<script src="@{'/public/javascripts/chosen.jquery.min.js'}" type="text/javascript" charset="utf-8"></script>
 <script type="text/javascript">
 $(document).ready(function() {
 	$('.calculator').calculator({
 		useThemeRoller: true, showOn: 'button', buttonImageOnly: true, buttonImage: '@{'/public/images/calculator.png'}'
 	});
+	
+	$(".chzn-select").chosen();
 }); 
 </script>
 #{/set}
@@ -32,30 +36,30 @@ $(document).ready(function() {
 				#{if ligneBudget}
 				<input type="hidden" name="ligneBudget.id" value="${ligneBudget.id}"/>
 				#{/if}
-				<p>
-					<label>Budget<span class="mandatory">*</span> :</label><select name="ligneBudget.budget.id">
+				<p class="fat">
+					<label>Budget<span class="mandatory">*</span> :</label><select name="ligneBudget.budget.id" class="chzn-select" data-placeholder="Choisissez un Budget...">
 						<option></option>
 						#{list items:budgets, as:'budget'}
-						<option value="${budget.id}" #{if ligneBudget}#{if ligneBudget.budget.id == budget.id}selected#{/if}#{/if}#{else}#{if flash.get("ligneBudget.budget.id") == budget.id.toString()}selected#{/if}#{/else}>${budget.compte.nom}</option>
+						<option value="${budget.id}" #{if ligneBudget?.budget?.id == budget.id}selected#{/if}>${budget.compte.nom}</option>
 						#{/list}
 					</select>
 					<span class="error">#{error 'ligneBudget.budget' /}</span>
 				</p>
-				<p>
-					<label>Tag<span class="mandatory">*</span> :</label><select name="ligneBudget.tag.id">
+				<p class="fat">
+					<label>Tag<span class="mandatory">*</span> :</label><select name="ligneBudget.tag.id" class="chzn-select" data-placeholder="Choisissez un Tag...">
 						<option></option>
 						#{list items:tags, as:'tag'}
-						<option value="${tag.id}" #{if ligneBudget}#{if ligneBudget.tag.id == tag.id}selected#{/if}#{/if}#{else}#{if flash.get("ligneBudget.tag.id") == tag.id.toString()}selected#{/if}#{/else}>${tag.nom}</option>
+						<option value="${tag.id}" #{if ligneBudget?.tag?.id == tag.id}selected#{/if}>${tag.nom}</option>
 						#{/list}
 					</select>
 					<span class="error">#{error 'ligneBudget.tag' /}</span>
 				</p>
 				<p>
-					<label for="montantManuel">Montant Manuel<span class="mandatory">*</span> :</label><input type="text" id="montantManuel" name="ligneBudget.montantManuel" value="#{if ligneBudget}${ligneBudget.montantManuel}#{/if}#{else}${flash.get("ligneBudget.montantManuel")}#{/else}" class="calculator"/>
+					<label for="montantManuel">Montant Manuel :</label><input type="text" id="montantManuel" name="ligneBudget.montantManuel" value="${ligneBudget?.montantManuel}" class="calculator"/>
 					<span class="error">#{error 'ligneBudget.montantManuel' /}</span>
 				</p>
 				<div class="submit">
-		            <input type="submit" value="Valider" />&nbsp;<a href="#{if ligneBudget}@{Budgets.index(ligneBudget.budget.compte.id)}#{/if}#{else}@{Budgets.index()}#{/else}" class="button white">Annuler</a>
+		            <input type="submit" value="Valider" />&nbsp;<a href="#{if ligneBudget}@{Budgets.index(ligneBudget.budget?.compte?.id)}#{/if}#{else}@{Budgets.index()}#{/else}" class="button white">Annuler</a>
 		        </div>
 			#{/form}
 		</section>
