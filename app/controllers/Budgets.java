@@ -104,4 +104,9 @@ public class Budgets extends Controller {
 
 		index(null);
 	}
+
+	public static void refresh() {
+		LigneBudgetUtils.refreshAll();
+		index(null);
+	}
 }

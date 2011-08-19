@@ -25,6 +25,7 @@
 			<div class="submit">
 	    		<ul class="actions">
 					<li><a href="@{Budgets.ajouterLigne()}" class="button">Ajouter une ligne</a></li>
+					<li><a href="@{Budgets.refresh()}" class="button white"><img src="@{'/public/images/refresh.gif'}">Mettre &agrave; jour</a></li>
 				</ul>
 			</div>
 			#{if flash.success}
@@ -46,7 +47,7 @@
 								        &nbsp;
 								    </div>
 								    <div class="text">
-								        ${((ligne.montantActuel * 100) / (ligne.montantEcheance + ligne.montantManuel)).format('00')}%
+								        ${((ligne.montantActuel * 100) / (ligne.montantEcheance + ligne.montantManuel)).formatPositive('00')}%
 								    </div>
 								</div>
 							</td>
