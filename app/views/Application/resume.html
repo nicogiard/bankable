@@ -94,11 +94,11 @@
 	                <tbody>
 	                    <tr>
 	                        <td>${resume.todayCredits ? resume.todayCredits : "0"}</td>
-	                        <td>Cr&eacute;dit${resume.todayCredits > 0 ? "s" : ""}<img src="@{'/public/images/plus.gif'}" title="Cr&eacute;dit" class="debitCredit"></td>
+	                        <td>Cr&eacute;dit${resume.todayCredits > 0 ? "s" : ""}#{plusMinus 1 /}</td>
 	                    </tr>
 	                    <tr>
 	                        <td>${resume.todayDebits ? resume.todayDebits : "0"}</td>
-	                        <td>D&eacute;bit${resume.todayDebits > 0 ? "s" : ""}<img src="@{'/public/images/minus.gif'}" title="D&eacute;bit" class="debitCredit"></td>
+	                        <td>D&eacute;bit${resume.todayDebits > 0 ? "s" : ""}#{plusMinus -1 /}</td>
 	                    </tr>
 	                    <tr>
 	                        <td>${resume.todayEcheances ? resume.todayEcheances : "0"}</td>
@@ -117,11 +117,11 @@
 	                <tbody>
 	                    <tr>
 	                        <td>${resume.weekCredits ? resume.weekCredits : "0"}</td>
-	                        <td>Cr&eacute;dit${resume.weekCredits > 0 ? "s" : ""}<img src="@{'/public/images/plus.gif'}" title="Cr&eacute;dit" class="debitCredit"></td>
+	                        <td>Cr&eacute;dit${resume.weekCredits > 0 ? "s" : ""}#{plusMinus 1 /}</td>
 	                    </tr>
 	                    <tr>
 	                        <td>${resume.weekDebits ? resume.weekDebits : "0"}</td>
-	                        <td>D&eacute;bit${resume.weekDebits > 0 ? "s" : ""}<img src="@{'/public/images/minus.gif'}" title="D&eacute;bit" class="debitCredit"></td>
+	                        <td>D&eacute;bit${resume.weekDebits > 0 ? "s" : ""}#{plusMinus -1 /}</td>
 	                    </tr>
 	                    <tr>
 	                        <td>${resume.weekEcheances ? resume.weekEcheances : "0"}</td>
