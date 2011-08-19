@@ -94,11 +94,11 @@
 	                <tbody>
 	                    <tr>
 	                        <td>${resume.todayCredits ? resume.todayCredits : "0"}</td>
-	                        <td>D&eacute;bit${resume.todayCredits > 0 ? "s" : ""}<img src="@{'/public/images/minus.gif'}" title="D&eacute;bit" class="debitCredit"></td>
+	                        <td>Cr&eacute;dit${resume.todayCredits > 0 ? "s" : ""}<img src="@{'/public/images/plus.gif'}" title="Cr&eacute;dit" class="debitCredit"></td>
 	                    </tr>
 	                    <tr>
 	                        <td>${resume.todayDebits ? resume.todayDebits : "0"}</td>
-	                        <td>Cr&eacute;dit${resume.todayDebits > 0 ? "s" : ""}<img src="@{'/public/images/plus.gif'}" title="Cr&eacute;dit" class="debitCredit"></td>
+	                        <td>D&eacute;bit${resume.todayDebits > 0 ? "s" : ""}<img src="@{'/public/images/minus.gif'}" title="D&eacute;bit" class="debitCredit"></td>
 	                    </tr>
 	                    <tr>
 	                        <td>${resume.todayEcheances ? resume.todayEcheances : "0"}</td>
@@ -111,21 +111,21 @@
 	            <table class="noalt">
 	                <thead>
 	                    <tr>
-	                        <th colspan="2"><em>Hier</em></th>
+	                        <th colspan="2"><em>Semaine</em></th>
 	                    </tr>
 	                </thead>
 	                <tbody>
 	                    <tr>
-	                        <td>${resume.yesterdayCredits ? resume.yesterdayCredits : "0"}</td>
-	                        <td>D&eacute;bit${resume.yesterdayCredits > 0 ? "s" : ""}<img src="@{'/public/images/minus.gif'}" title="D&eacute;bit" class="debitCredit"></td>
+	                        <td>${resume.weekCredits ? resume.weekCredits : "0"}</td>
+	                        <td>Cr&eacute;dit${resume.weekCredits > 0 ? "s" : ""}<img src="@{'/public/images/plus.gif'}" title="Cr&eacute;dit" class="debitCredit"></td>
 	                    </tr>
 	                    <tr>
-	                        <td>${resume.yesterdayDebits ? resume.yesterdayDebits : "0"}</td>
-	                        <td>Cr&eacute;dit${resume.yesterdayDebits > 0 ? "s" : ""}<img src="@{'/public/images/plus.gif'}" title="Cr&eacute;dit" class="debitCredit"></td>
+	                        <td>${resume.weekDebits ? resume.weekDebits : "0"}</td>
+	                        <td>D&eacute;bit${resume.weekDebits > 0 ? "s" : ""}<img src="@{'/public/images/minus.gif'}" title="D&eacute;bit" class="debitCredit"></td>
 	                    </tr>
 	                    <tr>
-	                        <td>${resume.yesterdayEcheances ? resume.yesterdayEcheances : "0"}</td>
-	                        <td>Ech&eacute;ance${resume.yesterdayEcheances > 0 ? "s" : ""}</td>
+	                        <td>${resume.weekEcheances ? resume.weekEcheances : "0"}</td>
+	                        <td>Ech&eacute;ance${resume.weekEcheances > 0 ? "s" : ""}</td>
 	                    </tr>
 	                </tbody>
 	            </table>

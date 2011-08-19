@@ -16,11 +16,11 @@ public class ResumeCompte {
 	public List tagsCredit;
 	public List tagsDebit;
 
-	public Integer todayCredits;
-	public Integer todayDebits;
-	public Integer todayEcheances;
+	public Long todayCredits;
+	public Long todayDebits;
+	public Long todayEcheances;
 
-	public Integer yesterdayCredits;
-	public Integer yesterdayDebits;
-	public Integer yesterdayEcheances;
+	public Long weekCredits;
+	public Long weekDebits;
+	public Long weekEcheances;
 }
