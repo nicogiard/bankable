@@ -12,7 +12,10 @@ import models.Operation;
 public class ResumeCompte {
 	public Map<Date, Float> soldes = new TreeMap<Date, Float>();
 	public List<Operation> operations = new ArrayList<Operation>();
-	public BigInteger countNoTag;
+
+	public BigInteger countNoTagCredit;
+	public BigInteger countNoTagDebit;
+
 	public List tagsCredit;
 	public List tagsDebit;
 

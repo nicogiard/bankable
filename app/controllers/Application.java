@@ -72,7 +72,10 @@ public class Application extends Controller {
 			resume.soldes.put(operation.date, solde);
 		}
 
-		resume.countNoTag = (BigInteger) JPA.em().createNativeQuery("select count(o.id) from operation o where o.compte_id=? and o.id not in (select distinct operation_id from operation_tags)").setParameter(1, compte.id).getSingleResult();
+		resume.countNoTagCredit = (BigInteger) JPA.em().createNativeQuery("select count(o.id) from operation o where o.compte_id=? and o.type=? and o.id not in (select distinct operation_id from operation_tags)").setParameter(1, compte.id)
+				.setParameter(2, ETypeOperation.CREDIT.toString()).getSingleResult();
+		resume.countNoTagDebit = (BigInteger) JPA.em().createNativeQuery("select count(o.id) from operation o where o.compte_id=? and o.type=? and o.id not in (select distinct operation_id from operation_tags)").setParameter(1, compte.id)
+				.setParameter(2, ETypeOperation.DEBIT.toString()).getSingleResult();
 
 		resume.tagsCredit = JPA
 				.em()

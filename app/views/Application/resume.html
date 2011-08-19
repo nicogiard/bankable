@@ -34,7 +34,7 @@
 		  data.addColumn('string', 'Tag');
 		  data.addColumn('number', 'Crédit');
 
-		  data.addRow(['Non taggée', ${resume.countNoTag}]);
+		  data.addRow(['Non taggée', ${resume.countNoTagCredit}]);
 		  
 		  #{list items:resume.tagsCredit, as:'unTag'}
 		  	data.addRow(["${unTag[0].nom.raw()}", ${unTag[1]}]);
@@ -52,7 +52,7 @@
 		  data.addColumn('string', 'Tag');
 		  data.addColumn('number', 'Débit');
 
-		  data.addRow(['Non taggée', ${resume.countNoTag}]);
+		  data.addRow(['Non taggée', ${resume.countNoTagDebit}]);
 		  
 		  #{list items:resume.tagsDebit, as:'unTag'}
 		  	data.addRow(["${unTag[0].nom.raw()}", ${unTag[1]}]);
