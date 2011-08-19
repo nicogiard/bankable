@@ -48,9 +48,6 @@ public class Pagination {
 		if (this.page < 1) {
 			this.page = 1;
 		}
-		if (this.page > this.pageCount) {
-			this.page = this.pageCount;
-		}
 	}
 
 	public int getPage() {
