@@ -13,7 +13,7 @@ import org.joda.time.MutableDateTime;
 
 import play.Logger;
 
-public class PlanningEcheance {
+public class PlanningEcheanceUtils {
 
 	public static void compute(Date actualMonth, List<Echeance> echeances) {
 		for (Echeance echeance : echeances) {

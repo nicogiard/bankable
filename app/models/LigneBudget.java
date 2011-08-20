@@ -22,7 +22,6 @@ public class LigneBudget extends Model {
 	@Column(columnDefinition = "Decimal(10,2)")
 	public Float montantEcheance;
 
-	@Required
 	@Column(columnDefinition = "Decimal(10,2)")
 	public Float montantManuel;
 

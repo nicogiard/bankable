@@ -18,7 +18,8 @@ import play.data.validation.Required;
 import play.data.validation.Valid;
 import play.db.jpa.JPA;
 import play.mvc.Controller;
-import utils.ImportCSVCaisseEpargne;
+import utils.LigneBudgetUtils;
+import utils.csv.ImportCSVCaisseEpargne;
 
 public class Operations extends Controller {
 
@@ -94,6 +95,8 @@ public class Operations extends Controller {
 		operation.compte.save();
 		operation.save();
 
+		LigneBudgetUtils.refreshAll();
+
 		if (params._contains("valid")) {
 			flash.success("L'opération a été enregistrée avec succès");
 			ajouter(operation.compte.id);
@@ -117,6 +120,8 @@ public class Operations extends Controller {
 
 		compte.save();
 		operation.delete();
+
+		LigneBudgetUtils.refreshAll();
 
 		Comptes.index(compteId);
 	}
@@ -189,6 +194,8 @@ public class Operations extends Controller {
 		}
 
 		JPA.em().createNativeQuery("DELETE FROM OperationImport WHERE compte_id=?").setParameter(1, compte.id).executeUpdate();
+
+		LigneBudgetUtils.refreshAll();
 
 		Comptes.index(compte.id);
 	}

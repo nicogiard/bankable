@@ -11,6 +11,7 @@ import play.data.validation.Required;
 import play.data.validation.Valid;
 import play.mvc.Before;
 import play.mvc.Controller;
+import utils.LigneBudgetUtils;
 
 public class Budgets extends Controller {
 	@Before
@@ -38,8 +39,8 @@ public class Budgets extends Controller {
 
 		if (budget != null) {
 			for (LigneBudget ligneBudget : budget.lignes) {
-				totalActuel += ligneBudget.montantActuel;
-				totalPrevisionnel += ligneBudget.montantEcheance + ligneBudget.montantManuel;
+				totalActuel = totalActuel + ligneBudget.montantActuel;
+				totalPrevisionnel = totalPrevisionnel + ligneBudget.montantEcheance + ligneBudget.montantManuel;
 			}
 		}
 		Date actualMonth = new Date();
@@ -73,7 +74,7 @@ public class Budgets extends Controller {
 				String titre = "Editer";
 				List<Budget> budgets = Budget.findAll();
 				List<Tag> tags = Tag.findAll();
-				render(titre, ligneBudget, budgets, tags);
+				render("Budgets/editerLigne.html", titre, ligneBudget, budgets, tags);
 			} else {
 				String titre = "Ajouter";
 				List<Budget> budgets = Budget.findAll();
@@ -81,12 +82,12 @@ public class Budgets extends Controller {
 				render("Budgets/editerLigne.html", titre, ligneBudget, budgets, tags);
 			}
 		}
-		// TODO : calculer le montantEcheance
-		// List<Echeance> echeances = Echeance.find("tag.id=?", ligneBudget.tag.id).fetch();
 
-		ligneBudget.montantEcheance = 0F;
-		ligneBudget.montantActuel = 0F;
-		ligneBudget.save();
+		if (ligneBudget.montantManuel == null) {
+			ligneBudget.montantManuel = 0F;
+		}
+
+		LigneBudgetUtils.refresh(ligneBudget);
 
 		flash.success("La ligne a été créée avec succès");
 

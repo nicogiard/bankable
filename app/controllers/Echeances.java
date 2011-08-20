@@ -14,7 +14,8 @@ import play.data.validation.Required;
 import play.data.validation.Valid;
 import play.mvc.Before;
 import play.mvc.Controller;
-import utils.PlanningEcheance;
+import utils.LigneBudgetUtils;
+import utils.PlanningEcheanceUtils;
 
 public class Echeances extends Controller {
 
@@ -75,6 +76,9 @@ public class Echeances extends Controller {
 			}
 		}
 		echeance.save();
+
+		LigneBudgetUtils.refreshAll();
+
 		index(null);
 	}
 
@@ -83,14 +87,14 @@ public class Echeances extends Controller {
 		notFoundIfNull(compte);
 
 		List<Echeance> allEcheances = Echeance.find("compte.id=?", compte.id).fetch();
-		PlanningEcheance.compute(date, allEcheances);
+		PlanningEcheanceUtils.compute(date, allEcheances);
 
-		Calendrier calendrier = PlanningEcheance.buildCalendrier(date);
+		Calendrier calendrier = PlanningEcheanceUtils.buildCalendrier(date);
 		List<models.PlanningEcheance> plannings = models.PlanningEcheance.find("select pe from PlanningEcheance pe join pe.echeance e where e.compte.id=?", 1L).fetch();
 		for (models.PlanningEcheance planningEcheance : plannings) {
 			for (Semaine semaine : calendrier.semaines) {
 				for (Jour jour : semaine.jours) {
-					if (PlanningEcheance.isEqual(jour.date, planningEcheance.date)) {
+					if (PlanningEcheanceUtils.isEqual(jour.date, planningEcheance.date)) {
 						jour.echeances.add(planningEcheance.echeance);
 						Logger.debug("ajout de l'écheance %s au jour %s", planningEcheance.echeance, jour.date);
 					}
