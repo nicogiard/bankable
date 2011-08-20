@@ -4,22 +4,22 @@
 Civilite(mr):
   code: mr
   nom: Monsieur
-  abreviation: M
+  abreviation: M.
   
 Civilite(mme):
   code: mme
   nom: Madame
-  abreviation: Mme
+  abreviation: Mme.
   
 Civilite(mlle):
   code: mlle
   nom: Mademoiselle
-  abreviation: Mlle
+  abreviation: Mlle.
   
 Civilite(soc):
   code: soc
   nom: Société
-  abreviation: Soc
+  abreviation: Soc.
 
 #-----------------------------------
 # Tag

@@ -34,17 +34,15 @@ $(document).ready(function() {
 		<table>
 			<thead>
 			  <tr>
-			    <th>D&eacute;signation</th><th>Tags</th><th>Civilit&eacute;</th><th>Nom</th><th>Pr&eacute;nom</th><th>Commentaires</th><th>&nbsp;</th>
+			    <th>Civilit&eacute;</th><th>D&eacute;signation</th><th>Tags</th><th>Commentaires</th><th>&nbsp;</th>
 			  </tr>
 			</thead>
 			<tbody>
 			  #{list items:tiersListe, as:'ligne'}
 			  <tr>
+			    <td>${ligne?.civilite?.nom}</td>
 	            <td>${ligne?.designation}</td>
 	            <td class="tags">#{if ligne?.tags?.size() > 0}${ligne?.tags?.join('nom', ', ')}#{/if}#{else}<span class="noTag">(aucun)</span>#{/else}</td>
-			    <td>${ligne?.civilite?.abreviation}</td>
-			    <td>${ligne?.nom}</td>
-	            <td>${ligne?.prenom}</td>
 	            <td>${ligne?.commentaires?.nl2br()}</td>
 			    <td class="actions"><a href="@{Tiers.editer(ligne.id)}" title="Editer"><img src="@{'/public/images/edit.png'}" alt="Editer" class="editer"></a><a href="@{Tiers.supprimer(ligne.id)}" title="Supprimer" class="supprimer"><img src="@{'/public/images/delete.png'}" alt="Supprimer"></a>
 			    </td>

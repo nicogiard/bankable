@@ -96,7 +96,7 @@ $(document).ready(function() {
 					<select id="${field.id}" name="${field.name}" class="chzn-select" data-placeholder="Choisissez un Tiers...">
 						<option></option>
 						#{list items:allTiers, as:'tiers'}
-						<option value="${tiers.id}" #{if operation}#{if tiers == operation.tiers}selected#{/if}#{/if}>${tiers.designation}</option>
+						<option value="${tiers.id}" #{if operation}#{if tiers == operation.tiers}selected#{/if}#{/if}>${tiers.civilite?.abreviation} ${tiers.designation}</option>
 						#{/list}
 					</select>
 					<span class="error">#{error field.name /}</span>
