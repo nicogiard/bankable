@@ -2,26 +2,26 @@
 
 <section id="sidebar">
 	<section>
-	
-	<div class="bloc filtre">
-	   <div class="title">Filtrer les tiers</div>
-	   <div class="content">
-	     #{if filtreTiers && filtreTiers != ''}
-	     <div class="valeur">
-	       Filtre actif : ${filtreTiers}
-	       <a href="@{Tiers.supprimerFiltre()}" ><img src="@{'/public/images/close.png'}"/></a>
-	     </div>
-	     #{/if}
-	     <div class="formulaire">
-	     #{form @Tiers.index()}
-          <input type="text" id="filtreTiers" name="filtreTiers" />
+    
+    <div class="bloc filtre">
+       <div class="title">Filtre</div>
+       <div class="content">
+         #{if Tiers_filtre && Tiers_filtre != ''}
+         <div class="valeur">
+           Filtre actif : ${Tiers_filtre}
+           <a href="@{Tiers.supprimerFiltre()}" ><img src="@{'/public/images/close.png'}"/></a>
+         </div>
+         #{/if}
+         <div class="formulaire">
+         #{form @Tiers.index()}
+          <input type="text" id="Tiers_filtre" name="Tiers_filtre" />
           <input type="submit" name="valid"  value="Valider" class="button"/>
          #{/form}
-	     </div>
-	   </div>
-	</div>
-	
-	</section>
+         </div>
+       </div>
+    </div>
+    
+    </section>
 </section>
 
 <section id="content">

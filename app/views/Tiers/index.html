@@ -30,7 +30,7 @@ $(document).ready(function() {
         #{/if}
         
         #{if tiersListe}
-        #{pagination pagination, url:actionBridge.Tiers.index() /}
+        #{pagination pagination, url:actionBridge.Tiers.index(), pageParamPrefix:'Tiers_' /}
 		<table>
 			<thead>
 			  <tr>
@@ -51,7 +51,7 @@ $(document).ready(function() {
 			</tbody>
 			<tfoot></tfoot>
 		</table>
-		#{pagination pagination, url:actionBridge.Tiers.index() /}
+		#{pagination pagination, url:actionBridge.Tiers.index(), pageParamPrefix:'Tiers_' /}
         #{/if}
 		#{else}
 			<p>Aucun tiers</p>

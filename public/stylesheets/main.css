@@ -51,7 +51,7 @@ header .tabs a.active, header .tabs a:hover {background-color: #F7F7F7; border: 
 #sidebar .filtre .valeur { position: relative; margin: 0 0 3px 0; }
 #sidebar .filtre .valeur a { position: absolute; right: 0px; top: 0px; }
 #sidebar .filtre .formulaire {}
-#sidebar .filtre .formulaire input { width: 220px; }
+#sidebar .filtre .formulaire input[type="text"] { width: 220px; }
 #sidebar .filtre .formulaire input.button { width: 220px; }
 
 
