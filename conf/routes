@@ -31,6 +31,7 @@ GET     /echeance                                                               
 GET     /echeance/ajouter                                                          Echeances.ajouter
 GET     /echeance/{echeanceId}/editer                                              Echeances.editer
 GET     /echeance/compte/{compteId}/date/{date}                                    Echeances.calendrier
+GET     /echeance/compte/{compteId}/liste                                          Echeances.list
 
 GET     /tags/compte/{compteId}                                                    Tags.index
 GET     /tags                                                                      Tags.index

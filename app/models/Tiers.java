@@ -22,19 +22,13 @@ import play.db.jpa.Model;
 @Table(name = "TIERS")
 public class Tiers extends Model {
 
-    @Column(name = "DESIGNATION")
-    @Required
-    public String designation;
-
     @ManyToOne(targetEntity = Civilite.class)
     @JoinColumn(name = "CIVILITE_ID")
     public Civilite civilite;
 
-    @Column(name = "NOM")
-    public String nom;
-
-    @Column(name = "PRENOM")
-    public String prenom;
+    @Column(name = "DESIGNATION")
+    @Required
+    public String designation;
 
     @Column(name = "COMMENTAIRES", length = 2500)
     public String commentaires;

@@ -11,7 +11,8 @@ log
 logs
 tmp
 test-result
-eclipse
 nbproject
 server.pid
 modules
+/*.h2.db
+/*.trace.db

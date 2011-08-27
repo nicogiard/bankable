@@ -43,6 +43,19 @@ $(document).ready(function() {
 			  <input type="hidden" name="tiers.id" value="${tiers.id}"/>
 			#{/if}
           
+            #{field 'tiers.civilite'}
+            <p class="fat">
+              <label for="${field.id}">Civilit&eacute;</label>
+              <select id="${field.id}" name="${field.name}.id" class="chzn-select" data-placeholder="Choisissez une Civilit&eacute;...">
+                <option></option>
+                #{list items: civilities, as: 'civility'}
+                <option value="${civility.id}" #{if field.value?.id == civility.id}selected="selected"#{/if}>${civility.nom} (${civility.abreviation})</option>
+                #{/list}
+              </select>
+              <span class="error">#{error field.name /}</span>
+            </p>
+            #{/field}
+                
 			#{bankable.textField 'tiers.designation'}
 				#{textFieldBody field, label:'D&eacute;signation', mandatory:true /}
 			#{/bankable.textField}
@@ -54,28 +67,7 @@ $(document).ready(function() {
 			  <span class="error">#{error field.name /}</span>
 			</p>
 			#{/field}
-          
-			#{field 'tiers.civilite'}
-			<p class="fat">
-			  <label for="${field.id}">Civilit&eacute;</label>
-			  <select id="${field.id}" name="${field.name}.id" class="chzn-select" data-placeholder="Choisissez une Civilit&eacute;...">
-			    <option></option>
-			    #{list items: civilities, as: 'civility'}
-			    <option value="${civility.id}" #{if field.value?.id == civility.id}selected="selected"#{/if}>${civility.nom} (${civility.abreviation})</option>
-			    #{/list}
-			  </select>
-			  <span class="error">#{error field.name /}</span>
-			</p>
-			#{/field}
-                    
-			#{bankable.textField 'tiers.nom'}
-				#{textFieldBody field, label:'Nom' /}
-			#{/bankable.textField}
-          
-			#{bankable.textField 'tiers.prenom'}
-				#{textFieldBody field, label:'Pr&eacute;nom' /}
-			#{/bankable.textField}
-
+              
 			#{field 'tiers.commentaires'}
 			<p>
 			  <label for="${field.id}">Commentaires</label>

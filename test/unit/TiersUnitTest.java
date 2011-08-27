@@ -19,8 +19,6 @@ public class TiersUnitTest extends UnitTest {
         Tiers nouveauTiers = new Tiers();
         nouveauTiers.designation = "Tiers1";
         nouveauTiers.civilite = null;
-        nouveauTiers.nom = "Nom tiers1";
-        nouveauTiers.prenom = "Prénom tiers1";
 
         ValidationResult result = Validation.valid("tiers", nouveauTiers);
         assertTrue(result.ok);
@@ -33,8 +31,6 @@ public class TiersUnitTest extends UnitTest {
         Tiers nouveauTiers = new Tiers();
         nouveauTiers.designation = null;
         nouveauTiers.civilite = null;
-        nouveauTiers.nom = "Nom tiers1";
-        nouveauTiers.prenom = "Prénom tiers1";
 
         ValidationResult result = Validation.valid("tiers", nouveauTiers);
         assertFalse(result.ok);

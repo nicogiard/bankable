@@ -13,10 +13,16 @@ import play.db.jpa.Model;
 @Table(name = "PLANNINGECHEANCE")
 public class PlanningEcheance extends Model {
 
-	@Required
-	@ManyToOne
-	public Echeance echeance;
+    @Required
+    @ManyToOne
+    public Echeance echeance;
 
-	@Required
-	public Date date;
+    @Required
+    public Date dateEcheance;
+
+    public Date date;
+
+    public ETypeEcheance type;
+
+    public Float montant;
 }
