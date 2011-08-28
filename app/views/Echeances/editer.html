@@ -3,11 +3,16 @@
 
 #{set 'moreStyles'}
     <link rel="stylesheet" type="text/css" href="@{'/public/stylesheets/flick/jquery-ui-1.8.15.css'}">
+    <link rel="stylesheet" type="text/css" href="@{'/public/stylesheets/jquery.calculator.css'}">
+<link rel="stylesheet" type="text/css" href="@{'/public/stylesheets/chosen.css'}" />
 #{/set}
 
 #{set 'moreScripts'}
 <script src="@{'/public/javascripts/jquery-ui-1.8.15.min.js'}" type="text/javascript" charset="utf-8"></script>
 <script src="@{'/public/javascripts/jquery.ui-1.8.15.datepicker-fr.js'}" type="text/javascript" charset="utf-8"></script>
+<script src="@{'/public/javascripts/jquery.calculator.pack.js'}" type="text/javascript" charset="utf-8"></script>
+<script src="@{'/public/javascripts/jquery.calculator-fr.js'}" type="text/javascript" charset="utf-8"></script>
+<script src="@{'/public/javascripts/chosen.jquery.min.js'}" type="text/javascript" charset="utf-8"></script>
 <script type="text/javascript">
 $(document).ready(function() {
 	$.datepicker.setDefaults($.datepicker.regional["fr"]);
@@ -15,6 +20,12 @@ $(document).ready(function() {
 	$(".datepicker").datepicker({
 		showButtonPanel: true
 	});
+	
+	$('.calculator').calculator({
+		useThemeRoller: true, showOn: 'button', buttonImageOnly: true, buttonImage: '@{'/public/images/calculator.png'}'
+	});
+    
+	$(".chzn-select").chosen();
 }); 
 </script>
 #{/set}
@@ -32,8 +43,8 @@ $(document).ready(function() {
 				#{if echeance}
 				<input type="hidden" name="echeance.id" value="${echeance.id}"/>
 				#{/if}
-				<p>
-					<label>Compte<span class="mandatory">*</span> :</label><select name="echeance.compte.id">
+				<p class="fat">
+					<label>Compte<span class="mandatory">*</span> :</label><select name="echeance.compte.id" class="chzn-select" data-placeholder="Choisissez un Compte...">
 						<option></option>
 						#{list items:comptes, as:'compte'}
 						<option value="${compte.id}" #{if echeance}#{if echeance.compte.id == compte.id}selected#{/if}#{/if}#{else}#{if flash.get("echeance.compte.id") == compte.id.toString()}selected#{/if}#{/else}>${compte.nom}</option>
@@ -41,16 +52,17 @@ $(document).ready(function() {
 					</select>
 					<span class="error">#{error 'echeance.compte' /}</span>
 				</p>
-				<p>
-					<label for="description">Description<span class="mandatory">*</span> :</label><input type="text" id="description" name="echeance.description" value="#{if echeance}${echeance.description}#{/if}#{else}${flash.get("echeance.description")}#{/else}"/>
-					<span class="error">#{error 'echeance.description' /}</span>
-				</p>
-				<p>
-					<label for="date">Date<span class="mandatory">*</span> :</label><input type="text" id="date" name="echeance.date" class="datepicker" value="#{if echeance}${echeance.date ? echeance.date.format("dd/MM/yyyy") : ""}#{/if}#{else}${flash.get("echeance.date")}#{/else}"/>
-					<span class="error">#{error 'echeance.date' /}</span>
-				</p>
-				<p>
-					<label>Type<span class="mandatory">*</span> :</label><select name="echeance.type.id">
+				
+				#{bankable.textField 'echeance.description'}
+					#{textFieldBody field, label:'Description', mandatory:true /}
+				#{/bankable.textField}
+				
+				#{bankable.textField 'echeance.date'}
+					#{textFieldBody field, label:'Date', mandatory:true, datePicker:true/}
+				#{/bankable.textField}
+				
+				<p class="fat">
+					<label>Type<span class="mandatory">*</span> :</label><select name="echeance.type.id" class="chzn-select" data-placeholder="Choisissez un Type...">
 						<option></option>
 						#{list items:models.ETypeEcheance, as:'typeEcheance'}
 						<option value="${typeEcheance}" #{if echeance}#{if typeEcheance == echeance.type}selected#{/if}#{/if}#{else}#{if flash.get("echeance.type") == typeEcheance}selected#{/if}#{/else}>&{'ETypeEcheance.' + typeEcheance}</option>
@@ -58,12 +70,13 @@ $(document).ready(function() {
 					</select>
 					<span class="error">#{error 'echeance.type' /}</span>
 				</p>
-				<p>
-					<label for="montant">Montant<span class="mandatory">*</span> :</label><input type="text" id="montant" name="echeance.montant" value="#{if echeance}${echeance.montant}#{/if}#{else}${flash.get("echeance.montant")}#{/else}"/>
-					<span class="error">#{error 'echeance.montant' /}</span>
-				</p>
-				<p>
-					<label>Type de Fr&eacute;quence<span class="mandatory">*</span> :</label><select name="echeance.typeFrequence.id">
+				
+				#{bankable.textField 'echeance.montant'}
+					#{textFieldBody field, label:'Montant', mandatory:true, calculator:true/}
+				#{/bankable.textField}
+				
+				<p class="fat">
+					<label>Type de Fr&eacute;quence<span class="mandatory">*</span> :</label><select name="echeance.typeFrequence.id" class="chzn-select" data-placeholder="Choisissez une Fr&eacute;quence...">
 						<option></option>
 						#{list items:models.ETypeFrequence, as:'typeFrequence'}
 						<option value="${typeFrequence}" #{if echeance}#{if typeFrequence == echeance.typeFrequence}selected#{/if}#{/if}#{else}#{if flash.get("echeance.typeFrequence") == typeFrequence}selected#{/if}#{/else}>&{'ETypeFrequence.' + typeFrequence}</option>
@@ -71,8 +84,8 @@ $(document).ready(function() {
 					</select>
 					<span class="error">#{error 'echeance.typeFrequence' /}</span>
 				</p>
-				<p>
-					<label>Tag<span class="mandatory">*</span> :</label><select name="echeance.tag.id">
+				<p class="fat">
+					<label>Tag<span class="mandatory">*</span> :</label><select name="echeance.tag.id" class="chzn-select" data-placeholder="Choisissez un Tag...">
 						<option></option>
 						#{list items:tags, as:'tag'}
 						<option value="${tag.id}" #{if echeance}#{if echeance.tag.id == tag.id}selected#{/if}#{/if}#{else}#{if flash.get("echeance.tag.id") == tag.id.toString()}selected#{/if}#{/else}>${tag.nom}</option>
@@ -80,10 +93,11 @@ $(document).ready(function() {
 					</select>
 					<span class="error">#{error 'echeance.tag' /}</span>
 				</p>
-				<p>
-					<label for="dateFin">Date de fin :</label><input type="text" id="dateFin" name="echeance.dateFin" class="datepicker" value="#{if echeance}${echeance.dateFin ? echeance.dateFin.format("dd/MM/yyyy") : ""}#{/if}#{else}${flash.get("echeance.dateFin")}#{/else}"/>
-					<span class="error">#{error 'echeance.dateFin' /}</span>
-				</p>
+				
+				#{bankable.textField 'echeance.dateFin'}
+					#{textFieldBody field, label:'Date de fin', datePicker:true/}
+				#{/bankable.textField}
+				
 				<div class="submit">
 		            <input type="submit" value="Valider" />&nbsp;<a href="#{if echeance}@{Echeances.index(echeance.compte.id)}#{/if}#{else}@{Echeances.index()}#{/else}" class="button white">Annuler</a>
 		        </div>

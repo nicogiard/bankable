@@ -1,4 +1,4 @@
-#{extends 'Tags/template.html' /}
+#{extends 'TagsController/template.html' /}
 #{set title:'Tags' /}
 
 #{if currentTag}
@@ -34,42 +34,25 @@
     <div class="title">Op&eacute;rations tagg&eacute;es avec le tag "${currentTag.nom}"</div>
 	#{if operations}
     <div class="content">
-        <div class="pagination">
-        	#{if page > 1}<a href="@{Tags.detail(currentTag.id, page-1)}" class="prev">«</a>#{/if}
-            #{else}<span class="prev">«</span>#{/else}
-            #{list items:1..numberOfPage, as:'nb'}
-            <a href="@{Tags.detail(currentTag.id, nb)}" #{if page && page == nb}class="current"#{/if}>${nb}</a>
-            #{/list}
-            #{if page < numberOfPage}<a href="@{Tags.detail(currentTag.id, page+1)}" class="next">»</a>#{/if}
-            #{else}<span class="next">»</span>#{/else}
-        </div>
+        #{pagination pagination, url:actionBridge.TagsController.detail(compte.id, currentTag.id) /}
         <table>
             <thead>
                 <tr>
-                	<th>Description</th><th class="debitCredit">Montant</th><th class="solde">Solde</th><th>Tags</th><th class="date">Date</th>
+                	<th>Description</th><th class="debitCredit">Montant</th><th>Tags</th><th class="date">Date</th>
                 </tr>
             </thead>
             <tbody>
                 #{list items:operations, as:'operation'}
 				<tr>
 					<td class="libelle">${operation.libelle}</td>
-					<td class="debitCredit">#{if operation.type.nom == "Débit"}<img src="@{'/public/images/minus.gif'}" title="D&eacute;bit" class="debitCredit">#{/if}#{else}<img src="@{'/public/images/plus.gif'}" title="Cr&eacute;dit" class="debitCredit">#{/else}${operation.montant.format('0.00')}&nbsp;${operation.compte.devise.symbole}</td>
-					<td class="solde">#{if operation.solde <= 0}<img src="@{'/public/images/minus.gif'}" title="D&eacute;bit" class="debitCredit">#{/if}#{else}<img src="@{'/public/images/plus.gif'}" title="Cr&eacute;dit" class="debitCredit">#{/else}${operation.solde.format('0.00')}&nbsp;${operation.compte.devise.symbole}</td>
+					<td class="debitCredit">#{if models.ETypeOperation.DEBIT == operation.type}#{plusMinus -1 /}#{/if}#{else}#{plusMinus 1 /}#{/else}${operation.montant.format('0.00')}&nbsp;&euro;</td>
 					<td class="tags">#{if operation.tags}${operation.tags.join('nom', ', ')}#{/if}#{else}<span class="noTag">(aucun)</span>#{/else}</td>
 					<td class="date"><span title="${operation.date.format('dd/MM/yyyy HH:mm:ss')}">${operation.date.format('dd/MM/yyyy')}</span></td>
 				</tr>
 				#{/list}
             </tbody>
         </table>
-        <div class="pagination">
-        	#{if page > 1}<a href="@{Tags.detail(currentTag.id, page-1)}" class="prev">«</a>#{/if}
-            #{else}<span class="prev">«</span>#{/else}
-            #{list items:1..numberOfPage, as:'nb'}
-            <a href="@{Tags.detail(currentTag.id, nb)}" #{if page && page == nb}class="current"#{/if}>${nb}</a>
-            #{/list}
-            #{if page < numberOfPage}<a href="@{Tags.detail(currentTag.id, page+1)}" class="next">»</a>#{/if}
-            #{else}<span class="next">»</span>#{/else}
-        </div>
+        #{pagination pagination, url:actionBridge.TagsController.detail(compte.id, currentTag.id) /}
     </div>
 	#{/if}
 	#{else}

@@ -19,16 +19,16 @@
     	});
     	
     	// Checkbox de la liste des Tags
-    	var listAction = #{jsAction @Tags.showTagOnGraph(':tagId', ':show') /}
+    	var listAction = #{jsAction @TagsController.showTagOnGraph(':tagId', ':show') /}
     	$("#sidebar ul.tagList input").click(function(e){
     		$.get(listAction({tagId: $(this).val(), show: ($(this).attr('checked') == 'checked' ? true : false)}), function(data) {
-   			  document.location.href = "@{Tags.index()}";
+   			  document.location.href = "@{TagsController.index()}";
    			});
     	});
     	
 		// Select pour Tags
     	$('#choixComptePourTag').change(function(){
-    		document.location.href = "@{Tags.index}/compte/" + $(this).val();
+    		document.location.href = "@{TagsController.index}/compte/" + $(this).val();
     	});
     	
 		// Select pour Echeances
@@ -43,10 +43,11 @@
         <div class="left tabs">
             <ul>
 				<li><a href="@{Application.index}" ${request.action =~ "Application." ? "class='active'" : ""}>R&eacute;sum&eacute;</a></li>
-				<li><a href="@{Comptes.resume}"${request.action =~ "Comptes." ? "class='active'" : ""}>Comptes</a></li>
+				<li><a href="@{Comptes.index}"${request.action =~ "Comptes." ? "class='active'" : ""}>Comptes</a></li>
 				<li><a href="@{Budgets.index}"${request.action =~ "Budgets." ? "class='active'" : ""}>Budgets</a></li>
 				<li><a href="@{Echeances.index}"${request.action =~ "Echeances." ? "class='active'" : ""}>Ech&eacute;ances</a></li>
-				<li><a href="@{Tags.index}"${request.action =~ "Tags." ? "class='active'" : ""}>Tags</a></li>
+                <li><a href="@{TagsController.index}"${request.action =~ "TagsController." ? "class='active'" : ""}>Tags</a></li>
+				<li><a href="@{Tiers.index}"${request.action =~ "Tiers." ? "class='active'" : ""}>Tiers</a></li>
 				#{if request.action =~ "Operations."}
 				<li><a href="#!" ${request.action =~ "Operations." ? "class='active'" : ""}>Op&eacute;rations</a></li>
 				#{/if}

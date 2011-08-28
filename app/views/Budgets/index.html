@@ -17,13 +17,17 @@
 </script>
 #{/set}
 
+#{if budget}
 <div class="bloc">
     <div class="title">Budget du mois ${actualMonth.format('MMMM yyyy', 'FR')}</div>
     <div class="content">
     	<section>
-    		<ul class="actions">
-				<li><a href="@{Budgets.ajouterLigne()}">Ajouter une ligne</a></li>
-			</ul>
+			<div class="submit">
+	    		<ul class="actions">
+					<li><a href="@{Budgets.ajouterLigne()}" class="button">Ajouter une ligne</a></li>
+					<li><a href="@{Budgets.refresh()}" class="button white"><img src="@{'/public/images/refresh.gif'}">Mettre &agrave; jour</a></li>
+				</ul>
+			</div>
 			#{if flash.success}
 			    <div class="notif success">
 		            <strong>Succ&eacute;s :</strong> ${flash.success} <a href="#!" class="close"></a>
@@ -43,13 +47,13 @@
 								        &nbsp;
 								    </div>
 								    <div class="text">
-								        ${((ligne.montantActuel * 100) / (ligne.montantEcheance + ligne.montantManuel)).format('00')}%
+								        ${((ligne.montantActuel * 100) / (ligne.montantEcheance + ligne.montantManuel)).formatPositive('00')}%
 								    </div>
 								</div>
 							</td>
-				    		<td class="budgetActuel">${ligne.montantActuel.format('0.00')}&nbsp;${ligne.budget.compte.devise.symbole}</td>
-				    		<td class="budgetPrevisionnel">${(ligne.montantEcheance + ligne.montantManuel).format('0.00')}&nbsp;${ligne.budget.compte.devise.symbole}</td>
-				    		<td class="budgetPrevisionnelRepartis">Ech&eacute;ance = ${ligne.montantEcheance.format('0.00')} ${ligne.budget.compte.devise.symbole} | Manuel = ${ligne.montantManuel.format('0.00')} ${ligne.budget.compte.devise.symbole}</td>
+				    		<td class="budgetActuel">#{plusMinus ligne.montantActuel /}${ligne.montantActuel.formatPositive('0.00')}&nbsp;&euro;</td>
+				    		<td class="budgetPrevisionnel">#{plusMinus (ligne.montantEcheance + ligne.montantManuel) /}${(ligne.montantEcheance + ligne.montantManuel).formatPositive('0.00')}&nbsp;&euro;</td>
+				    		<td class="budgetPrevisionnelRepartis">Ech&eacute;ance = #{plusMinus ligne.montantEcheance /}${ligne.montantEcheance.formatPositive('0.00')}&nbsp;&euro; | Manuel = #{plusMinus ligne.montantManuel /}${ligne.montantManuel.formatPositive('0.00')}&nbsp;&euro;</td>
 				    		<td class="actions"><a href="@{Budgets.editerLigne(ligne.id)}" title="Editer"><img src="@{'/public/images/edit.png'}" alt="Editer" class="editer"></a><a href="@{Budgets.supprimerLigne(ligne.id)}" title="Supprimer" class="supprimer"><img src="@{'/public/images/delete.png'}" alt="Supprimer"></a></td>
 				    	</tr>
 				    #{/list}
@@ -61,3 +65,4 @@
     	</section>
     </div>
 </div>
+#{/if}

@@ -1,6 +1,30 @@
 #{extends 'main.html' /}
 
+<script type="text/javascript" charset="UTF-8">
+$(document).ready(function() {
+    $("input[name=Echeances_mode]").change(function(e){
+        $("#Echeances_mode_form").submit();
+    });
+}); 
+</script>
+
+
 <section id="sidebar">
+    <section>
+    
+    <div class="bloc filtre">
+       <div class="title">Mode de visualisation</div>
+       <div class="content">
+         <div class="formulaire">
+         #{form @Echeances.index(compte.id, echeanceSelectionnee?.id), id:'Echeances_mode_form'}
+          <label>Calendrier</label><input type="radio" name="Echeances_mode" value="CAL" #{if Echeances_mode == 'CAL'}checked="checked"#{/if}/>
+          <label>Liste</label><input type="radio" name="Echeances_mode"  value="LIST" #{if Echeances_mode == 'LIST'}checked="checked"#{/if} />
+         #{/form}
+         </div>
+       </div>
+    </div>
+    
+    </section>
 	<section>
 		<ul>
 			<li class="nosubmenu"><a href="@{Echeances.ajouter}">Ajouter</a></li>
@@ -16,7 +40,7 @@
 			#{if echeances}
 			<ul class="echeanceList">
 			#{list items:echeances, as:'uneEcheance'}
-				<li #{if echeance}${echeance.id == uneEcheance.id ? "class='current'" : ""}#{/if}><a href="@{Echeances.editer(uneEcheance.id)}">#{if models.ETypeEcheance.DEBIT == uneEcheance.type}<img src="@{'/public/images/minus.gif'}" title="D&eacute;bit" class="debitCredit">#{/if}#{else}<img src="@{'/public/images/plus.gif'}" title="Cr&eacute;dit" class="debitCredit">#{/else}${uneEcheance.description}</a></li>
+				<li #{if echeance}${echeance.id == uneEcheance.id ? "class='current'" : ""}#{/if}><a href="@{Echeances.editer(uneEcheance.id)}">#{if models.ETypeEcheance.DEBIT == uneEcheance.type}#{plusMinus -1 /}#{/if}#{else}#{plusMinus 1 /}#{/else}${uneEcheance.description}</a></li>
 			#{/list}
 			</ul>
 			#{/if}

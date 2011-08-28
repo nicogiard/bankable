@@ -1,0 +1,61 @@
+#{extends 'Tiers/template.html' /}
+#{set title:'Tiers' /}
+
+#{set 'moreScripts'}
+<script type="text/javascript" charset="UTF-8">
+$(document).ready(function() {
+	$("a.supprimer").click(function(e){
+		e.preventDefault();
+		if (confirm('Etes vous sûr de vouloir supprimer ce tiers ?')) {
+            document.location.href = $(this).attr("href");
+        }
+	});
+}); 
+</script>
+#{/set}
+
+<div class="bloc">
+    <div class="title">Tiers</div>
+    <div class="content">
+      <section>
+        #{if flash.success}
+		  <div class="notif success">
+		     <strong>Succ&eacute;s :</strong> ${flash.success} <a href="#!" class="close"></a>
+		  </div>
+		#{/if}
+        #{if tiers == null}
+        <ul class="actions">
+           <li><a href="@{Tiers.ajouter()}" class="button">Ajouter un Tiers</a></li>
+        </ul>
+        #{/if}
+        
+        #{if tiersListe}
+        #{pagination pagination, url:actionBridge.Tiers.index(), pageParamPrefix:'Tiers_' /}
+		<table>
+			<thead>
+			  <tr>
+			    <th>Civilit&eacute;</th><th>D&eacute;signation</th><th>Tags</th><th>Commentaires</th><th>&nbsp;</th>
+			  </tr>
+			</thead>
+			<tbody>
+			  #{list items:tiersListe, as:'ligne'}
+			  <tr>
+			    <td>${ligne?.civilite?.nom}</td>
+	            <td>${ligne?.designation}</td>
+	            <td class="tags">#{if ligne?.tags?.size() > 0}${ligne?.tags?.join('nom', ', ')}#{/if}#{else}<span class="noTag">(aucun)</span>#{/else}</td>
+	            <td>${ligne?.commentaires?.nl2br()}</td>
+			    <td class="actions"><a href="@{Tiers.editer(ligne.id)}" title="Editer"><img src="@{'/public/images/edit.png'}" alt="Editer" class="editer"></a><a href="@{Tiers.supprimer(ligne.id)}" title="Supprimer" class="supprimer"><img src="@{'/public/images/delete.png'}" alt="Supprimer"></a>
+			    </td>
+			  </tr>
+			  #{/list}
+			</tbody>
+			<tfoot></tfoot>
+		</table>
+		#{pagination pagination, url:actionBridge.Tiers.index(), pageParamPrefix:'Tiers_' /}
+        #{/if}
+		#{else}
+			<p>Aucun tiers</p>
+		#{/else}
+      </section>
+	</div>
+</div>

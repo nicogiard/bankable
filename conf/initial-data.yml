@@ -1,38 +1,87 @@
 #-----------------------------------
-# Devise
+# Civilite
 #-----------------------------------
-Devise(euro):
-  nom: Euro
-  symbole: €
+Civilite(mr):
+  code: mr
+  nom: Monsieur
+  abreviation: M.
   
-Devise(dollar):
-  nom: Dollar
-  symbole: $
+Civilite(mme):
+  code: mme
+  nom: Madame
+  abreviation: Mme.
+  
+Civilite(mlle):
+  code: mlle
+  nom: Mademoiselle
+  abreviation: Mlle.
+  
+Civilite(soc):
+  code: soc
+  nom: Société
+  abreviation: Soc.
 
 #-----------------------------------
 # Tag
 #-----------------------------------
-
+Tag(tagSalaire):
+  nom: Salaire
+  showOnGraph: true
+  
+Tag(tagDAB):
+  nom: DAB
+  showOnGraph: true
 
 #-----------------------------------
 # Compte
 #-----------------------------------
-
+Compte(compteCourant):
+  nom: Compte Courant
+  solde: 0
+  devise: euro
+  numero: 12
+  etablissement: Caisse d'Epargne Normandie
 
 #-----------------------------------
 # Operation
 #-----------------------------------
+Operation(op1):
+  date: 2011-08-17
+  libelle: Retrait
+  type: DEBIT
+  montant: 100
+  etat: NONPOINTEE
+  compte: compteCourant
+  tags: 
+    - tagDAB
 
+Operation(op2):
+  date: 2011-08-06
+  libelle: Salaire
+  type: CREDIT
+  montant: 1000
+  etat: NONPOINTEE
+  compte: compteCourant
+  tags: 
+    - tagSalaire
 
 #-----------------------------------
 # Echeance
 #-----------------------------------
-
+Echeance(ec1):
+  description: Salaire
+  date: 2011-07-30
+  type: CREDIT
+  montant: 2700
+  compte: compteCourant
+  typeFrequence: MENSUELLE
+  tag: tagSalaire
 
 #-----------------------------------
 # Budget
 #-----------------------------------
-
+Budget(bc1):
+  compte: compteCourant
 
 #-----------------------------------
 # LigneBudget

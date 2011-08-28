@@ -14,7 +14,7 @@
 	#{form @Operations.importUpload(compte.id), enctype:'multipart/form-data'}
 		<p><label for="fichier">Fichier à envoyer: </label><input type="file" name="fichier" id="fichier"/></p>
 	    <div class="submit">
-	    	<input type="submit" value="Envoyer" />&nbsp;<a href="@{Comptes.resume(compte.id)}" class="button white">Annuler</a>
+	    	<input type="submit" value="Envoyer" />&nbsp;<a href="@{Comptes.index(compte.id)}" class="button white">Annuler</a>
 	    </div>
 	#{/form}
 	</div>
@@ -43,7 +43,7 @@
 								<td>${operation.date.format("dd/MM/yyyy")}</td>
 								<td>${operation.numero}</td>
 								<td>${operation.libelle}</td>
-								<td>#{if models.ETypeOperation.DEBIT == operation.type}<img src="@{'/public/images/minus.gif'}" title="D&eacute;bit" class="debitCredit">#{/if}#{else}<img src="@{'/public/images/plus.gif'}" title="Cr&eacute;dit" class="debitCredit">#{/else}${operation.montant}</td>
+								<td>#{if models.ETypeOperation.DEBIT == operation.type}#{plusMinus -1 /}#{/if}#{else}#{plusMinus 1 /}#{/else}${operation.montant}</td>
 								<td>&{'ETypeOperation.' + operation.type}</td>
 								<td>${operation.detail}</td>
 							</tr>

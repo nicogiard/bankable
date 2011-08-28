@@ -42,8 +42,7 @@ $(document).ready(function() {
     <div class="title">${compte.nom}<a href="@{Comptes.editer(compte.id)}">Editer</a></div>
     <div class="content">
 		<section id="infoCompte">
-			<p><label>Solde courant: </label>#{if compte.solde > 0}<img src="@{'/public/images/plus.gif'}" title="Cr&eacute;dit" class="debitCredit">#{/if}#{else}<img src="@{'/public/images/minus.gif'}" title="D&eacute;bit" class="debitCredit">#{/else}<span>${compte.solde.format('0.00')} ${compte.devise.symbole}</span></p>
-			<p><label>Devise: </label><span>${compte.devise.nom}</span></p>
+			<p><label>Solde courant: </label>#{plusMinus compte.solde /}<span>${compte.solde.formatPositive('0.00')}&nbsp;&euro;</span></p>
 			<p><label>Num&eacute;ro: </label><span>${compte.numero}&nbsp;</span></p>
 			<p><label>Etablissement: </label><span>${compte.etablissement}&nbsp;</span></p>
 		</section>
@@ -54,25 +53,19 @@ $(document).ready(function() {
     <div class="title">Op&eacute;rations</div>
     <div class="content">
 		<section>
-			<ul class="actions">
-				<li><a href="@{Operations.ajouter(compte.id)}">Ajouter une op&eacute;ration</a></li>
-				<li><a href="@{Operations.importer(compte.id)}">Importer des op&eacute;rations</a></li>
-				<li><a href="@{Comptes.rapprocher(compte.id)}" id="linkRapprocher">Rapprocher les op&eacute;rations point&eacute;es</a></li>
-			</ul>
+			<div class="submit">
+				<ul class="actions">
+					<li><a href="@{Operations.ajouter(compte.id)}" class="button">Ajouter une op&eacute;ration</a></li>
+					<li><a href="@{Operations.importer(compte.id)}" class="button">Importer des op&eacute;rations</a></li>
+					<li><a href="@{Comptes.rapprocher(compte.id)}" id="linkRapprocher" class="button">Rapprocher les op&eacute;rations point&eacute;es</a></li>
+				</ul>
+			</div>
 			#{if compte.operations}
-	        <div class="pagination">
-	        	#{if page > 1}<a href="@{Comptes.resume(compte.id, page-1)}" class="prev">«</a>#{/if}
-	            #{else}<span class="prev">«</span>#{/else}
-	            #{list items:1..numberOfPage, as:'nb'}
-	            <a href="@{Comptes.resume(compte.id, nb)}" #{if page && page == nb}class="current"#{/if}>${nb}</a>
-	            #{/list}
-	            #{if page < numberOfPage}<a href="@{Comptes.resume(compte.id, page+1)}" class="next">»</a>#{/if}
-	            #{else}<span class="next">»</span>#{/else}
-	        </div>
+			#{pagination pagination, url:actionBridge.Comptes.index(compte.id) /}
 			<table>
 				<thead>
 					<tr>
-						<th>&nbsp;</th><th>&nbsp;</th><th>Description</th><th class="debitCredit">Montant</th><th class="solde">Solde</th><th>Tags</th><th class="date">Date</th><th>&nbsp;</th>
+						<th>&nbsp;</th><th>&nbsp;</th><th>Description</th><th class="debitCredit">Montant</th><th>Tags</th><th class="date">Date</th><th>&nbsp;</th>
 					</tr>
 				</thead>
 				<tbody>
@@ -81,8 +74,7 @@ $(document).ready(function() {
 						<td class="check"><input type="checkbox"></td>
 						<td class="rapproche"><a href="#!" value="${operation.id}" class="linkRapproche #{if models.EEtatOperation.NONPOINTEE == operation.etat}" title="Non Point&eacute;e"#{/if}#{if models.EEtatOperation.POINTEE == operation.etat}pointee" title="Point&eacute;e"#{/if}#{if models.EEtatOperation.RAPPROCHEE == operation.etat}rapprochee" title="Rapproch&eacute;e"#{/if}>&nbsp;</a></td>
 						<td class="libelle">${operation.libelle}</td>
-						<td class="debitCredit">#{if models.ETypeOperation.DEBIT == operation.type}<img src="@{'/public/images/minus.gif'}" title="D&eacute;bit" class="debitCredit">#{/if}#{else}<img src="@{'/public/images/plus.gif'}" title="Cr&eacute;dit" class="debitCredit">#{/else}${operation.montant.format('0.00')}&nbsp;${operation.compte.devise.symbole}</td>
-						<td class="solde">#{if operation.solde <= 0}<img src="@{'/public/images/minus.gif'}" title="D&eacute;bit" class="debitCredit">#{/if}#{else}<img src="@{'/public/images/plus.gif'}" title="Cr&eacute;dit" class="debitCredit">#{/else}${operation.solde.format('0.00')}&nbsp;${operation.compte.devise.symbole}</td>
+						<td class="debitCredit">#{if models.ETypeOperation.DEBIT == operation.type}#{plusMinus -1 /}#{/if}#{else}#{plusMinus 1 /}#{/else}${operation.montant.format('0.00')}&nbsp;&euro;</td>
 						<td class="tags">#{if operation.tags.size() > 0}${operation.tags.join('nom', ', ')}#{/if}#{else}<span class="noTag">(aucun)</span>#{/else}</td>
 						<td class="date"><span title="${operation.date.format('dd/MM/yyyy HH:mm:ss')}">${operation.date.format('dd/MM/yyyy')}</span></td>
 						<td class="actions"><a href="@{Operations.editer(operation.compte.id, operation.id)}" title="Editer"><img src="@{'/public/images/edit.png'}" alt="Editer" class="editer"></a><a href="@{Operations.supprimer(operation.compte.id, operation.id)}" title="Supprimer" class="supprimer"><img src="@{'/public/images/delete.png'}" alt="Supprimer"></a></td>
@@ -91,15 +83,7 @@ $(document).ready(function() {
 				</tbody>
 				<tfoot></tfoot>
 			</table>
-			<div class="pagination">
-	        	#{if page > 1}<a href="@{Comptes.resume(compte.id, page-1)}" class="prev">«</a>#{/if}
-	            #{else}<span class="prev">«</span>#{/else}
-	            #{list items:1..numberOfPage, as:'nb'}
-	            <a href="@{Comptes.resume(compte.id, nb)}" #{if page && page == nb}class="current"#{/if}>${nb}</a>
-	            #{/list}
-	            #{if page < numberOfPage}<a href="@{Comptes.resume(compte.id, page+1)}" class="next">»</a>#{/if}
-	            #{else}<span class="next">»</span>#{/else}
-	        </div>
+			#{pagination pagination, url:actionBridge.Comptes.index(compte.id) /}
 			#{/if}
 			#{else}
 				<p>Aucune opération</p>

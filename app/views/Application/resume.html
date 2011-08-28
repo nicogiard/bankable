@@ -13,8 +13,8 @@
 		  data.addColumn('string', 'x');
 		  data.addColumn('number', 'Balance');
 		  
-		  #{list items:resume.operations, as:'operation'}
-		  	data.addRow(["${operation.date.format("dd/MM/yyyy")}", ${operation.solde}]);
+		  #{list items:resume.soldes.entrySet(), as:'solde'}
+		    data.addRow(["${solde.key.format("dd/MM/yyyy")}", ${solde.value}]);
 		  #{/list}
 				
 		  var formatter = new google.visualization.NumberFormat({suffix: ' €'});
@@ -34,7 +34,7 @@
 		  data.addColumn('string', 'Tag');
 		  data.addColumn('number', 'Crédit');
 
-		  data.addRow(['Non taggée', ${resume.countNoTag}]);
+		  data.addRow(['Non taggée', ${resume.countNoTagCredit}]);
 		  
 		  #{list items:resume.tagsCredit, as:'unTag'}
 		  	data.addRow(["${unTag[0].nom.raw()}", ${unTag[1]}]);
@@ -52,7 +52,7 @@
 		  data.addColumn('string', 'Tag');
 		  data.addColumn('number', 'Débit');
 
-		  data.addRow(['Non taggée', ${resume.countNoTag}]);
+		  data.addRow(['Non taggée', ${resume.countNoTagDebit}]);
 		  
 		  #{list items:resume.tagsDebit, as:'unTag'}
 		  	data.addRow(["${unTag[0].nom.raw()}", ${unTag[1]}]);
@@ -71,11 +71,10 @@
 
 <div class="left">
 	<div class="bloc">
-	    <div class="title">R&eacute;sum&eacute; : ${compte.nom}<a href="@{Comptes.resume(compte.id)}">Afficher</a></div>
+	    <div class="title">R&eacute;sum&eacute; : ${compte.nom}<a href="@{Comptes.index(compte.id)}">Afficher</a></div>
 	    <div class="content">
 			<section id="infoCompte">
-				<p><label>Solde courant: </label>#{if compte.solde > 0}<img src="@{'/public/images/plus.gif'}" title="Cr&eacute;dit" class="debitCredit">#{/if}#{else}<img src="@{'/public/images/minus.gif'}" title="D&eacute;bit" class="debitCredit">#{/else}<span>${compte.solde.format('0.00')} ${compte.devise.symbole}</span></p>
-				<p><label>Devise: </label><span>${compte.devise.nom}</span></p>
+				<p><label>Solde courant: </label>#{plusMinus compte.solde /}<span>${compte.solde.formatPositive('0.00')}&nbsp;&euro;</span></p>
 				<p><label>Num&eacute;ro: </label><span>${compte.numero}&nbsp;</span></p>
 				<p><label>Etablissement: </label><span>${compte.etablissement}&nbsp;</span></p>
 			</section>
@@ -95,11 +94,11 @@
 	                <tbody>
 	                    <tr>
 	                        <td>${resume.todayCredits ? resume.todayCredits : "0"}</td>
-	                        <td>D&eacute;bit${resume.todayCredits > 0 ? "s" : ""}<img src="@{'/public/images/minus.gif'}" title="D&eacute;bit" class="debitCredit"></td>
+	                        <td>Cr&eacute;dit${resume.todayCredits > 0 ? "s" : ""}#{plusMinus 1 /}</td>
 	                    </tr>
 	                    <tr>
 	                        <td>${resume.todayDebits ? resume.todayDebits : "0"}</td>
-	                        <td>Cr&eacute;dit${resume.todayDebits > 0 ? "s" : ""}<img src="@{'/public/images/plus.gif'}" title="Cr&eacute;dit" class="debitCredit"></td>
+	                        <td>D&eacute;bit${resume.todayDebits > 0 ? "s" : ""}#{plusMinus -1 /}</td>
 	                    </tr>
 	                    <tr>
 	                        <td>${resume.todayEcheances ? resume.todayEcheances : "0"}</td>
@@ -112,21 +111,21 @@
 	            <table class="noalt">
 	                <thead>
 	                    <tr>
-	                        <th colspan="2"><em>Hier</em></th>
+	                        <th colspan="2"><em>Semaine</em></th>
 	                    </tr>
 	                </thead>
 	                <tbody>
 	                    <tr>
-	                        <td>${resume.yesterdayCredits ? resume.yesterdayCredits : "0"}</td>
-	                        <td>D&eacute;bit${resume.yesterdayCredits > 0 ? "s" : ""}<img src="@{'/public/images/minus.gif'}" title="D&eacute;bit" class="debitCredit"></td>
+	                        <td>${resume.weekCredits ? resume.weekCredits : "0"}</td>
+	                        <td>Cr&eacute;dit${resume.weekCredits > 0 ? "s" : ""}#{plusMinus 1 /}</td>
 	                    </tr>
 	                    <tr>
-	                        <td>${resume.yesterdayDebits ? resume.yesterdayDebits : "0"}</td>
-	                        <td>Cr&eacute;dit${resume.yesterdayDebits > 0 ? "s" : ""}<img src="@{'/public/images/plus.gif'}" title="Cr&eacute;dit" class="debitCredit"></td>
+	                        <td>${resume.weekDebits ? resume.weekDebits : "0"}</td>
+	                        <td>D&eacute;bit${resume.weekDebits > 0 ? "s" : ""}#{plusMinus -1 /}</td>
 	                    </tr>
 	                    <tr>
-	                        <td>${resume.yesterdayEcheances ? resume.yesterdayEcheances : "0"}</td>
-	                        <td>Ech&eacute;ance${resume.yesterdayEcheances > 0 ? "s" : ""}</td>
+	                        <td>${resume.weekEcheances ? resume.weekEcheances : "0"}</td>
+	                        <td>Ech&eacute;ance${resume.weekEcheances > 0 ? "s" : ""}</td>
 	                    </tr>
 	                </tbody>
 	            </table>

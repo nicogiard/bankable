@@ -1,0 +1,65 @@
+#{extends 'Echeances/template.html' /} 
+#{set title:'Echéances' /}
+
+#{bloc title:'Echéances'}
+      
+  #{if echeances}
+  <table>
+    <thead>
+      <tr>
+        <th>Description</th>
+        <th>Type</th>
+        <th>Montant</th>
+        <th>Fr&eacute;quence</th>
+        <th>Date de d&eacute;but</th>
+        <th>Date de fin</th>
+        <th>Tag</th>
+        <th>&nbsp;</th>
+      </tr>
+    </thead>
+    <tbody> 
+
+    #{list items:echeances, as:'ligne'}
+    <tr>
+       <td><a href="@{Echeances.list(compte.id,ligne.id)}">${ligne?.description}</a></td>
+       <td>&{'ETypeEcheance.'+ligne?.type}</td>
+       <td>${ligne?.montant}</td>
+       <td>&{'ETypeFrequence.'+ligne?.typeFrequence}</td>
+       <td>${ligne?.date?.format()}</td>
+       <td>${ligne?.dateFin?.format()}</td>
+       <td class="tags">${ligne?.tag?.nom}</td>
+       <td class="actions"></td>
+    </tr>
+    #{/list}
+    </tbody>
+  </table>
+  #{/if}
+#{/bloc}	  
+
+#{if echeanceSelectionnee}
+#{bloc title:'Echeance: ' + echeanceSelectionnee?.description}
+  <table>
+    <thead>
+      <tr>
+        <th>Date</th>
+        <th>Date réelle</th>
+        <th>Type</th>
+        <th>Montant</th>
+        <th>&nbsp;</th>
+      </tr>
+    </thead>
+    <tbody> 
+    #{list items:echeanceSelectionnee.planning, as:'ligne'}
+    <tr>
+       <td>${ligne?.dateEcheance?.format()}</td>
+       <td>${ligne?.date?.format()}</td>
+       <td>${ligne?.type}</td>
+       <td>${ligne?.montant}</td>
+       <td class="actions"></td>
+    </tr>
+    #{/list}
+    </tbody>
+  </table>
+
+#{/bloc}
+#{/if}

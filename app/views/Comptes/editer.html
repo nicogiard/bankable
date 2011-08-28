@@ -22,33 +22,24 @@ $(document).ready(function() {
 				#{if compte}
 				<input type="hidden" name="compte.id" value="${compte.id}"/>
 				#{/if}
-				<p>
-					<label for="nom">Nom<span class="mandatory">*</span> :</label><input type="text" id="nom" name="compte.nom" value="#{if compte}${compte.nom}#{/if}#{else}${flash.get("compte.nom")}#{/else}"/>
-					<span class="error">#{error 'compte.nom' /}</span>
-				</p>
-				<p>
-					<label>Devise<span class="mandatory">*</span> :</label><select name="compte.devise.id">
-						<option></option>
-						#{list items:devises, as:'devise'}
-						<option value="${devise.id}" #{if compte}#{if compte.devise.id == devise.id}selected#{/if}#{/if}#{else}#{if flash.get("compte.devise.id") == devise.id.toString()}selected#{/if}#{/else}>${devise.nom} (${devise.symbole})</option>
-						#{/list}
-					</select>
-					<span class="error">#{error 'compte.devise' /}</span>
-				</p>
-				<p>
-					<label for="solde">Solde<span class="mandatory">*</span> :</label><input type="text" id="solde" name="compte.solde" value="#{if compte}${compte.solde}#{/if}#{else}${flash.get("compte.solde")}#{/else}"/>
-					<span class="error">#{error 'compte.solde' /}</span>
-				</p>
-				<p>
-					<label for="numero">Num&eacute;ro :</label><input type="text" id="numero" name="compte.numero" value="#{if compte}${compte.numero}#{/if}#{else}${flash.get("compte.numero")}#{/else}" />
-					<span class="error">#{error 'compte.numero' /}</span>
-				</p>
-				<p>
-					<label for="etablissement">Etablissement :</label><input type="text" id="etablissement" name="compte.etablissement" value="#{if compte}${compte.etablissement}#{/if}#{else}${flash.get("compte.etablissement")}#{/else}" />
-					<span class="error">#{error 'compte.etablissement' /}</span>
-				</p>
+				
+				#{bankable.textField 'compte.nom'}
+					#{textFieldBody field, label:'Nom', mandatory:true /}
+				#{/bankable.textField}
+				
+				#{bankable.textField 'compte.solde'}
+					#{textFieldBody field, label:'Solde', mandatory:true, calculator:true /}
+				#{/bankable.textField}
+				
+				#{bankable.textField 'compte.numero'}
+					#{textFieldBody field, label:'Num&eacute;ro' /}
+				#{/bankable.textField}
+				
+				#{bankable.textField 'compte.etablissement'}
+					#{textFieldBody field, label:'Etablissement' /}
+				#{/bankable.textField}
 				<div class="submit">
-		            <input type="submit" value="Valider" />&nbsp;<a href="#{if compte}@{Comptes.resume(compte.id)}#{/if}#{else}@{Comptes.resume()}#{/else}" class="button white">Annuler</a>
+		            <input type="submit" value="Valider" />&nbsp;<a href="#{if compte}@{Comptes.index(compte.id)}#{/if}#{else}@{Comptes.index()}#{/else}" class="button white">Annuler</a>
 		        </div>
 			#{/form}
 		</section>

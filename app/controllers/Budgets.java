@@ -11,6 +11,7 @@ import play.data.validation.Required;
 import play.data.validation.Valid;
 import play.mvc.Before;
 import play.mvc.Controller;
+import utils.LigneBudgetUtils;
 
 public class Budgets extends Controller {
 	@Before
@@ -24,8 +25,10 @@ public class Budgets extends Controller {
 		Compte compte = null;
 		if (compteId != null) {
 			compte = Compte.findById(compteId);
+			notFoundIfNull(compte);
 		} else {
 			compte = Compte.find("").first();
+			notFoundIfNull(compte);
 			index(compte.id);
 		}
 
@@ -34,11 +37,12 @@ public class Budgets extends Controller {
 		Float totalActuel = 0F;
 		Float totalPrevisionnel = 0F;
 
-		for (LigneBudget ligneBudget : budget.lignes) {
-			totalActuel += ligneBudget.montantActuel;
-			totalPrevisionnel += ligneBudget.montantEcheance + ligneBudget.montantManuel;
+		if (budget != null) {
+			for (LigneBudget ligneBudget : budget.lignes) {
+				totalActuel = totalActuel + ligneBudget.montantActuel;
+				totalPrevisionnel = totalPrevisionnel + ligneBudget.montantEcheance + ligneBudget.montantManuel;
+			}
 		}
-
 		Date actualMonth = new Date();
 
 		render(compte, actualMonth, budget, totalActuel, totalPrevisionnel);
@@ -66,20 +70,24 @@ public class Budgets extends Controller {
 
 	public static void enregistrerLigne(@Required @Valid LigneBudget ligneBudget) {
 		if (validation.hasErrors()) {
-			params.flash();
-			validation.keep();
 			if (ligneBudget.id != null && ligneBudget.id > 0) {
-				editerLigne(ligneBudget.id);
+				String titre = "Editer";
+				List<Budget> budgets = Budget.findAll();
+				List<Tag> tags = Tag.findAll();
+				render("Budgets/editerLigne.html", titre, ligneBudget, budgets, tags);
 			} else {
-				ajouterLigne();
+				String titre = "Ajouter";
+				List<Budget> budgets = Budget.findAll();
+				List<Tag> tags = Tag.findAll();
+				render("Budgets/editerLigne.html", titre, ligneBudget, budgets, tags);
 			}
 		}
-		// TODO : calculer le montantEcheance
-		// List<Echeance> echeances = Echeance.find("tag.id=?", ligneBudget.tag.id).fetch();
 
-		ligneBudget.montantEcheance = 0F;
-		ligneBudget.montantActuel = 0F;
-		ligneBudget.save();
+		if (ligneBudget.montantManuel == null) {
+			ligneBudget.montantManuel = 0F;
+		}
+
+		LigneBudgetUtils.refresh(ligneBudget);
 
 		flash.success("La ligne a été créée avec succès");
 
@@ -94,6 +102,11 @@ public class Budgets extends Controller {
 
 		flash.success("La ligne a été supprimée avec succès");
 
+		index(null);
+	}
+
+	public static void refresh() {
+		LigneBudgetUtils.refreshAll();
 		index(null);
 	}
 }

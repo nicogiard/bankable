@@ -3,60 +3,66 @@ package controllers;
 import java.util.List;
 
 import models.Compte;
-import models.Devise;
 import models.EEtatOperation;
 import models.ETypeOperation;
 import models.Operation;
-import play.Logger;
 import play.data.validation.Required;
 import play.data.validation.Valid;
 import play.db.jpa.JPA;
 import play.mvc.Before;
 import play.mvc.Controller;
+import controllers.utils.Pagination;
 
 public class Comptes extends Controller {
 
-	public static final Long OPERATION_PAR_PAGE = 15L;
+	private static final Pagination comptesPagination = new Pagination();
 
 	@Before
 	static void defaultData() {
 		List<Compte> comptes = Compte.findAll();
+		renderArgs.put("comptes", comptes);
 
 		Double total = Compte.find("select sum(compte.solde) from Compte compte").first();
-
-		renderArgs.put("comptes", comptes);
+		if (total == null) {
+			total = 0D;
+		}
 		renderArgs.put("total", total);
+
+		// Récupération de la pagination
+		// Dans l'ordre params puis session
+		String pageParam = params.get("page");
+		if (pageParam == null) {
+			pageParam = session.get("comptesPagination.page");
+		}
+		if (pageParam == null) {
+			pageParam = "1";
+		}
+		comptesPagination.setPage(Integer.valueOf(pageParam));
+		session.put("comptesPagination.page", pageParam);
 	}
 
-	public static void resume(Long compteId, Long pageNumber) {
+	public static void index(Long compteId) {
 		Compte compte = null;
 		if (compteId != null) {
 			compte = Compte.findById(compteId);
-		} else {
-			compte = Compte.find("").first();
-			resume(compte.id, null);
+			notFoundIfNull(compte);
 		}
 
 		if (compte != null) {
-			Long page = (pageNumber == null || pageNumber == 0) ? 1L : pageNumber;
 			Long countOperation = Compte.find("select count(operation) from Operation operation where operation.compte.id=?", compte.id).first();
-			Double tempNumberOfPage = countOperation.doubleValue() / OPERATION_PAR_PAGE;
-			Long numberOfPage = tempNumberOfPage < 1 ? 1L : Math.round(tempNumberOfPage);
+			comptesPagination.setElementCount(countOperation);
 
-			Logger.debug("page : %s | count : %s | numberOfPage : %s", page.toString(), countOperation.toString(), numberOfPage.toString());
+			List<Operation> operations = Operation.find("compte.id=? ORDER BY date DESC, id DESC", compte.id).fetch(comptesPagination.getPage(), comptesPagination.getPageSize());
 
-			List<Operation> operations = Operation.find("compte.id=? ORDER BY date DESC, id DESC", compte.id).fetch(page.intValue(), OPERATION_PAR_PAGE.intValue());
-
-			render(compte, operations, countOperation, numberOfPage, page);
+			Pagination pagination = comptesPagination;
+			render(compte, operations, pagination);
 		}
-
 		render(compte);
 	}
 
 	public static void ajouter() {
 		String titre = "Ajouter";
-		List<Devise> devises = Devise.findAll();
-		render("Comptes/editer.html", titre, devises);
+		render("Comptes/editer.html", titre);
 	}
 
 	public static void editer(Long compteId) {
@@ -64,23 +70,22 @@ public class Comptes extends Controller {
 		notFoundIfNull(compte);
 
 		String titre = "Editer";
-		List<Devise> devises = Devise.findAll();
 
-		render(titre, compte, devises);
+		render(titre, compte);
 	}
 
 	public static void enregistrer(@Required @Valid Compte compte) {
 		if (validation.hasErrors()) {
-			params.flash();
-			validation.keep();
 			if (compte.id != null && compte.id > 0) {
-				editer(compte.id);
+				String titre = "Editer";
+				render(titre, compte);
 			} else {
-				ajouter();
+				String titre = "Ajouter";
+				render("Comptes/editer.html", titre);
 			}
 		}
 		compte.save();
-		resume(compte.id, null);
+		index(compte.id);
 	}
 
 	public static void rapprocher(Long compteId) {
@@ -92,7 +97,7 @@ public class Comptes extends Controller {
 			operation.etat = EEtatOperation.RAPPROCHEE;
 			operation.save();
 		}
-		Comptes.resume(compte.id, null);
+		Comptes.index(compte.id);
 	}
 
 	public static void vider(Long compteId) {
@@ -102,17 +107,15 @@ public class Comptes extends Controller {
 		// Update du Solde du compte a partir de la première opération
 		Operation operation = Operation.find("compte.id=? ORDER BY date ASC, id ASC", compte.id).first();
 		if (operation.type == ETypeOperation.CREDIT) {
-			operation.solde = operation.compte.solde + operation.montant;
-			operation.compte.solde = operation.solde;
+			compte.solde = compte.solde - operation.montant;
 		} else {
-			operation.solde = operation.compte.solde - operation.montant;
-			operation.compte.solde = operation.solde;
+			compte.solde = compte.solde + operation.montant;
 		}
 		compte.save();
 
 		JPA.em().createNativeQuery("DELETE FROM Operation_Tags WHERE operation_id in (SELECT id FROM Operation WHERE compte_id=?)").setParameter(1, compteId).executeUpdate();
 		JPA.em().createNativeQuery("DELETE FROM Operation WHERE compte_id=?").setParameter(1, compteId).executeUpdate();
 
-		Comptes.resume(compteId, null);
+		Comptes.index(compteId);
 	}
 }

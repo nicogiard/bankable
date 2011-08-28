@@ -7,9 +7,8 @@ GET     /                                                                       
 GET     /resume/compte/{compteId}                                                  Application.resume
 
 GET     /compte/ajouter                                                            Comptes.ajouter
-GET     /compte/{compteId}/page/{pageNumber}                                       Comptes.resume
-GET     /compte/{compteId}                                                         Comptes.resume
-GET     /compte                                                                    Comptes.resume
+GET     /compte/{compteId}                                                         Comptes.index
+GET     /compte                                                                    Comptes.index
 GET     /compte/{compteId}/editer                                                  Comptes.editer
 GET     /compte/{compteId}/vider                                                   Comptes.vider
 GET     /compte/{compteId}/rapprocher                                              Comptes.rapprocher
@@ -32,12 +31,18 @@ GET     /echeance                                                               
 GET     /echeance/ajouter                                                          Echeances.ajouter
 GET     /echeance/{echeanceId}/editer                                              Echeances.editer
 GET     /echeance/compte/{compteId}/date/{date}                                    Echeances.calendrier
+GET     /echeance/compte/{compteId}/liste                                          Echeances.list
 
-GET     /tags/compte/{compteId}                                                    Tags.index
-GET     /tags                                                                      Tags.index
-GET     /tag/{tagId}/compte/{compteId}/page/{pageNumber}                           Tags.detail
-GET     /tag/{tagId}/compte/{compteId}                                             Tags.detail
-GET     /tag/{tagId}/graph/{show}                                                  Tags.showTagOnGraph
+GET     /tags/compte/{compteId}                                                    TagsController.index
+GET     /tags                                                                      TagsController.index
+GET     /tag/{tagId}/compte/{compteId}                                             TagsController.detail
+GET     /tag/{tagId}/graph/{show}                                                  TagsController.showTagOnGraph
+
+GET     /tiers                                                                     Tiers.index
+GET     /tiers/ajouter                                                             Tiers.ajouter
+GET     /tiers/{tiersId}/editer                                                    Tiers.editer
+GET     /tiers/{tiersId}/supprimer                                                 Tiers.supprimer
+POST    /tiers/{tiersId}/enregistrer                                               Tiers.enregistrer
 
 # Ignore favicon requests
 GET     /favicon.ico                                                               404

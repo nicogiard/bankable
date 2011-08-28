@@ -14,27 +14,47 @@ import play.data.validation.Required;
 import play.data.validation.Valid;
 import play.mvc.Before;
 import play.mvc.Controller;
-import utils.PlanningEcheance;
+import utils.LigneBudgetUtils;
+import utils.PlanningEcheanceUtils;
+import controllers.utils.SessionUtil;
 
 public class Echeances extends Controller {
 
+	private static final String CALENDAR_MODE = "CAL";
+	private static final String LIST_MODE = "LIST";
+	private static final String DEFAULT_MODE = CALENDAR_MODE;
+
 	@Before
 	static void defaultData() {
+		List<Compte> allComptes = Compte.findAll();
+		renderArgs.put("allComptes", allComptes);
 	}
 
-	public static void index(Long compteId) {
+	public static void index(Long compteId, Long echeanceId) {
+		Logger.debug(">> Echeances.index >> compteId=%d | echeanceId=%d", compteId, echeanceId);
 		Compte compte = null;
 		if (compteId != null) {
 			compte = Compte.findById(compteId);
+			notFoundIfNull(compte);
 		} else {
 			compte = Compte.find("").first();
-			index(compte.id);
+			notFoundIfNull(compte);
+			index(compte.id, echeanceId);
 		}
 
-		List<Compte> allComptes = Compte.findAll();
+		// Recuperation dans la session du mode de visualisation des echeances
+		String mode = SessionUtil.getSessionParam(SessionUtil.SESSION_PARAM_ECHEANCES_MODE, true, DEFAULT_MODE);
+		renderArgs.put(SessionUtil.SESSION_PARAM_ECHEANCES_MODE, mode);
+		Logger.debug("Visualisation mode = %s", mode);
 
-		List<Echeance> echeances = Echeance.find("compte.id=? ORDER BY type ASC, description ASC", compte.id).fetch();
-		render(allComptes, compte, echeances);
+		if (LIST_MODE.equals(mode)) {
+			Logger.debug("Display list mode");
+			list(compteId, echeanceId);
+		} else {
+			Logger.debug("display calendar mode");
+			List<Echeance> echeances = Echeance.find("compte.id=? ORDER BY type ASC, description ASC", compte.id).fetch();
+			render(compte, echeances);
+		}
 	}
 
 	public static void ajouter() {
@@ -59,16 +79,23 @@ public class Echeances extends Controller {
 
 	public static void enregistrer(@Required @Valid Echeance echeance) {
 		if (validation.hasErrors()) {
-			params.flash();
-			validation.keep();
 			if (echeance.id != null && echeance.id > 0) {
-				editer(echeance.id);
+				String titre = "Editer";
+				List<Compte> comptes = Compte.findAll();
+				List<Tag> tags = Tag.findAll();
+				render(titre, echeance, comptes, tags);
 			} else {
-				ajouter();
+				String titre = "Ajouter";
+				List<Compte> comptes = Compte.findAll();
+				List<Tag> tags = Tag.findAll();
+				render("Echeances/editer.html", titre, echeance, comptes, tags);
 			}
 		}
 		echeance.save();
-		index(null);
+
+		LigneBudgetUtils.refreshAll();
+
+		index(null, null);
 	}
 
 	public static void calendrier(Long compteId, Date date) {
@@ -76,14 +103,14 @@ public class Echeances extends Controller {
 		notFoundIfNull(compte);
 
 		List<Echeance> allEcheances = Echeance.find("compte.id=?", compte.id).fetch();
-		PlanningEcheance.compute(date, allEcheances);
+		PlanningEcheanceUtils.compute(date, allEcheances);
 
-		Calendrier calendrier = PlanningEcheance.buildCalendrier(date);
+		Calendrier calendrier = PlanningEcheanceUtils.buildCalendrier(date);
 		List<models.PlanningEcheance> plannings = models.PlanningEcheance.find("select pe from PlanningEcheance pe join pe.echeance e where e.compte.id=?", 1L).fetch();
 		for (models.PlanningEcheance planningEcheance : plannings) {
 			for (Semaine semaine : calendrier.semaines) {
 				for (Jour jour : semaine.jours) {
-					if (PlanningEcheance.isEqual(jour.date, planningEcheance.date)) {
+					if (PlanningEcheanceUtils.isEqual(jour.date, planningEcheance.date)) {
 						jour.echeances.add(planningEcheance.echeance);
 						Logger.debug("ajout de l'écheance %s au jour %s", planningEcheance.echeance, jour.date);
 					}
@@ -92,5 +119,22 @@ public class Echeances extends Controller {
 		}
 
 		render(compte, calendrier);
+	}
+
+	public static void list(Long compteId, Long echeanceId) {
+		Compte compte = Compte.findById(compteId);
+		notFoundIfNull(compte);
+
+		List<Echeance> echeances = Echeance.find("compte.id=? ORDER BY type ASC, description ASC", compte.id).fetch();
+
+		Echeance echeanceSelectionnee = null;
+		if (echeanceId != null) {
+			echeanceSelectionnee = Echeance.findById(echeanceId);
+			notFoundIfNull(echeanceSelectionnee);
+
+		}
+
+		renderArgs.put(SessionUtil.SESSION_PARAM_ECHEANCES_MODE, LIST_MODE);
+		render("Echeances/list.html", compte, echeances, echeanceSelectionnee);
 	}
 }
