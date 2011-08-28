@@ -44,6 +44,11 @@ GET     /tiers/{tiersId}/editer                                                 
 GET     /tiers/{tiersId}/supprimer                                                 Tiers.supprimer
 POST    /tiers/{tiersId}/enregistrer                                               Tiers.enregistrer
 
+GET     /api/comptes                                                               API.comptes
+GET     /api/compte/{compteId}                                                     API.compte
+GET     /api/compte/{compteId}/operations                                          API.operations
+POST    /api/compte/{compteId}/operation/enregistrer                               API.enregistrerOperation
+
 # Ignore favicon requests
 GET     /favicon.ico                                                               404
 

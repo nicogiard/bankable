@@ -16,8 +16,10 @@ import org.joda.time.MutableDateTime;
 import play.db.jpa.JPA;
 import play.mvc.Before;
 import play.mvc.Controller;
+import play.mvc.With;
 import controllers.utils.Pagination;
 
+@With(Secure.class)
 public class TagsController extends Controller {
 
 	private static final Pagination tagsPagination = new Pagination();

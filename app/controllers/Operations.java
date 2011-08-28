@@ -18,9 +18,11 @@ import play.data.validation.Required;
 import play.data.validation.Valid;
 import play.db.jpa.JPA;
 import play.mvc.Controller;
+import play.mvc.With;
 import utils.LigneBudgetUtils;
 import utils.csv.ImportCSVCaisseEpargne;
 
+@With(Secure.class)
 public class Operations extends Controller {
 
 	public static void ajouter(Long compteId) {

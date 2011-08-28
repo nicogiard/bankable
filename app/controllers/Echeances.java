@@ -14,10 +14,12 @@ import play.data.validation.Required;
 import play.data.validation.Valid;
 import play.mvc.Before;
 import play.mvc.Controller;
+import play.mvc.With;
 import utils.LigneBudgetUtils;
 import utils.PlanningEcheanceUtils;
 import controllers.utils.SessionUtil;
 
+@With(Secure.class)
 public class Echeances extends Controller {
 
 	private static final String CALENDAR_MODE = "CAL";

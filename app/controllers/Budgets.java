@@ -11,8 +11,10 @@ import play.data.validation.Required;
 import play.data.validation.Valid;
 import play.mvc.Before;
 import play.mvc.Controller;
+import play.mvc.With;
 import utils.LigneBudgetUtils;
 
+@With(Secure.class)
 public class Budgets extends Controller {
 	@Before
 	static void defaultData() {

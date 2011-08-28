@@ -1,4 +1,17 @@
 #-----------------------------------
+# User
+#-----------------------------------
+User(nicogiard):
+  login: nicogiard
+  password: nico
+  firstName: Nicolas
+  lastName: Giard
+  email: nicogiard@gmail.com
+  active: true
+  dateCreation: 2011-08-28
+  dateModification: 2011-08-28
+
+#-----------------------------------
 # Civilite
 #-----------------------------------
 Civilite(mr):
