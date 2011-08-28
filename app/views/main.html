@@ -35,6 +35,9 @@
     	$('#choixComptePourEcheance').change(function(){
     		document.location.href = "@{Echeances.index}/compte/" + $(this).val();
     	});
+		
+		// Hack pour le scroll sur les tags
+    	$("#panelTagList").css("height", "-=18").css("overflow", "auto");
 	 });
 	</script>
 </head>
