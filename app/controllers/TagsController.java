@@ -18,7 +18,7 @@ import play.mvc.Before;
 import play.mvc.Controller;
 import controllers.utils.Pagination;
 
-public class Tags extends Controller {
+public class TagsController extends Controller {
 
 	private static final Pagination tagsPagination = new Pagination();
 

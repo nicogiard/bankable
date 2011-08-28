@@ -9,7 +9,7 @@
 		</select>
 		<ul class="tagList">
 		#{list items:allTags, as:'unTag'}
-			<li #{if currentTag}#{if currentTag.id == unTag.id}class='current'#{/if}#{/if}><input type="checkbox" id="chk-tag-${unTag.id}" value="${unTag.id}" ${unTag.showOnGraph ? "checked" : ""}><a href="@{Tags.detail(compte.id, unTag.id)}">${unTag.nom}</a></li>
+			<li #{if currentTag}#{if currentTag.id == unTag.id}class='current'#{/if}#{/if}><input type="checkbox" id="chk-tag-${unTag.id}" value="${unTag.id}" ${unTag.showOnGraph ? "checked" : ""}><a href="@{TagsController.detail(compte.id, unTag.id)}">${unTag.nom}</a></li>
 		#{/list}
 		</ul>
 	</section>

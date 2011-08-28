@@ -33,10 +33,10 @@ GET     /echeance/{echeanceId}/editer                                           
 GET     /echeance/compte/{compteId}/date/{date}                                    Echeances.calendrier
 GET     /echeance/compte/{compteId}/liste                                          Echeances.list
 
-GET     /tags/compte/{compteId}                                                    Tags.index
-GET     /tags                                                                      Tags.index
-GET     /tag/{tagId}/compte/{compteId}                                             Tags.detail
-GET     /tag/{tagId}/graph/{show}                                                  Tags.showTagOnGraph
+GET     /tags/compte/{compteId}                                                    TagsController.index
+GET     /tags                                                                      TagsController.index
+GET     /tag/{tagId}/compte/{compteId}                                             TagsController.detail
+GET     /tag/{tagId}/graph/{show}                                                  TagsController.showTagOnGraph
 
 GET     /tiers                                                                     Tiers.index
 GET     /tiers/ajouter                                                             Tiers.ajouter
