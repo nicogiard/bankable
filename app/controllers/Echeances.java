@@ -106,7 +106,7 @@ public class Echeances extends Controller {
 		PlanningEcheanceUtils.compute(date, allEcheances);
 
 		Calendrier calendrier = PlanningEcheanceUtils.buildCalendrier(date);
-		List<models.PlanningEcheance> plannings = models.PlanningEcheance.find("select pe from PLANNINGECHEANCE pe join pe.echeance e where e.compte.id=?", 1L).fetch();
+		List<models.PlanningEcheance> plannings = models.PlanningEcheance.find("select pe from PlanningEcheance pe join pe.echeance e where e.compte.id=?", 1L).fetch();
 		for (models.PlanningEcheance planningEcheance : plannings) {
 			for (Semaine semaine : calendrier.semaines) {
 				for (Jour jour : semaine.jours) {
@@ -125,7 +125,7 @@ public class Echeances extends Controller {
 		Compte compte = Compte.findById(compteId);
 		notFoundIfNull(compte);
 
-		List<Echeance> echeances = Echeance.find("compte.id=?", compte.id).fetch();
+		List<Echeance> echeances = Echeance.find("compte.id=? ORDER BY type ASC, description ASC", compte.id).fetch();
 
 		Echeance echeanceSelectionnee = null;
 		if (echeanceId != null) {

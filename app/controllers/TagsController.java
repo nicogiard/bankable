@@ -57,12 +57,12 @@ public class TagsController extends Controller {
 		List tagsCredit = JPA
 				.em()
 				.createNativeQuery(
-						"select t.id as id, t.nom as nom, t.showOnGraph as showOnGraph, sum(o.montant) as count from tag t inner join operation_tags ot on t.id = ot.tag_id inner join operation o on ot.operation_id = o.id where o.compte_id=? and o.type=? and t.showOnGraph=true group by ot.tag_id",
+						"select t.id as id, t.nom as nom, t.showOnGraph as showOnGraph, sum(o.montant) as count from TAG t inner join OPERATION_TAGS ot on t.id = ot.tag_id inner join OPERATION o on ot.operation_id = o.id where o.compte_id=? and o.type=? and t.showOnGraph=true group by ot.tag_id",
 						"TagWithCount").setParameter(1, compte.id).setParameter(2, ETypeOperation.CREDIT.toString()).getResultList();
 		List tagsDebit = JPA
 				.em()
 				.createNativeQuery(
-						"select t.id as id, t.nom as nom, t.showOnGraph as showOnGraph, sum(o.montant) as count from tag t inner join operation_tags ot on t.id = ot.tag_id inner join operation o on ot.operation_id = o.id where o.compte_id=? and o.type=? and t.showOnGraph=true group by ot.tag_id",
+						"select t.id as id, t.nom as nom, t.showOnGraph as showOnGraph, sum(o.montant) as count from TAG t inner join OPERATION_TAGS ot on t.id = ot.tag_id inner join OPERATION o on ot.operation_id = o.id where o.compte_id=? and o.type=? and t.showOnGraph=true group by ot.tag_id",
 						"TagWithCount").setParameter(1, compte.id).setParameter(2, ETypeOperation.DEBIT.toString()).getResultList();
 		render(compte, tagsCredit, tagsDebit);
 	}
@@ -74,7 +74,7 @@ public class TagsController extends Controller {
 		Tag currentTag = Tag.findById(tagId);
 		notFoundIfNull(currentTag);
 
-		Long countOperation = Compte.find("select count(o) from Operation o join o.tags t where t.id=?", currentTag.id).first();
+		Long countOperation = Operation.find("select count(o) from Operation o join o.tags t where t.id=?", currentTag.id).first();
 		tagsPagination.setElementCount(countOperation);
 
 		List<Operation> operations = Operation.find("select o from Operation o join o.tags t where o.compte.id=? AND t.id=? ORDER BY date DESC", compte.id, currentTag.id).fetch(tagsPagination.getPage(), tagsPagination.getPageSize());
