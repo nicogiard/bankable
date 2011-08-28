@@ -193,7 +193,7 @@ public class Operations extends Controller {
 			operation.save();
 		}
 
-		JPA.em().createNativeQuery("DELETE FROM OperationImport WHERE compte_id=?").setParameter(1, compte.id).executeUpdate();
+		JPA.em().createNativeQuery("DELETE FROM OPERATIONIMPORT WHERE compte_id=?").setParameter(1, compte.id).executeUpdate();
 
 		LigneBudgetUtils.refreshAll();
 

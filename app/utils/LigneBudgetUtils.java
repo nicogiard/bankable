@@ -44,7 +44,7 @@ public class LigneBudgetUtils {
 
 				// Calcul du montant Actuel
 				ligneBudget.montantActuel = 0F;
-				List<Operation> operations = JPA.em().createNativeQuery("SELECT o.* FROM operation o INNER JOIN operation_tags ot ON o.id=ot.operation_id WHERE ot.tag_id=? AND o.date BETWEEN ? AND ?", Operation.class)
+				List<Operation> operations = JPA.em().createNativeQuery("SELECT o.* FROM OPERATION o INNER JOIN OPERATION_TAGS ot ON o.id=ot.operation_id WHERE ot.tag_id=? AND o.date BETWEEN ? AND ?", Operation.class)
 						.setParameter(1, ligneBudget.tag.id).setParameter(2, firstDayOfMonth.toDate()).setParameter(3, lastDayOfMonth.toDate()).getResultList();
 				for (Operation operation : operations) {
 					if (operation.type == ETypeOperation.CREDIT) {
@@ -84,7 +84,7 @@ public class LigneBudgetUtils {
 
 		// Calcul du montant Actuel
 		ligneBudget.montantActuel = 0F;
-		List<Operation> operations = JPA.em().createNativeQuery("SELECT o.* FROM operation o INNER JOIN operation_tags ot ON o.id=ot.operation_id WHERE ot.tag_id=? AND o.date BETWEEN ? AND ?", Operation.class).setParameter(1, ligneBudget.tag.id)
+		List<Operation> operations = JPA.em().createNativeQuery("SELECT o.* FROM OPERATION o INNER JOIN OPERATION_TAGS ot ON o.id=ot.operation_id WHERE ot.tag_id=? AND o.date BETWEEN ? AND ?", Operation.class).setParameter(1, ligneBudget.tag.id)
 				.setParameter(2, firstDayOfMonth.toDate()).setParameter(3, lastDayOfMonth.toDate()).getResultList();
 		for (Operation operation : operations) {
 			if (operation.type == ETypeOperation.CREDIT) {
