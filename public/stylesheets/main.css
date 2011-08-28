@@ -30,6 +30,8 @@ header .logout a {color: #0A93CC;}
 #sidebar ul li a span.nomCompte {}
 #sidebar ul li  span.soldeCompte {float: right; margin-right: 25px;}
 
+#sidebar.sidebarForTags {bottom: auto; float: left; position: absolute;}
+
 #sidebar ul.tagList li a, #sidebar ul.echeanceList li a {background: #494949 url(../images/arrow.png) no-repeat 96% -15px; font-size: 1em; height: 20px; line-height: 20px;}
 #sidebar ul.tagList li input {float: left;}
 
