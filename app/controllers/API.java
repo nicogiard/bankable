@@ -1,0 +1,49 @@
+package controllers;
+
+import java.util.Calendar;
+import java.util.List;
+
+import models.Compte;
+import models.Operation;
+import play.data.validation.Required;
+import play.data.validation.Valid;
+import play.mvc.After;
+import play.mvc.Before;
+import play.mvc.Controller;
+import utils.TimeRequestLogger;
+
+public class API extends Controller {
+	protected static long timeRequest;
+
+	@Before
+	public static void initTimeRequest() {
+		timeRequest = Calendar.getInstance().getTimeInMillis();
+	}
+
+	@After
+	public static void logTimeRequest() {
+		TimeRequestLogger.log(request.action, Calendar.getInstance().getTimeInMillis() - timeRequest);
+	}
+
+	public static void comptes() {
+		List<Compte> comptes = Compte.findAll();
+		renderJSON(comptes);
+	}
+
+	public static void compte(Long compteId) {
+		Compte compte = Compte.findById(compteId);
+		notFoundIfNull(compte);
+		renderJSON(compte);
+	}
+
+	public static void operations(Long compteId) {
+		Compte compte = Compte.findById(compteId);
+		notFoundIfNull(compte);
+		List<Operation> operations = Operation.find("compte.id=? ORDER BY date DESC, id DESC", compte.id).fetch();
+		renderJSON(operations);
+	}
+
+	public static void enregistrerOperation(@Required @Valid Operation operation) {
+
+	}
+}
