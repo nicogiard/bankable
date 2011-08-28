@@ -34,7 +34,7 @@
     <div class="title">Op&eacute;rations tagg&eacute;es avec le tag "${currentTag.nom}"</div>
 	#{if operations}
     <div class="content">
-        #{pagination pagination, url:actionBridge.Tags.detail(compte.id, currentTag.id) /}
+        #{pagination pagination, url:actionBridge.TagsController.detail(compte.id, currentTag.id) /}
         <table>
             <thead>
                 <tr>
@@ -52,7 +52,7 @@
 				#{/list}
             </tbody>
         </table>
-        #{pagination pagination, url:actionBridge.Tags.detail(compte.id, currentTag.id) /}
+        #{pagination pagination, url:actionBridge.TagsController.detail(compte.id, currentTag.id) /}
     </div>
 	#{/if}
 	#{else}
