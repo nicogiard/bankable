@@ -15,8 +15,16 @@
 }%
 #{set firstPage: _pagination.page - (controllers.utils.Pagination.MAX_PAGE - 1) / 2 /}
 #{set lastPage: _pagination.page + (controllers.utils.Pagination.MAX_PAGE - 1) / 2 /}
-#{if firstPage < 1 }#{set firstPage: 1 /}#{if lastPage < _pagination.pageCount}#{set lastPage: lastPage + 1 /}#{/if}#{/if}
-#{if lastPage > _pagination.pageCount }#{set lastPage: _pagination.pageCount /}#{if firstPage > 1}#{set firstPage: firstPage - 1 /}#{/if}#{/if}
+#{if firstPage < 1 }
+  #{set firstDifference: firstPage < 1 ? 1 - firstPage: 0 /}
+  #{set firstPage: 1 /}
+  #{set lastPage: [lastPage + firstDifference, _pagination.pageCount].min() /}
+#{/if}
+#{if lastPage > _pagination.pageCount }
+  #{set lastDifference: lastPage > _pagination.pageCount ? lastPage - _pagination.pageCount: 0 /}
+  #{set lastPage: _pagination.pageCount /}
+  #{set firstPage: [firstPage - lastDifference, 1].max() /}
+#{/if}
 
 <div class="pagination">
 	#{if _pagination.page > 1}<a href="${_url}?${_pageParamPrefix}page=${_pagination.page-1}" class="prev">&laquo;</a>#{/if}
