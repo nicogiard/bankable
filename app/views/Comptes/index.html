@@ -65,7 +65,7 @@ $(document).ready(function() {
 			<table>
 				<thead>
 					<tr>
-						<th>&nbsp;</th><th>&nbsp;</th><th>Description</th><th class="debitCredit">Montant</th><th>Tags</th><th class="date">Date</th><th>&nbsp;</th>
+						<th>&nbsp;</th><th>&nbsp;</th><th>Description</th><th>Tiers</th><th class="debitCredit">Montant</th><th>Tags</th><th class="date">Date</th><th>&nbsp;</th>
 					</tr>
 				</thead>
 				<tbody>
@@ -74,6 +74,7 @@ $(document).ready(function() {
 						<td class="check"><input type="checkbox"></td>
 						<td class="rapproche"><a href="#!" value="${operation.id}" class="linkRapproche #{if models.EEtatOperation.NONPOINTEE == operation.etat}" title="Non Point&eacute;e"#{/if}#{if models.EEtatOperation.POINTEE == operation.etat}pointee" title="Point&eacute;e"#{/if}#{if models.EEtatOperation.RAPPROCHEE == operation.etat}rapprochee" title="Rapproch&eacute;e"#{/if}>&nbsp;</a></td>
 						<td class="libelle">${operation.libelle}</td>
+						<td class="tiers">${operation.tiers?.civilite?.abreviation} ${operation.tiers?.designation}</td>
 						<td class="debitCredit">#{if models.ETypeOperation.DEBIT == operation.type}#{plusMinus -1 /}#{/if}#{else}#{plusMinus 1 /}#{/else}${operation.montant.format('0.00')}&nbsp;&euro;</td>
 						<td class="tags">#{if operation.tags.size() > 0}${operation.tags.join('nom', ', ')}#{/if}#{else}<span class="noTag">(aucun)</span>#{/else}</td>
 						<td class="date"><span title="${operation.date.format('dd/MM/yyyy HH:mm:ss')}">${operation.date.format('dd/MM/yyyy')}</span></td>
