@@ -1,11 +1,16 @@
 package controllers;
 
+import java.util.Date;
 import java.util.List;
 
 import models.Compte;
 import models.EEtatOperation;
 import models.ETypeOperation;
 import models.Operation;
+
+import org.apache.commons.lang.StringUtils;
+
+import play.Logger;
 import play.data.validation.Required;
 import play.data.validation.Valid;
 import play.db.jpa.JPA;
@@ -60,6 +65,50 @@ public class Comptes extends Controller {
 			render(compte, operations, pagination);
 		}
 		render(compte);
+	}
+
+	public static void filtrer(Long compteId, String libelle, Float montant, String tag, Date date) {
+		Compte compte = null;
+		if (compteId != null) {
+			compte = Compte.findById(compteId);
+			notFoundIfNull(compte);
+		}
+
+		if (compte != null) {
+			StringBuilder sbCountOperations = new StringBuilder("select count(operation) from Operation operation where operation.compte.id=?");
+			StringBuilder sbOperations = new StringBuilder("compte.id=?");
+
+			if (StringUtils.isNotBlank(libelle)) {
+				sbCountOperations.append(" AND operation.libelle LIKE '%").append(libelle).append("%'");
+				sbOperations.append(" AND libelle LIKE '%").append(libelle).append("%'");
+			}
+			if (montant != null) {
+				sbCountOperations.append(" AND operation.montant=").append(montant).append("");
+				sbOperations.append(" AND montant=").append(montant).append("");
+			}
+			if (StringUtils.isNotBlank(tag)) {
+				sbCountOperations.append(" AND operation.tag LIKE '%").append(tag).append("%'");
+				sbOperations.append(" AND tag LIKE '%").append(tag).append("%'");
+			}
+			if (date != null) {
+				sbCountOperations.append(" AND operation.date='").append(date).append("'");
+				sbOperations.append(" AND date='").append(date).append("'");
+			}
+
+			sbOperations.append(" ORDER BY date DESC, id DESC");
+
+			Logger.debug("request CountOperations with filter : %s", sbCountOperations.toString());
+			Logger.debug("request Operations with filter : %s", sbCountOperations.toString());
+
+			Long countOperation = Compte.find(sbCountOperations.toString(), compte.id).first();
+			comptesPagination.setElementCount(countOperation);
+
+			List<Operation> operations = Operation.find(sbOperations.toString(), compte.id).fetch(comptesPagination.getPage(), comptesPagination.getPageSize());
+
+			Pagination pagination = comptesPagination;
+			render("Comptes/index.html", compte, operations, pagination, libelle, montant, tag, date);
+		}
+		render("Comptes/index.html", compte);
 	}
 
 	public static void ajouter() {
