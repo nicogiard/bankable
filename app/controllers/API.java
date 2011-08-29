@@ -5,6 +5,8 @@ import java.util.List;
 
 import models.Compte;
 import models.Operation;
+import models.serializer.CompteJSonSerializer;
+import models.serializer.OperationJSonSerializer;
 import play.data.validation.Required;
 import play.data.validation.Valid;
 import play.mvc.After;
@@ -27,20 +29,20 @@ public class API extends Controller {
 
 	public static void comptes() {
 		List<Compte> comptes = Compte.findAll();
-		renderJSON(comptes);
+		renderJSON(comptes, CompteJSonSerializer.get());
 	}
 
 	public static void compte(Long compteId) {
 		Compte compte = Compte.findById(compteId);
 		notFoundIfNull(compte);
-		renderJSON(compte);
+		renderJSON(compte, CompteJSonSerializer.get());
 	}
 
 	public static void operations(Long compteId) {
 		Compte compte = Compte.findById(compteId);
 		notFoundIfNull(compte);
 		List<Operation> operations = Operation.find("compte.id=? ORDER BY date DESC, id DESC", compte.id).fetch();
-		renderJSON(operations);
+		renderJSON(operations, OperationJSonSerializer.get());
 	}
 
 	public static void enregistrerOperation(@Required @Valid Operation operation) {
