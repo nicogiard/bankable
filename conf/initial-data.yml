@@ -10,6 +10,16 @@ User(nicogiard):
   active: true
   dateCreation: 2011-08-28
   dateModification: 2011-08-28
+  
+User(fmeurisse):
+  login: fmeurisse
+  password: fme
+  firstName: Fabien
+  lastName: Meurisse
+  email: fabien.meurisse@gmail.com
+  active: true
+  dateCreation: 2011-08-28
+  dateModification: 2011-08-28
 
 #-----------------------------------
 # Civilite
