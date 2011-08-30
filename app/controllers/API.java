@@ -5,14 +5,13 @@ import java.util.List;
 
 import models.Compte;
 import models.Operation;
-import models.serializer.CompteJSonSerializer;
-import models.serializer.OperationJSonSerializer;
 import play.data.validation.Required;
 import play.data.validation.Valid;
 import play.mvc.After;
 import play.mvc.Before;
 import play.mvc.Controller;
 import utils.TimeRequestLogger;
+import controllers.utils.APIRenderJSon;
 
 public class API extends Controller {
 	protected static long timeRequest;
@@ -29,23 +28,29 @@ public class API extends Controller {
 
 	public static void comptes() {
 		List<Compte> comptes = Compte.findAll();
-		renderJSON(comptes, CompteJSonSerializer.get());
+		renderJSon(comptes);
 	}
 
 	public static void compte(Long compteId) {
+		notFoundIfNull(compteId);
 		Compte compte = Compte.findById(compteId);
 		notFoundIfNull(compte);
-		renderJSON(compte, CompteJSonSerializer.get());
+		renderJSon(compte);
 	}
 
 	public static void operations(Long compteId) {
+		notFoundIfNull(compteId);
 		Compte compte = Compte.findById(compteId);
 		notFoundIfNull(compte);
 		List<Operation> operations = Operation.find("compte.id=? ORDER BY date DESC, id DESC", compte.id).fetch();
-		renderJSON(operations, OperationJSonSerializer.get());
+		renderJSon(operations);
 	}
 
 	public static void enregistrerOperation(@Required @Valid Operation operation) {
 
+	}
+
+	protected static void renderJSon(Object o) {
+		throw new APIRenderJSon(o);
 	}
 }

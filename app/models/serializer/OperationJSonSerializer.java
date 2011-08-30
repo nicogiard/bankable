@@ -26,7 +26,7 @@ public class OperationJSonSerializer implements JsonSerializer<Operation> {
 
 	public JsonElement serialize(Operation operation, Type type, JsonSerializationContext jsonSerializationContext) {
 		JsonObject obj = new JsonObject();
-		SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
+		SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy hh:mm:ss");
 		obj.addProperty("date", sdf.format(operation.date));
 		obj.addProperty("libelle", operation.libelle);
 		obj.addProperty("type", operation.type.name());
@@ -34,8 +34,7 @@ public class OperationJSonSerializer implements JsonSerializer<Operation> {
 		obj.addProperty("numero", operation.numero);
 		obj.addProperty("detail", operation.detail);
 		obj.addProperty("etat", operation.etat.name());
-		// obj.addProperty("tags", operation.tags);
-		// obj.addProperty("tiers", operation.tiers);
+		obj.add("tags", jsonSerializationContext.serialize(operation.tags));
 		return obj;
 	}
 }
