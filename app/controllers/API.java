@@ -5,6 +5,10 @@ import java.util.List;
 
 import models.Compte;
 import models.Operation;
+import models.User;
+
+import org.apache.commons.lang.StringUtils;
+
 import play.data.validation.Required;
 import play.data.validation.Valid;
 import play.mvc.After;
@@ -15,6 +19,18 @@ import controllers.utils.APIRenderJSon;
 
 public class API extends Controller {
 	protected static long timeRequest;
+
+	@Before
+	public static void basicAuth() {
+		if (StringUtils.isBlank(request.user) && StringUtils.isBlank(request.password)) {
+			unauthorized("Veuillez saisir vos identifiants");
+		} else {
+			User user = User.find("login=? and password=?", request.user, request.password).first();
+			if (user == null) {
+				unauthorized("Identifiants inconnus");
+			}
+		}
+	}
 
 	@Before
 	public static void initTimeRequest() {
