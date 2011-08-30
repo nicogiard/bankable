@@ -32,7 +32,7 @@ public class Operations extends Controller {
 		Compte compte = Compte.find("id=? AND user=?", compteId, connectedUser).first();
 		notFoundIfNull(compte);
 
-		List<Tag> allTags = Tag.find("ORDER BY nom ASC").fetch();
+		List<Tag> allTags = Tag.find("user=? ORDER BY nom ASC", connectedUser).fetch();
 		List<models.Tiers> allTiers = models.Tiers.find("ORDER BY designation ASC").fetch();
 
 		String titre = "Ajouter";
@@ -48,7 +48,7 @@ public class Operations extends Controller {
 		Operation operation = Operation.findById(operationId);
 		notFoundIfNull(operation);
 
-		List<Tag> allTags = Tag.find("ORDER BY nom ASC").fetch();
+		List<Tag> allTags = Tag.find("user=? ORDER BY nom ASC", connectedUser).fetch();
 		List<models.Tiers> allTiers = models.Tiers.find("ORDER BY designation ASC").fetch();
 
 		String titre = "Editer";
@@ -56,13 +56,14 @@ public class Operations extends Controller {
 	}
 
 	public static void enregistrer(@Required @Valid Operation operation, String tags, Float oldMontant) {
+		User connectedUser = Security.connectedUser();
 		if (validation.hasErrors()) {
 			if (operation.id != null && operation.id > 0) {
 				String titre = "Editer";
 				Compte compte = operation.compte;
 				notFoundIfNull(compte);
 
-				List<Tag> allTags = Tag.find("ORDER BY nom ASC").fetch();
+				List<Tag> allTags = Tag.find("user=? ORDER BY nom ASC", connectedUser).fetch();
 				List<models.Tiers> allTiers = models.Tiers.find("ORDER BY designation ASC").fetch();
 				render("Operations/editer.html", titre, compte, operation, allTags, allTiers);
 			} else {
@@ -70,13 +71,12 @@ public class Operations extends Controller {
 				Compte compte = operation.compte;
 				notFoundIfNull(compte);
 
-				List<Tag> allTags = Tag.find("ORDER BY nom ASC").fetch();
+				List<Tag> allTags = Tag.find("user=? ORDER BY nom ASC", connectedUser).fetch();
 				List<models.Tiers> allTiers = models.Tiers.find("ORDER BY designation ASC").fetch();
 				render("Operations/editer.html", titre, compte, operation, allTags, allTiers);
 			}
 		}
 
-		User connectedUser = Security.connectedUser();
 		if (operation.compte.user.id != connectedUser.id) {
 			forbidden("Vous n'êtes pas le propriétaire de ce compte");
 		}
