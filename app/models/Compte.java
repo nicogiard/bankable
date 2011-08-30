@@ -5,6 +5,7 @@ import java.util.List;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.OrderBy;
 import javax.persistence.Table;
@@ -15,6 +16,10 @@ import play.db.jpa.Model;
 @Entity
 @Table(name = "COMPTE")
 public class Compte extends Model {
+
+	@Required
+	@ManyToOne
+	public User user;
 
 	@Required
 	public String nom;

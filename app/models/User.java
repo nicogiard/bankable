@@ -1,8 +1,12 @@
 package models;
 
 import java.util.Date;
+import java.util.List;
 
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.OneToMany;
+import javax.persistence.OrderBy;
 import javax.persistence.Table;
 
 import play.data.validation.Email;
@@ -34,6 +38,10 @@ public class User extends Model {
 	public Date dateCreation;
 
 	public Date dateModification;
+
+	@OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
+	@OrderBy("id DESC")
+	public List<Compte> comptes;
 
 	@Override
 	public String toString() {
