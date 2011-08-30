@@ -50,10 +50,22 @@ Civilite(soc):
 Tag(tagSalaire):
   nom: Salaire
   showOnGraph: true
+  user: nicogiard
   
 Tag(tagDAB):
   nom: DAB
   showOnGraph: true
+  user: nicogiard
+  
+Tag(tagSalaire2):
+  nom: Salaire
+  showOnGraph: true
+  user: fmeurisse
+  
+Tag(tagDAB2):
+  nom: DAB
+  showOnGraph: true
+  user: fmeurisse
 
 #-----------------------------------
 # Compte

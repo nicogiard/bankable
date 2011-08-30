@@ -4,6 +4,7 @@ import javax.persistence.ColumnResult;
 import javax.persistence.Entity;
 import javax.persistence.EntityResult;
 import javax.persistence.FieldResult;
+import javax.persistence.ManyToOne;
 import javax.persistence.SqlResultSetMapping;
 import javax.persistence.Table;
 
@@ -21,4 +22,8 @@ public class Tag extends Model {
 
 	@Required
 	public boolean showOnGraph;
+
+	@Required
+	@ManyToOne
+	public User user;
 }
