@@ -77,10 +77,10 @@ $(document).ready(function() {
 			<table>
 				<thead>
 					<tr id="head">
-						<th colspan="2"><a href="#!" id="showSearch"><img src="@{'/public/images/magnifier.png'}" /></a><th>Description</th><th class="debitCredit">Montant</th><th>Tags</th><th class="date">Date</th><th>&nbsp;</th>
+						<th colspan="2"><a href="#!" id="showSearch"><img src="@{'/public/images/magnifier.png'}" /></a><th>Description</th><th>Tiers</th><th class="debitCredit">Montant</th><th>Tags</th><th class="date">Date</th><th>&nbsp;</th>
 					</tr>
 					<tr id="search" style="display: none;">
-						<th colspan="2"><input type="hidden" name="compteId" value="${compte.id}"/></th><th><input type="text" placeholder="Description" name="libelle" value="${libelle}"/></th><th class="debitCredit"><input type="text" placeholder="Montant" name="montant" value="${montant}"/></th><th><input type="text" placeholder="Tag" name="tag" value="${tag}" /></th><th class="date"><input type="text" placeholder="Date" name="date" value="${date}" /></th><th><a href="#!" onClick="javascript:formFilter.submit();"><img src="@{'/public/images/accept.png'}" title="Filtrer" alt="Filtrer"/></a><a href="@{Comptes.index(compte.id)}" ><img src="@{'/public/images/cross.png'}" title="Annuler" alt="Annuler"/></a></th>
+						<th colspan="2"><input type="hidden" name="compteId" value="${compte.id}"/></th><th><input type="text" placeholder="Description" name="libelle" value="${libelle}"/></th><th><input type="text" placeholder="Tiers" name="tiers" value="${tiers}"/></th><th class="debitCredit"><input type="text" placeholder="Montant" name="montant" value="${montant}"/></th><th><input type="text" placeholder="Tag" name="tag" value="${tag}" /></th><th class="date"><input type="text" placeholder="Date" name="date" value="${date}" /></th><th><a href="#!" onClick="javascript:formFilter.submit();"><img src="@{'/public/images/accept.png'}" title="Filtrer" alt="Filtrer"/></a><a href="@{Comptes.index(compte.id)}" ><img src="@{'/public/images/cross.png'}" title="Annuler" alt="Annuler"/></a></th>
 					</tr>
 				</thead>
 				<tbody>
@@ -89,6 +89,7 @@ $(document).ready(function() {
 						<td class="check"><input type="checkbox"></td>
 						<td class="rapproche"><a href="#!" value="${operation.id}" class="linkRapproche #{if models.EEtatOperation.NONPOINTEE == operation.etat}" title="Non Point&eacute;e"#{/if}#{if models.EEtatOperation.POINTEE == operation.etat}pointee" title="Point&eacute;e"#{/if}#{if models.EEtatOperation.RAPPROCHEE == operation.etat}rapprochee" title="Rapproch&eacute;e"#{/if}>&nbsp;</a></td>
 						<td class="libelle">${operation.libelle}</td>
+						<td class="tiers">${operation.tiers?.civilite?.abreviation} ${operation.tiers?.designation}</td>
 						<td class="debitCredit">#{if models.ETypeOperation.DEBIT == operation.type}#{plusMinus -1 /}#{/if}#{else}#{plusMinus 1 /}#{/else}${operation.montant.format('0.00')}&nbsp;&euro;</td>
 						<td class="tags">#{if operation.tags.size() > 0}${operation.tags.join('nom', ', ')}#{/if}#{else}<span class="noTag">(aucun)</span>#{/else}</td>
 						<td class="date"><span title="${operation.date.format('dd/MM/yyyy HH:mm:ss')}">${operation.date.format('dd/MM/yyyy')}</span></td>

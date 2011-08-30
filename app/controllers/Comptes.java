@@ -67,7 +67,7 @@ public class Comptes extends Controller {
 		render(compte);
 	}
 
-	public static void filtrer(Long compteId, String libelle, Float montant, String tag, Date date) {
+	public static void filtrer(Long compteId, String libelle, String tiers, Float montant, String tag, Date date) {
 		Compte compte = null;
 		if (compteId != null) {
 			compte = Compte.findById(compteId);
@@ -81,6 +81,10 @@ public class Comptes extends Controller {
 			if (StringUtils.isNotBlank(libelle)) {
 				sbCountOperations.append(" AND operation.libelle LIKE '%").append(libelle).append("%'");
 				sbOperations.append(" AND libelle LIKE '%").append(libelle).append("%'");
+			}
+			if (StringUtils.isNotBlank(tiers)) {
+				sbCountOperations.append(" AND operation.tiers.designation LIKE '%").append(tiers).append("%'");
+				sbOperations.append(" AND tiers.designation LIKE '%").append(tiers).append("%'");
 			}
 			if (montant != null) {
 				sbCountOperations.append(" AND operation.montant=").append(montant).append("");

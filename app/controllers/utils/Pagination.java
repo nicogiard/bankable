@@ -11,7 +11,7 @@ public class Pagination {
     private long elementCount;
 
     public static final int DEFAULT_PER_PAGE = 15;
-    public static final int MAX_PAGE = 10;
+    public static final int MAX_PAGE = 11;
 
     public Pagination() {
         this(DEFAULT_PER_PAGE);
