@@ -64,6 +64,15 @@ Compte(compteCourant):
   devise: euro
   numero: 12
   etablissement: Caisse d'Epargne Normandie
+  user: nicogiard
+  
+Compte(compteCourantFabien):
+  nom: CC Fabien
+  solde: 0
+  devise: euro
+  numero: 12
+  etablissement: Caisse d'Epargne Normandie
+  user: fmeurisse
 
 #-----------------------------------
 # Operation

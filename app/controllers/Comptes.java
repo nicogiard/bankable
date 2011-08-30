@@ -7,6 +7,7 @@ import models.Compte;
 import models.EEtatOperation;
 import models.ETypeOperation;
 import models.Operation;
+import models.User;
 
 import org.apache.commons.lang.StringUtils;
 
@@ -26,10 +27,12 @@ public class Comptes extends Controller {
 
 	@Before
 	static void defaultData() {
-		List<Compte> comptes = Compte.findAll();
+		User connectedUser = Security.connectedUser();
+
+		List<Compte> comptes = Compte.find("user=?", connectedUser).fetch();
 		renderArgs.put("comptes", comptes);
 
-		Double total = Compte.find("select sum(compte.solde) from Compte compte").first();
+		Double total = Compte.find("SELECT sum(compte.solde) FROM Compte compte WHERE user=?", connectedUser).first();
 		if (total == null) {
 			total = 0D;
 		}
@@ -49,9 +52,11 @@ public class Comptes extends Controller {
 	}
 
 	public static void index(Long compteId) {
+		User connectedUser = Security.connectedUser();
+
 		Compte compte = null;
 		if (compteId != null) {
-			compte = Compte.findById(compteId);
+			compte = Compte.find("id=? AND user=?", compteId, connectedUser).first();
 			notFoundIfNull(compte);
 		}
 
@@ -68,9 +73,11 @@ public class Comptes extends Controller {
 	}
 
 	public static void filtrer(Long compteId, String libelle, String tiers, Float montant, String tag, Date date) {
+		User connectedUser = Security.connectedUser();
+
 		Compte compte = null;
 		if (compteId != null) {
-			compte = Compte.findById(compteId);
+			compte = Compte.find("id=? AND user=?", compteId, connectedUser).first();
 			notFoundIfNull(compte);
 		}
 
@@ -121,7 +128,9 @@ public class Comptes extends Controller {
 	}
 
 	public static void editer(Long compteId) {
-		Compte compte = Compte.findById(compteId);
+		User connectedUser = Security.connectedUser();
+
+		Compte compte = Compte.find("id=? AND user=?", compteId, connectedUser).first();
 		notFoundIfNull(compte);
 
 		String titre = "Editer";
@@ -139,12 +148,20 @@ public class Comptes extends Controller {
 				render("Comptes/editer.html", titre);
 			}
 		}
+
+		User connectedUser = Security.connectedUser();
+		if (compte.user.id != connectedUser.id) {
+			forbidden("Vous n'êtes pas le propriétaire de ce compte");
+		}
+
 		compte.save();
 		index(compte.id);
 	}
 
 	public static void rapprocher(Long compteId) {
-		Compte compte = Compte.findById(compteId);
+		User connectedUser = Security.connectedUser();
+
+		Compte compte = Compte.find("id=? AND user=?", compteId, connectedUser).first();
 		notFoundIfNull(compte);
 
 		List<Operation> operations = Operation.find("compte.id=? AND etat=?", compte.id, EEtatOperation.POINTEE).fetch();
@@ -156,7 +173,9 @@ public class Comptes extends Controller {
 	}
 
 	public static void vider(Long compteId) {
-		Compte compte = Compte.findById(compteId);
+		User connectedUser = Security.connectedUser();
+
+		Compte compte = Compte.find("id=? AND user=?", compteId, connectedUser).first();
 		notFoundIfNull(compte);
 
 		// Update du Solde du compte a partir de la première opération
