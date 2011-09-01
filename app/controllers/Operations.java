@@ -55,7 +55,7 @@ public class Operations extends Controller {
 		render(titre, compte, operation, allTags, allTiers);
 	}
 
-	public static void enregistrer(@Required @Valid Operation operation, String tags, Float oldMontant) {
+	public static void enregistrer(@Required @Valid Operation operation, String tags) {
 		User connectedUser = Security.connectedUser();
 		if (validation.hasErrors()) {
 			if (operation.id != null && operation.id > 0) {
@@ -81,13 +81,15 @@ public class Operations extends Controller {
 			forbidden("Vous n'êtes pas le propriétaire de ce compte");
 		}
 
-		if (oldMontant == null) {
-			oldMontant = 0F;
-		}
-		if (operation.type == ETypeOperation.DEBIT) {
-			operation.compte.solde = (operation.compte.solde + oldMontant) - operation.montant;
-		} else {
-			operation.compte.solde = (operation.compte.solde - oldMontant) + operation.montant;
+		if (operation.id != null) {
+			Float oldMontant = operation.getMontantFromDatabase();
+			if (oldMontant != operation.montant) {
+				if (operation.type == ETypeOperation.DEBIT) {
+					operation.compte.solde = (operation.compte.solde + oldMontant) - operation.montant;
+				} else {
+					operation.compte.solde = (operation.compte.solde - oldMontant) + operation.montant;
+				}
+			}
 		}
 
 		operation.tags.clear();
