@@ -2,13 +2,21 @@ package functionnal;
 
 import org.junit.Test;
 
+import play.mvc.Http.Request;
 import play.mvc.Http.Response;
 
 public class ComptesTest extends MyFunctionalTest {
 
 	@Test
 	public void testThatIndexPageWorks() {
-		Response response = GET("/");
+		String url = "/";
+		Response response = GET(url);
+		assertStatus(302, response);
+
+		Response loginResponse = login("nicogiard", "nico");
+
+		Request request = requestAfterLogin(url, loginResponse);
+		response = makeRequest(request);
 		assertIsOk(response);
 		assertContentType("text/html", response);
 		assertCharset("utf-8", response);
@@ -16,13 +24,27 @@ public class ComptesTest extends MyFunctionalTest {
 
 	@Test
 	public void testThatResumeComptePageNotFound() {
-		Response response = GET("/resume/compte/99");
+		String url = "/resume/compte/99";
+		Response response = GET(url);
+		assertStatus(302, response);
+
+		Response loginResponse = login("nicogiard", "nico");
+
+		Request request = requestAfterLogin(url, loginResponse);
+		response = makeRequest(request);
 		assertIsNotFound(response);
 	}
 
 	@Test
 	public void testThatResumeComptePageWorks() {
-		Response response = GET("/resume/compte/1");
+		String url = "/resume/compte/1";
+		Response response = GET(url);
+		assertStatus(302, response);
+
+		Response loginResponse = login("nicogiard", "nico");
+
+		Request request = requestAfterLogin(url, loginResponse);
+		response = makeRequest(request);
 		assertIsOk(response);
 		assertContentType("text/html", response);
 		assertCharset("utf-8", response);
@@ -30,7 +52,14 @@ public class ComptesTest extends MyFunctionalTest {
 
 	@Test
 	public void testThatHomeComptePageWorks() {
-		Response response = GET("/compte");
+		String url = "/compte";
+		Response response = GET(url);
+		assertStatus(302, response);
+
+		Response loginResponse = login("nicogiard", "nico");
+
+		Request request = requestAfterLogin(url, loginResponse);
+		response = makeRequest(request);
 		assertIsOk(response);
 		assertContentType("text/html", response);
 		assertCharset("utf-8", response);
@@ -38,7 +67,14 @@ public class ComptesTest extends MyFunctionalTest {
 
 	@Test
 	public void testThatComptePageWorks() {
-		Response response = GET("/compte/1");
+		String url = "/compte/1";
+		Response response = GET(url);
+		assertStatus(302, response);
+
+		Response loginResponse = login("nicogiard", "nico");
+
+		Request request = requestAfterLogin(url, loginResponse);
+		response = makeRequest(request);
 		assertIsOk(response);
 		assertContentType("text/html", response);
 		assertCharset("utf-8", response);
@@ -46,7 +82,14 @@ public class ComptesTest extends MyFunctionalTest {
 
 	@Test
 	public void testThatCompteAjouterPageWorks() {
-		Response response = GET("/compte/ajouter");
+		String url = "/compte/ajouter";
+		Response response = GET(url);
+		assertStatus(302, response);
+
+		Response loginResponse = login("nicogiard", "nico");
+
+		Request request = requestAfterLogin(url, loginResponse);
+		response = makeRequest(request);
 		assertIsOk(response);
 		assertContentType("text/html", response);
 		assertCharset("utf-8", response);
@@ -54,7 +97,14 @@ public class ComptesTest extends MyFunctionalTest {
 
 	@Test
 	public void testThatEditerComptePageWorks() {
-		Response response = GET("/compte/1/editer");
+		String url = "/compte/1/editer";
+		Response response = GET(url);
+		assertStatus(302, response);
+
+		Response loginResponse = login("nicogiard", "nico");
+
+		Request request = requestAfterLogin(url, loginResponse);
+		response = makeRequest(request);
 		assertIsOk(response);
 		assertContentType("text/html", response);
 		assertCharset("utf-8", response);
