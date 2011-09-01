@@ -4,6 +4,7 @@ import java.util.Calendar;
 import java.util.List;
 
 import models.Compte;
+import models.ETypeOperation;
 import models.Operation;
 import models.User;
 
@@ -14,6 +15,7 @@ import play.data.validation.Valid;
 import play.mvc.After;
 import play.mvc.Before;
 import play.mvc.Controller;
+import utils.OperationUtils;
 import utils.TimeRequestLogger;
 import controllers.utils.APIRenderJSon;
 
@@ -62,8 +64,28 @@ public class API extends Controller {
 		renderJSon(operations);
 	}
 
-	public static void enregistrerOperation(@Required @Valid Operation operation) {
+	public static void enregistrerOperation(@Required @Valid Operation operation, String tags) {
+		if (validation.hasErrors()) {
+			renderJSon(validation.errorsMap());
+		}
 
+		if (!request.user.equals(operation.compte.user.login)) {
+			forbidden("Vous n'êtes pas le propriétaire de ce compte");
+		}
+
+		if (operation.type == ETypeOperation.DEBIT) {
+			operation.compte.solde = operation.compte.solde - operation.montant;
+		} else {
+			operation.compte.solde = operation.compte.solde + operation.montant;
+		}
+
+		operation.tags.clear();
+		OperationUtils.extractTags(operation, tags);
+
+		operation.compte.save();
+		operation.save();
+
+		renderJSon(operation);
 	}
 
 	protected static void renderJSon(Object o) {

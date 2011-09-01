@@ -12,15 +12,13 @@ import models.Operation;
 import models.OperationImport;
 import models.Tag;
 import models.User;
-
-import org.apache.commons.lang.StringUtils;
-
 import play.data.validation.Required;
 import play.data.validation.Valid;
 import play.db.jpa.JPA;
 import play.mvc.Controller;
 import play.mvc.With;
 import utils.LigneBudgetUtils;
+import utils.OperationUtils;
 import utils.csv.ImportCSVCaisseEpargne;
 
 @With(Secure.class)
@@ -93,18 +91,7 @@ public class Operations extends Controller {
 		}
 
 		operation.tags.clear();
-		if (StringUtils.isNotBlank(tags)) {
-			String[] tabTags = tags.split(",");
-			for (String stringTag : tabTags) {
-				Tag tag = Tag.find("nom=?", stringTag.trim()).first();
-				if (tag == null) {
-					tag = new Tag();
-					tag.nom = stringTag.trim();
-					tag.save();
-				}
-				operation.tags.add(tag);
-			}
-		}
+		OperationUtils.extractTags(operation, tags);
 
 		operation.compte.save();
 		operation.save();
