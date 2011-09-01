@@ -88,13 +88,13 @@ public class Application extends Controller {
 		resume.tagsCredit = JPA
 				.em()
 				.createNativeQuery(
-						"select t.id as id, t.nom as nom, t.showOnGraph as showOnGraph, count(ot.tag_id) as count from TAG t inner join OPERATION_TAGS ot on t.id = ot.tag_id inner join OPERATION o on ot.operation_id = o.id where o.compte_id=? and o.type=? and t.showOnGraph=true group by ot.tag_id",
+						"select t.id as id, t.nom as nom, t.showOnGraph as showOnGraph, t.user_id as user, count(ot.tag_id) as count from TAG t inner join OPERATION_TAGS ot on t.id = ot.tag_id inner join OPERATION o on ot.operation_id = o.id where o.compte_id=? and o.type=? and t.showOnGraph=true group by ot.tag_id",
 						"TagWithCount").setParameter(1, compte.id).setParameter(2, ETypeOperation.CREDIT.toString()).getResultList();
 
 		resume.tagsDebit = JPA
 				.em()
 				.createNativeQuery(
-						"select t.id as id, t.nom as nom, t.showOnGraph as showOnGraph, count(ot.tag_id) as count from TAG t inner join OPERATION_TAGS ot on t.id = ot.tag_id inner join OPERATION o on ot.operation_id = o.id where o.compte_id=? and o.type=? and t.showOnGraph=true group by ot.tag_id",
+						"select t.id as id, t.nom as nom, t.showOnGraph as showOnGraph, t.user_id as user, count(ot.tag_id) as count from TAG t inner join OPERATION_TAGS ot on t.id = ot.tag_id inner join OPERATION o on ot.operation_id = o.id where o.compte_id=? and o.type=? and t.showOnGraph=true group by ot.tag_id",
 						"TagWithCount").setParameter(1, compte.id).setParameter(2, ETypeOperation.DEBIT.toString()).getResultList();
 
 		DateTime today = new DateTime();
