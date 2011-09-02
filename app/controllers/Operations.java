@@ -78,11 +78,8 @@ public class Operations extends Controller {
 		if (operation.compte.user.id != connectedUser.id) {
 			forbidden("Vous n'êtes pas le propriétaire de ce compte");
 		}
-		Float oldMontant = 0F;
 
-		if (operation.id != null) {
-			operation.getMontantFromDatabase();
-		}
+		Float oldMontant = operation.getMontantFromDatabase();
 
 		if (oldMontant != operation.montant) {
 			if (operation.type == ETypeOperation.DEBIT) {
