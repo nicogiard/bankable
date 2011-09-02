@@ -1,5 +1,6 @@
 package models;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -15,6 +16,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 import play.data.validation.Required;
+import play.db.jpa.JPA;
 import play.db.jpa.Model;
 
 @Entity
@@ -53,4 +55,8 @@ public class Operation extends Model {
 
 	@ManyToOne
 	public Tiers tiers;
+
+	public Float getMontantFromDatabase() {
+		return ((BigDecimal) JPA.newEntityManager().createNativeQuery("SELECT montant FROM Operation WHERE id=?").setParameter(1, this.id).getSingleResult()).floatValue();
+	}
 }

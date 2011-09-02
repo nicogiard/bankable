@@ -3,12 +3,12 @@
 <html>
 <head>
     <title>#{get 'title' /}</title>
-    <meta charset="UTF_8">
+    <meta charset="UTF-8">
     <link rel="stylesheet" media="screen" href="@{'/public/stylesheets/reset.css'}">
     <link rel="stylesheet" media="screen" href="@{'/public/stylesheets/main.css'}">
     #{get 'moreStyles' /}
     <link rel="shortcut icon" type="image/png" href="@{'/public/images/favicon.png'}">
-    <script src="@{'/public/javascripts/jquery-1.6.2.min.js'}" type="text/javascript" charset="UTF-8"></script>
+    <script src="@{'/public/javascripts/jquery-1.6.3.min.js'}" type="text/javascript" charset="UTF-8"></script>
     #{get 'moreScripts' /}
     <script type="text/javascript" charset="UTF-8">
     $(document).ready(function(){
@@ -52,6 +52,9 @@
 				<li><a href="#!" ${request.action =~ "Operations." ? "class='active'" : ""}>Op&eacute;rations</a></li>
 				#{/if}
 			</ul>
+        </div>
+        <div class="right logout">
+        	<a href="@{Secure.logout}">D&eacute;connexion</a>
         </div>
     </header>
     #{doLayout /}

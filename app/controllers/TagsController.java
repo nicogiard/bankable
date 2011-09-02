@@ -10,24 +10,29 @@ import models.Compte;
 import models.ETypeOperation;
 import models.Operation;
 import models.Tag;
+import models.User;
 
 import org.joda.time.MutableDateTime;
 
 import play.db.jpa.JPA;
 import play.mvc.Before;
 import play.mvc.Controller;
+import play.mvc.With;
 import controllers.utils.Pagination;
 
+@With(Secure.class)
 public class TagsController extends Controller {
 
 	private static final Pagination tagsPagination = new Pagination();
 
 	@Before
 	static void defaultData() {
-		List<Compte> allComptes = Compte.findAll();
-		List<Tag> allTags = Tag.find("ORDER BY nom ASC").fetch();
+		User connectedUser = Security.connectedUser();
 
+		List<Compte> allComptes = Compte.find("user=?", connectedUser).fetch();
 		renderArgs.put("allComptes", allComptes);
+
+		List<Tag> allTags = Tag.find("user=? ORDER BY nom ASC", connectedUser).fetch();
 		renderArgs.put("allTags", allTags);
 
 		// Récupération de la pagination
@@ -44,12 +49,14 @@ public class TagsController extends Controller {
 	}
 
 	public static void index(Long compteId) {
+		User connectedUser = Security.connectedUser();
+
 		Compte compte = null;
 		if (compteId != null) {
-			compte = Compte.findById(compteId);
+			compte = Compte.find("id=? AND user=?", compteId, connectedUser).first();
 			notFoundIfNull(compte);
 		} else {
-			compte = Compte.find("").first();
+			compte = Compte.find("user=?", connectedUser).first();
 			notFoundIfNull(compte);
 			index(compte.id);
 		}
@@ -57,27 +64,29 @@ public class TagsController extends Controller {
 		List tagsCredit = JPA
 				.em()
 				.createNativeQuery(
-						"select t.id as id, t.nom as nom, t.showOnGraph as showOnGraph, sum(o.montant) as count from TAG t inner join OPERATION_TAGS ot on t.id = ot.tag_id inner join OPERATION o on ot.operation_id = o.id where o.compte_id=? and o.type=? and t.showOnGraph=true group by ot.tag_id",
+						"SELECT t.id AS id, t.nom AS nom, t.showOnGraph AS showOnGraph, sum(o.montant) AS count FROM TAG t INNER JOIN OPERATION_TAGS ot ON t.id = ot.tag_id INNER JOIN OPERATION o ON ot.operation_id = o.id WHERE o.compte_id=? AND o.type=? AND t.showOnGraph=true GROUP BY ot.tag_id",
 						"TagWithCount").setParameter(1, compte.id).setParameter(2, ETypeOperation.CREDIT.toString()).getResultList();
 		List tagsDebit = JPA
 				.em()
 				.createNativeQuery(
-						"select t.id as id, t.nom as nom, t.showOnGraph as showOnGraph, sum(o.montant) as count from TAG t inner join OPERATION_TAGS ot on t.id = ot.tag_id inner join OPERATION o on ot.operation_id = o.id where o.compte_id=? and o.type=? and t.showOnGraph=true group by ot.tag_id",
+						"SELECT t.id AS id, t.nom AS nom, t.showOnGraph AS showOnGraph, sum(o.montant) AS count FROM TAG t INNER JOIN OPERATION_TAGS ot ON t.id = ot.tag_id INNER JOIN OPERATION o ON ot.operation_id = o.id WHERE o.compte_id=? AND o.type=? AND t.showOnGraph=true GROUP BY ot.tag_id",
 						"TagWithCount").setParameter(1, compte.id).setParameter(2, ETypeOperation.DEBIT.toString()).getResultList();
 		render(compte, tagsCredit, tagsDebit);
 	}
 
 	public static void detail(Long compteId, Long tagId) {
-		Compte compte = Compte.findById(compteId);
+		User connectedUser = Security.connectedUser();
+
+		Compte compte = Compte.find("id=? AND user=?", compteId, connectedUser).first();
 		notFoundIfNull(compte);
 
-		Tag currentTag = Tag.findById(tagId);
+		Tag currentTag = Tag.find("id=? AND user=?", tagId, connectedUser).first();
 		notFoundIfNull(currentTag);
 
-		Long countOperation = Operation.find("select count(o) from Operation o join o.tags t where t.id=?", currentTag.id).first();
+		Long countOperation = Operation.find("SELECT count(o) FROM Operation o JOIN o.tags t WHERE t.id=?", currentTag.id).first();
 		tagsPagination.setElementCount(countOperation);
 
-		List<Operation> operations = Operation.find("select o from Operation o join o.tags t where o.compte.id=? AND t.id=? ORDER BY date DESC", compte.id, currentTag.id).fetch(tagsPagination.getPage(), tagsPagination.getPageSize());
+		List<Operation> operations = Operation.find("SELECT o FROM Operation o JOIN o.tags t WHERE o.compte.id=? AND t.id=? ORDER BY date DESC", compte.id, currentTag.id).fetch(tagsPagination.getPage(), tagsPagination.getPageSize());
 
 		SimpleDateFormat sdf = new SimpleDateFormat("MM/yyyy");
 		MutableDateTime dateTime = new MutableDateTime(new Date());
@@ -115,7 +124,9 @@ public class TagsController extends Controller {
 
 	public static void showTagOnGraph(Long tagId, boolean show) {
 		if (request.isAjax()) {
-			Tag currentTag = Tag.findById(tagId);
+			User connectedUser = Security.connectedUser();
+
+			Tag currentTag = Tag.find("id=? AND user=?", tagId, connectedUser).first();
 			notFoundIfNull(currentTag);
 
 			currentTag.showOnGraph = show;

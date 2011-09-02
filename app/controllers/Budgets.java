@@ -7,27 +7,33 @@ import models.Budget;
 import models.Compte;
 import models.LigneBudget;
 import models.Tag;
+import models.User;
 import play.data.validation.Required;
 import play.data.validation.Valid;
 import play.mvc.Before;
 import play.mvc.Controller;
+import play.mvc.With;
 import utils.LigneBudgetUtils;
 
+@With(Secure.class)
 public class Budgets extends Controller {
 	@Before
 	static void defaultData() {
-		List<Compte> allComptes = Compte.findAll();
+		User connectedUser = Security.connectedUser();
 
+		List<Compte> allComptes = Compte.find("user=?", connectedUser).fetch();
 		renderArgs.put("allComptes", allComptes);
 	}
 
 	public static void index(Long compteId) {
+		User connectedUser = Security.connectedUser();
+
 		Compte compte = null;
 		if (compteId != null) {
-			compte = Compte.findById(compteId);
+			compte = Compte.find("id=? AND user=?", compteId, connectedUser).first();
 			notFoundIfNull(compte);
 		} else {
-			compte = Compte.find("").first();
+			compte = Compte.find("user=?", connectedUser).first();
 			notFoundIfNull(compte);
 			index(compte.id);
 		}
@@ -49,22 +55,25 @@ public class Budgets extends Controller {
 	}
 
 	public static void ajouterLigne() {
-		String titre = "Ajouter";
+		User connectedUser = Security.connectedUser();
 
-		List<Budget> budgets = Budget.findAll();
+		List<Budget> budgets = Budget.find("compte.user=?", connectedUser).fetch();
 		List<Tag> tags = Tag.findAll();
+
+		String titre = "Ajouter";
 		render("Budgets/editerLigne.html", titre, budgets, tags);
 	}
 
 	public static void editerLigne(Long ligneBudgetId) {
-		String titre = "Editer";
+		User connectedUser = Security.connectedUser();
 
-		List<Budget> budgets = Budget.findAll();
+		List<Budget> budgets = Budget.find("compte.user=?", connectedUser).fetch();
 		List<Tag> tags = Tag.findAll();
 
 		LigneBudget ligneBudget = LigneBudget.findById(ligneBudgetId);
 		notFoundIfNull(ligneBudget);
 
+		String titre = "Editer";
 		render(titre, ligneBudget, budgets, tags);
 	}
 
@@ -83,6 +92,11 @@ public class Budgets extends Controller {
 			}
 		}
 
+		User connectedUser = Security.connectedUser();
+		if (ligneBudget.budget.compte.user.id != connectedUser.id) {
+			forbidden("Vous n'êtes pas le propriétaire de ce compte");
+		}
+
 		if (ligneBudget.montantManuel == null) {
 			ligneBudget.montantManuel = 0F;
 		}
@@ -95,7 +109,9 @@ public class Budgets extends Controller {
 	}
 
 	public static void supprimerLigne(Long ligneBudgetId) {
-		LigneBudget ligneBudget = LigneBudget.findById(ligneBudgetId);
+		User connectedUser = Security.connectedUser();
+
+		LigneBudget ligneBudget = LigneBudget.find("id=? AND budget.compte.user=?", ligneBudgetId, connectedUser).first();
 		notFoundIfNull(ligneBudget);
 
 		ligneBudget.delete();

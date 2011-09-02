@@ -2,7 +2,8 @@
 # This file defines all application routes (Higher priority routes first)
 # ~~~~
 
-# Home page
+*       /                                                                          module:secure
+
 GET     /                                                                          Application.index
 GET     /resume/compte/{compteId}                                                  Application.resume
 
@@ -43,6 +44,11 @@ GET     /tiers/ajouter                                                          
 GET     /tiers/{tiersId}/editer                                                    Tiers.editer
 GET     /tiers/{tiersId}/supprimer                                                 Tiers.supprimer
 POST    /tiers/{tiersId}/enregistrer                                               Tiers.enregistrer
+
+GET     /api/comptes                                                               API.comptes
+GET     /api/compte/{compteId}                                                     API.compte
+GET     /api/compte/{compteId}/operations                                          API.operations
+POST    /api/compte/{compteId}/operation/enregistrer                               API.enregistrerOperation
 
 # Ignore favicon requests
 GET     /favicon.ico                                                               404

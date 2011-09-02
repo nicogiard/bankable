@@ -11,51 +11,57 @@ import models.ETypeOperation;
 import models.Operation;
 import models.OperationImport;
 import models.Tag;
-
-import org.apache.commons.lang.StringUtils;
-
+import models.User;
 import play.data.validation.Required;
 import play.data.validation.Valid;
 import play.db.jpa.JPA;
 import play.mvc.Controller;
+import play.mvc.With;
 import utils.LigneBudgetUtils;
+import utils.OperationUtils;
 import utils.csv.ImportCSVCaisseEpargne;
 
+@With(Secure.class)
 public class Operations extends Controller {
 
 	public static void ajouter(Long compteId) {
-		String titre = "Ajouter";
-		Compte compte = Compte.findById(compteId);
+		User connectedUser = Security.connectedUser();
+
+		Compte compte = Compte.find("id=? AND user=?", compteId, connectedUser).first();
 		notFoundIfNull(compte);
 
-		List<Tag> allTags = Tag.find("ORDER BY nom ASC").fetch();
+		List<Tag> allTags = Tag.find("user=? ORDER BY nom ASC", connectedUser).fetch();
 		List<models.Tiers> allTiers = models.Tiers.find("ORDER BY designation ASC").fetch();
 
+		String titre = "Ajouter";
 		render("Operations/editer.html", titre, compte, allTags, allTiers);
 	}
 
 	public static void editer(Long compteId, Long operationId) {
-		String titre = "Editer";
-		Compte compte = Compte.findById(compteId);
+		User connectedUser = Security.connectedUser();
+
+		Compte compte = Compte.find("id=? AND user=?", compteId, connectedUser).first();
 		notFoundIfNull(compte);
 
 		Operation operation = Operation.findById(operationId);
 		notFoundIfNull(operation);
 
-		List<Tag> allTags = Tag.find("ORDER BY nom ASC").fetch();
+		List<Tag> allTags = Tag.find("user=? ORDER BY nom ASC", connectedUser).fetch();
 		List<models.Tiers> allTiers = models.Tiers.find("ORDER BY designation ASC").fetch();
 
+		String titre = "Editer";
 		render(titre, compte, operation, allTags, allTiers);
 	}
 
-	public static void enregistrer(@Required @Valid Operation operation, String tags, Float oldMontant) {
+	public static void enregistrer(@Required @Valid Operation operation, String tags) {
+		User connectedUser = Security.connectedUser();
 		if (validation.hasErrors()) {
 			if (operation.id != null && operation.id > 0) {
 				String titre = "Editer";
 				Compte compte = operation.compte;
 				notFoundIfNull(compte);
 
-				List<Tag> allTags = Tag.find("ORDER BY nom ASC").fetch();
+				List<Tag> allTags = Tag.find("user=? ORDER BY nom ASC", connectedUser).fetch();
 				List<models.Tiers> allTiers = models.Tiers.find("ORDER BY designation ASC").fetch();
 				render("Operations/editer.html", titre, compte, operation, allTags, allTiers);
 			} else {
@@ -63,34 +69,29 @@ public class Operations extends Controller {
 				Compte compte = operation.compte;
 				notFoundIfNull(compte);
 
-				List<Tag> allTags = Tag.find("ORDER BY nom ASC").fetch();
+				List<Tag> allTags = Tag.find("user=? ORDER BY nom ASC", connectedUser).fetch();
 				List<models.Tiers> allTiers = models.Tiers.find("ORDER BY designation ASC").fetch();
 				render("Operations/editer.html", titre, compte, operation, allTags, allTiers);
 			}
 		}
 
-		if (oldMontant == null) {
-			oldMontant = 0F;
+		if (operation.compte.user.id != connectedUser.id) {
+			forbidden("Vous n'êtes pas le propriétaire de ce compte");
 		}
-		if (operation.type == ETypeOperation.DEBIT) {
-			operation.compte.solde = (operation.compte.solde + oldMontant) - operation.montant;
-		} else {
-			operation.compte.solde = (operation.compte.solde - oldMontant) + operation.montant;
+
+		if (operation.id != null) {
+			Float oldMontant = operation.getMontantFromDatabase();
+			if (oldMontant != operation.montant) {
+				if (operation.type == ETypeOperation.DEBIT) {
+					operation.compte.solde = (operation.compte.solde + oldMontant) - operation.montant;
+				} else {
+					operation.compte.solde = (operation.compte.solde - oldMontant) + operation.montant;
+				}
+			}
 		}
 
 		operation.tags.clear();
-		if (StringUtils.isNotBlank(tags)) {
-			String[] tabTags = tags.split(",");
-			for (String stringTag : tabTags) {
-				Tag tag = Tag.find("nom=?", stringTag.trim()).first();
-				if (tag == null) {
-					tag = new Tag();
-					tag.nom = stringTag.trim();
-					tag.save();
-				}
-				operation.tags.add(tag);
-			}
-		}
+		OperationUtils.extractTags(operation, tags);
 
 		operation.compte.save();
 		operation.save();
@@ -107,9 +108,12 @@ public class Operations extends Controller {
 	}
 
 	public static void supprimer(Long compteId, Long operationId) {
-		Compte compte = Compte.findById(compteId);
+		User connectedUser = Security.connectedUser();
+
+		Compte compte = Compte.find("id=? AND user=?", compteId, connectedUser).first();
 		notFoundIfNull(compte);
-		Operation operation = Operation.findById(operationId);
+
+		Operation operation = Operation.find("id=? AND compte.id=? AND compte.user=?", operationId, compte.id, connectedUser).first();
 		notFoundIfNull(operation);
 
 		if (ETypeOperation.DEBIT == operation.type) {
@@ -127,10 +131,12 @@ public class Operations extends Controller {
 	}
 
 	public static void pointer(Long compteId, Long operationId) {
-		Compte compte = Compte.findById(compteId);
+		User connectedUser = Security.connectedUser();
+
+		Compte compte = Compte.find("id=? AND user=?", compteId, connectedUser).first();
 		notFoundIfNull(compte);
 
-		Operation operation = Operation.findById(operationId);
+		Operation operation = Operation.find("id=? AND compte.id=? AND compte.user=?", operationId, compte.id, connectedUser).first();
 		notFoundIfNull(operation);
 
 		if (operation.etat == EEtatOperation.NONPOINTEE) {
@@ -142,13 +148,17 @@ public class Operations extends Controller {
 	}
 
 	public static void importer(Long compteId) {
-		Compte compte = Compte.findById(compteId);
+		User connectedUser = Security.connectedUser();
+
+		Compte compte = Compte.find("id=? AND user=?", compteId, connectedUser).first();
 		notFoundIfNull(compte);
 		render(compte);
 	}
 
 	public static void importUpload(Long compteId, File fichier) {
-		Compte compte = Compte.findById(compteId);
+		User connectedUser = Security.connectedUser();
+
+		Compte compte = Compte.find("id=? AND user=?", compteId, connectedUser).first();
 		notFoundIfNull(compte);
 
 		if (fichier != null && fichier.exists()) {
@@ -167,7 +177,9 @@ public class Operations extends Controller {
 	}
 
 	public static void importerOperations(Long compteId) {
-		Compte compte = Compte.findById(compteId);
+		User connectedUser = Security.connectedUser();
+
+		Compte compte = Compte.find("id=? AND user=?", compteId, connectedUser).first();
 		notFoundIfNull(compte);
 
 		List<OperationImport> operationsImport = OperationImport.find("ORDER BY id DESC").fetch();

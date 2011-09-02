@@ -9,15 +9,18 @@ import models.Echeance;
 import models.Jour;
 import models.Semaine;
 import models.Tag;
+import models.User;
 import play.Logger;
 import play.data.validation.Required;
 import play.data.validation.Valid;
 import play.mvc.Before;
 import play.mvc.Controller;
+import play.mvc.With;
 import utils.LigneBudgetUtils;
 import utils.PlanningEcheanceUtils;
 import controllers.utils.SessionUtil;
 
+@With(Secure.class)
 public class Echeances extends Controller {
 
 	private static final String CALENDAR_MODE = "CAL";
@@ -26,18 +29,22 @@ public class Echeances extends Controller {
 
 	@Before
 	static void defaultData() {
-		List<Compte> allComptes = Compte.findAll();
+		User connectedUser = Security.connectedUser();
+
+		List<Compte> allComptes = Compte.find("user=?", connectedUser).fetch();
 		renderArgs.put("allComptes", allComptes);
 	}
 
 	public static void index(Long compteId, Long echeanceId) {
+		User connectedUser = Security.connectedUser();
+
 		Logger.debug(">> Echeances.index >> compteId=%d | echeanceId=%d", compteId, echeanceId);
 		Compte compte = null;
 		if (compteId != null) {
-			compte = Compte.findById(compteId);
+			compte = Compte.find("id=? AND user=?", compteId, connectedUser).first();
 			notFoundIfNull(compte);
 		} else {
-			compte = Compte.find("").first();
+			compte = Compte.find("user=?", connectedUser).first();
 			notFoundIfNull(compte);
 			index(compte.id, echeanceId);
 		}
@@ -58,22 +65,25 @@ public class Echeances extends Controller {
 	}
 
 	public static void ajouter() {
-		String titre = "Ajouter";
+		User connectedUser = Security.connectedUser();
 
-		List<Compte> comptes = Compte.findAll();
+		List<Compte> comptes = Compte.find("user=?", connectedUser).fetch();
 		List<Tag> tags = Tag.findAll();
+
+		String titre = "Ajouter";
 		render("Echeances/editer.html", titre, comptes, tags);
 	}
 
 	public static void editer(Long echeanceId) {
-		String titre = "Editer";
+		User connectedUser = Security.connectedUser();
 
-		List<Compte> comptes = Compte.findAll();
+		List<Compte> comptes = Compte.find("user=?", connectedUser).fetch();
 		List<Tag> tags = Tag.findAll();
 
 		Echeance echeance = Echeance.findById(echeanceId);
 		notFoundIfNull(echeance);
 
+		String titre = "Editer";
 		render(titre, echeance, comptes, tags);
 	}
 
@@ -91,6 +101,12 @@ public class Echeances extends Controller {
 				render("Echeances/editer.html", titre, echeance, comptes, tags);
 			}
 		}
+
+		User connectedUser = Security.connectedUser();
+		if (echeance.compte.user.id != connectedUser.id) {
+			forbidden("Vous n'êtes pas le propriétaire de ce compte");
+		}
+
 		echeance.save();
 
 		LigneBudgetUtils.refreshAll();
@@ -99,14 +115,16 @@ public class Echeances extends Controller {
 	}
 
 	public static void calendrier(Long compteId, Date date) {
-		Compte compte = Compte.findById(compteId);
+		User connectedUser = Security.connectedUser();
+
+		Compte compte = Compte.find("id=? AND user=?", compteId, connectedUser).first();
 		notFoundIfNull(compte);
 
 		List<Echeance> allEcheances = Echeance.find("compte.id=?", compte.id).fetch();
 		PlanningEcheanceUtils.compute(date, allEcheances);
 
 		Calendrier calendrier = PlanningEcheanceUtils.buildCalendrier(date);
-		List<models.PlanningEcheance> plannings = models.PlanningEcheance.find("select pe from PlanningEcheance pe join pe.echeance e where e.compte.id=?", 1L).fetch();
+		List<models.PlanningEcheance> plannings = models.PlanningEcheance.find("select pe from PlanningEcheance pe join pe.echeance e where e.compte.id=?", compte.id).fetch();
 		for (models.PlanningEcheance planningEcheance : plannings) {
 			for (Semaine semaine : calendrier.semaines) {
 				for (Jour jour : semaine.jours) {
@@ -122,7 +140,9 @@ public class Echeances extends Controller {
 	}
 
 	public static void list(Long compteId, Long echeanceId) {
-		Compte compte = Compte.findById(compteId);
+		User connectedUser = Security.connectedUser();
+
+		Compte compte = Compte.find("id=? AND user=?", compteId, connectedUser).first();
 		notFoundIfNull(compte);
 
 		List<Echeance> echeances = Echeance.find("compte.id=? ORDER BY type ASC, description ASC", compte.id).fetch();

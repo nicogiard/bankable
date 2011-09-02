@@ -54,7 +54,6 @@ $(document).ready(function() {
 			#{form @Operations.enregistrer()}
 				#{if operation}
 				<input type="hidden" name="operation.id" value="${operation.id}"/>
-				<input type="hidden" name="oldMontant" value="${operation.montant}"/>
 				#{/if}
 				<input type="hidden" name="operation.compte.id" value="${compte.id}"/>
 				
@@ -93,7 +92,7 @@ $(document).ready(function() {
 				#{field 'operation.tiers'}
 				<p class="fat">
 					<label for="${field.id}">Tiers :</label>
-					<select id="${field.id}" name="${field.name}" class="chzn-select" data-placeholder="Choisissez un Tiers...">
+					<select id="${field.id}" name="${field.name}.id" class="chzn-select" data-placeholder="Choisissez un Tiers...">
 						<option></option>
 						#{list items:allTiers, as:'tiers'}
 						<option value="${tiers.id}" #{if operation}#{if tiers == operation.tiers}selected#{/if}#{/if}>${tiers.civilite?.abreviation} ${tiers.designation}</option>
