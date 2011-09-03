@@ -57,6 +57,10 @@ public class Operation extends Model {
 	public Tiers tiers;
 
 	public Float getMontantFromDatabase() {
-		return ((BigDecimal) JPA.newEntityManager().createNativeQuery("SELECT montant FROM Operation WHERE id=?").setParameter(1, this.id).getSingleResult()).floatValue();
+		try {
+			return ((BigDecimal) JPA.newEntityManager().createNativeQuery("SELECT montant FROM Operation WHERE id=?").setParameter(1, this.id).getSingleResult()).floatValue();
+		} catch (Exception e) {
+			return 0F;
+		}
 	}
 }

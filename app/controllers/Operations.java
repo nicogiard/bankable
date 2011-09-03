@@ -79,14 +79,13 @@ public class Operations extends Controller {
 			forbidden("Vous n'êtes pas le propriétaire de ce compte");
 		}
 
-		if (operation.id != null) {
-			Float oldMontant = operation.getMontantFromDatabase();
-			if (oldMontant != operation.montant) {
-				if (operation.type == ETypeOperation.DEBIT) {
-					operation.compte.solde = (operation.compte.solde + oldMontant) - operation.montant;
-				} else {
-					operation.compte.solde = (operation.compte.solde - oldMontant) + operation.montant;
-				}
+		Float oldMontant = operation.getMontantFromDatabase();
+
+		if (oldMontant != operation.montant) {
+			if (operation.type == ETypeOperation.DEBIT) {
+				operation.compte.solde = (operation.compte.solde + oldMontant) - operation.montant;
+			} else {
+				operation.compte.solde = (operation.compte.solde - oldMontant) + operation.montant;
 			}
 		}
 
