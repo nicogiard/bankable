@@ -14,25 +14,25 @@ import play.test.UnitTest;
  */
 public class TiersUnitTest extends UnitTest {
 
-    @Test
-    public void testCreeTiersValide() throws Exception {
-        Tiers nouveauTiers = new Tiers();
-        nouveauTiers.designation = "Tiers1";
-        nouveauTiers.civilite = null;
+	@Test
+	public void testCreeTiersValide() throws Exception {
+		Tiers nouveauTiers = new Tiers();
+		nouveauTiers.setDesignation("Tiers1");
+		nouveauTiers.civilite = null;
 
-        ValidationResult result = Validation.valid("tiers", nouveauTiers);
-        assertTrue(result.ok);
+		ValidationResult result = Validation.valid("tiers", nouveauTiers);
+		assertTrue(result.ok);
 
-        nouveauTiers.save();
-    }
+		nouveauTiers.save();
+	}
 
-    @Test
-    public void testCreeTiersSansDesignation() throws Exception {
-        Tiers nouveauTiers = new Tiers();
-        nouveauTiers.designation = null;
-        nouveauTiers.civilite = null;
+	@Test
+	public void testCreeTiersSansDesignation() throws Exception {
+		Tiers nouveauTiers = new Tiers();
+		nouveauTiers.setDesignation(null);
+		nouveauTiers.civilite = null;
 
-        ValidationResult result = Validation.valid("tiers", nouveauTiers);
-        assertFalse(result.ok);
-    }
+		ValidationResult result = Validation.valid("tiers", nouveauTiers);
+		assertFalse(result.ok);
+	}
 }

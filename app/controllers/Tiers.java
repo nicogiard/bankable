@@ -128,7 +128,7 @@ public class Tiers extends Controller {
 		}
 
 		tiers.save();
-		flash.success("Le tiers '%s' a été enregistrée avec succès", tiers.designation);
+		flash.success("Le tiers '%s' a été enregistrée avec succès", tiers.getDesignation());
 
 		if (params._contains("valid")) {
 			ajouter();
@@ -142,7 +142,7 @@ public class Tiers extends Controller {
 		models.Tiers tiers = models.Tiers.findById(tiersId);
 		notFoundIfNull(tiers);
 		tiers.delete();
-		flash.success("Le tiers '%s' a été supprimé avec succès", tiers.designation);
+		flash.success("Le tiers '%s' a été supprimé avec succès", tiers.getDesignation());
 		index();
 	}
 }
