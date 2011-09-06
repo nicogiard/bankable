@@ -2,6 +2,7 @@ package controllers;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Map.Entry;
 
 import models.Compte;
 import models.EEtatOperation;
@@ -139,13 +140,21 @@ public class Comptes extends Controller {
 	}
 
 	public static void enregistrer(@Required @Valid Compte compte) {
+		validation.clear();
+		compte.user = Security.connectedUser();
+		validation.valid(compte);
+
 		if (validation.hasErrors()) {
+			for (Entry<String, List<play.data.validation.Error>> entry : validation.errorsMap().entrySet()) {
+				System.out.println(entry.getKey() + " : " + entry.getValue());
+			}
+
 			if (compte.id != null && compte.id > 0) {
 				String titre = "Editer";
 				render(titre, compte);
 			} else {
 				String titre = "Ajouter";
-				render("Comptes/editer.html", titre);
+				render("Comptes/editer.html", titre, compte);
 			}
 		}
 
