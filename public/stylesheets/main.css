@@ -21,7 +21,7 @@ header .tabs a.active, header .tabs a:hover {background-color: #F7F7F7; border: 
 header .logout a {color: #0A93CC;}
 
 /*********************************************** SIDEBAR ***********************************************************/
-#sidebar {bottom: 0; background-color: #494949; border-right: 1px solid #1B1B1B; box-shadow: inset -5px 0 5px #404040; -moz-box-shadow: inset -5px 0 5px #404040; -webkit-box-shadow: inset -5px 0 5px #404040; -o-box-shadow: inset -5px 0 5px #404040; left: 0; position: fixed; text-shadow: 0px 1px 0px #000000; -moz-text-shadow: 0px 1px 0px #000000; -webkit-text-shadow: 0px 1px 0px #000000; -o-text-shadow: 0px 1px 0px #000000; top: 42px; width: 240px; z-index: 3;}
+#sidebar {bottom: 0; background-color: #494949; border-right: 1px solid #1B1B1B; box-shadow: inset -5px 0 5px #404040; -moz-box-shadow: inset -5px 0 5px #404040; -webkit-box-shadow: inset -5px 0 5px #404040; -o-box-shadow: inset -5px 0 5px #404040; left: 0; overflow: auto; position: fixed; text-shadow: 0px 1px 0px #000000; -moz-text-shadow: 0px 1px 0px #000000; -webkit-text-shadow: 0px 1px 0px #000000; -o-text-shadow: 0px 1px 0px #000000; top: 42px; width: 240px; z-index: 3;}
 #sidebar section {margin: 5px 0 5px 0; color: #FFF;}
 #sidebar ul li a {background: #494949 url(../images/arrow.png) no-repeat 96% -9px; border-bottom: 1px solid #313131; border-top: 1px solid #606060; color: #AAAAAA; display: block; font-weight: bold; font-size: 1.1em; height: 30px; line-height: 30px; text-decoration: none; text-indent: 5px; text-shadow: 0px 1px #0D0D0D; -moz-text-shadow: 0px 1px #0D0D0D; -webkit-text-shadow: 0px 1px #0D0D0D; -o-text-shadow: 0px 1px #0D0D0D;}
 #sidebar ul li a:hover, #sidebar ul li.current a {background-color: #585858; color: #FFF;}
@@ -29,8 +29,6 @@ header .logout a {color: #0A93CC;}
 #sidebar ul li.noLink {color: #AAAAAA; display: block; font-weight: bold; font-size: 1.1em; height: 40px; line-height: 40px; text-indent: 10px;}
 #sidebar ul li a span.nomCompte {}
 #sidebar ul li  span.soldeCompte {float: right; margin-right: 25px;}
-
-#sidebar.sidebarForTags {bottom: auto; float: left; position: absolute;}
 
 #sidebar ul.tagList li a, #sidebar ul.echeanceList li a {background: #494949 url(../images/arrow.png) no-repeat 96% -15px; font-size: 1em; height: 20px; line-height: 20px;}
 #sidebar ul.tagList li input {float: left;}
