@@ -18,6 +18,11 @@ $(document).ready(function() {
     <div class="title">${titre} un compte</div>
     <div class="content">
 		<section>
+			#{ifErrors}
+				<div class="notif error">
+		            <strong>Erreur :</strong> Veuillez corriger les erreurs avant de continuer. <a href="#!" class="close"></a>
+		        </div>
+			#{/ifErrors}
 			#{form @Comptes.enregistrer()}
 				#{if compte}
 				<input type="hidden" name="compte.id" value="${compte.id}"/>
@@ -46,7 +51,7 @@ $(document).ready(function() {
 	</div>
 </div>
 
-#{if compte}
+#{if compte?.id}
 <div class="bloc">
     <div class="title">Supprimer les op&eacute;rations</div>
     <div class="content">

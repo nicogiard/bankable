@@ -12,25 +12,26 @@ import javax.persistence.Table;
 import play.data.validation.Email;
 import play.data.validation.Required;
 import play.db.jpa.Model;
+import play.libs.Crypto;
 
 @Entity
 @Table(name = "USER")
 public class User extends Model {
 	@Required
-	public String login;
+	private String login;
 
 	@Required
-	public String password;
+	private String password;
 
 	@Required
-	public String firstName;
+	private String firstName;
 
 	@Required
-	public String lastName;
+	private String lastName;
 
 	@Required
 	@Email
-	public String email;
+	private String email;
 
 	@Required
 	public Boolean active;
@@ -46,7 +47,47 @@ public class User extends Model {
 	@Override
 	public String toString() {
 		StringBuilder sb = new StringBuilder("[User]");
-		sb.append(" login : ").append(login);
+		sb.append(" login : ").append(getLogin());
 		return sb.toString();
+	}
+
+	public String getLogin() {
+		return Crypto.decryptAES(login);
+	}
+
+	public void setLogin(String login) {
+		this.login = Crypto.encryptAES(login);
+	}
+
+	public String getPassword() {
+		return Crypto.decryptAES(password);
+	}
+
+	public void setPassword(String password) {
+		this.password = Crypto.encryptAES(password);
+	}
+
+	public String getFirstName() {
+		return Crypto.decryptAES(firstName);
+	}
+
+	public void setFirstName(String firstName) {
+		this.firstName = Crypto.encryptAES(firstName);
+	}
+
+	public String getLastName() {
+		return Crypto.decryptAES(lastName);
+	}
+
+	public void setLastName(String lastName) {
+		this.lastName = Crypto.encryptAES(lastName);
+	}
+
+	public String getEmail() {
+		return Crypto.decryptAES(email);
+	}
+
+	public void setEmail(String email) {
+		this.email = Crypto.encryptAES(email);
 	}
 }
