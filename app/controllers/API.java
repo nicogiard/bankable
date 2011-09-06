@@ -46,14 +46,14 @@ public class API extends Controller {
 
 	public static void comptes() {
 		List<Compte> comptes = Compte.findAll();
-		renderJSon(comptes);
+		renderJSON(comptes);
 	}
 
 	public static void compte(Long compteId) {
 		notFoundIfNull(compteId);
 		Compte compte = Compte.findById(compteId);
 		notFoundIfNull(compte);
-		renderJSon(compte);
+		renderJSON(compte);
 	}
 
 	public static void operations(Long compteId) {
@@ -61,12 +61,12 @@ public class API extends Controller {
 		Compte compte = Compte.findById(compteId);
 		notFoundIfNull(compte);
 		List<Operation> operations = Operation.find("compte.id=? ORDER BY date DESC, id DESC", compte.id).fetch();
-		renderJSon(operations);
+		renderJSON(operations);
 	}
 
 	public static void enregistrerOperation(@Required @Valid Operation operation, String tags) {
 		if (validation.hasErrors()) {
-			renderJSon(validation.errorsMap());
+			renderJSON(validation.errorsMap());
 		}
 
 		if (!request.user.equals(operation.compte.user.login)) {
@@ -85,10 +85,10 @@ public class API extends Controller {
 		operation.compte.save();
 		operation.save();
 
-		renderJSon(operation);
+		renderJSON(operation);
 	}
 
-	protected static void renderJSon(Object o) {
+	protected static void renderJSON(Object o) {
 		throw new APIRenderJSon(o);
 	}
 }
