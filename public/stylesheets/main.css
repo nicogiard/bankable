@@ -57,10 +57,21 @@ header .logout a {color: #0A93CC;}
 #sidebar .filtre .formulaire input.button { width: 220px; }
 
 
+/*********************************************** LOGIN ************************************************************/
+#content.login {margin: 90px auto 0; width: 350px;}
+#content.login .notif {margin: 12px 0px 16px;}
+#content.login div.input {background-color: #1B1B1B; background-color: rgba(0, 0, 0, 0.4); border: 1px solid #0E0D0D; border: 1px solid #303030; -moz-border-radius: 3px; -webkit-border-radius: 3px; -khtml-border-radius: 3px; border-radius: 3px 3px 3px 3px; -moz-box-shadow: inset 2px 2px 5px rgba(0, 0, 0, 0.6); -webkit-box-shadow: inset 2px 2px 5px rgba(0, 0, 0, 0.6); -o-box-shadow: inset 2px 2px 5px rgba(0, 0, 0, 0.6); box-shadow: inset 2px 2px 5px rgba(0, 0, 0, 0.6); height: 33px; line-height: 33px; margin-bottom: 13px; margin-top: 16px; position: relative;}
+#content.login div.input {background-color: #EEE; background-color: rgba(255, 255, 255, 0.5); -moz-box-shadow: inset 2px 2px 5px #CECBCB; -webkit-box-shadow: inset 2px 2px 5px #CECBCB; -o-box-shadow: inset 2px 2px 5px #CECBCB; box-shadow: inset 2px 2px 5px #CECBCB; border: 1px solid #C2C1C1;}
+#content.login div.input label {color: #A7A3A3; height: 33px; left: 10px; line-height: 33px; position: absolute; top: 0;}
+#content.login div.input input {background: transparent; border: none; color: #6A6A6A; height: 32px; left: 0; padding: 0 10px; position: absolute; top: 0; width: 329px;}
+#content.login .checkbox {background: none !important; -moz-box-shadow: none !important; -webkit-box-shadow: none !important; -o-box-shadow: none !important; box-shadow: none !important; border: none !important;}
+#content.login div.checkbox {float: left; width: 229px; margin-top: 3px;}
+#content.login div.submit {float: right; width: 97px; text-align: right;}
+
 /*********************************************** CONTENT ***********************************************************/
 #content {margin: 60px 40px 0px 260px;color: #6D6D6D;padding: 0px 0px 20px;}
 #content a {color: #0A93CC;}
-#content h1 {color: black; height: 32px; font-family: HattoriHanzoLight; font-size: 27px; font-weight: normal; letter-spacing: 1px; padding-top: 35px; text-shadow: 0px 1px 0px #EDEDED; -moz-text-shadow: 0px 1px 0px #EDEDED; -webkit-text-shadow: 0px 1px 0px #EDEDED; -o-text-shadow: 0px 1px 0px #EDEDED;}
+#content h1 {color: black; height: 32px; font-size: 27px; font-weight: normal; letter-spacing: 1px; padding-top: 35px; text-shadow: 0px 1px 0px #EDEDED; -moz-text-shadow: 0px 1px 0px #EDEDED; -webkit-text-shadow: 0px 1px 0px #EDEDED; -o-text-shadow: 0px 1px 0px #EDEDED;}
 
 #content .bloc {background-color: white; box-shadow: 0px 5px 10px #AFAEAE; -moz-box-shadow: 0px 5px 10px #AFAEAE; -webkit-box-shadow: 0px 5px 10px #AFAEAE; -o-box-shadow: 0px 5px 10px #AFAEAE; margin: 20px 0px 0px;}
 #content .bloc .title {background: url(../images/white-title.png); border: none; color: #2C2C2C; line-height: 34px; font-size: 15px; font-weight: bold; height: 35px; padding: 0 10px; position: relative; text-shadow: 0px 1px white; -moz-text-shadow: 0px 1px #FFFFFF; -webkit-text-shadow: 0px 1px #FFFFFF; -o-text-shadow: 0px 1px #FFFFFF;}

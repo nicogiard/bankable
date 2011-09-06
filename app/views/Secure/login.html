@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+    <title>Bankable | Login</title>
+    <meta charset="UTF-8">
+    <link rel="shortcut icon" type="image/png" href="@{'/public/images/favicon.png'}">
+    <link rel="shortcut icon" type="image/x-icon" href="@{'/public/images/favicon.ico'}">
+    <link rel="stylesheet" media="screen" href="@{'/public/stylesheets/reset.css'}">
+    <link rel="stylesheet" media="screen" href="@{'/public/stylesheets/main.css'}">
+    #{get 'moreStyles' /}
+    <script src="@{'/public/javascripts/jquery-1.6.3.min.js'}" type="text/javascript" charset="UTF-8"></script>
+    #{get 'moreScripts' /}
+    <script type="text/javascript" charset="UTF-8">
+    $(document).ready(function(){
+    	// Masquage des notifications
+    	$(".notif a.close").click(function(){
+    		$(this).parent().fadeTo(500,0).slideUp();
+    		return false;
+    	});
+    });
+    </script>
+</head>
+<body>
+	<div id="content" class="login">
+		<h1><img src="@{'/public/images/lock-closed.png'}" alt="">Bankable</h1>
+		<div class="notif tip" style="display: none; opacity: 0;">
+			No password needed just submit the form <a href="#" class="close"></a>
+		</div>
+		#{form @authenticate()}
+			#{if flash.error}
+				<div class="notif error">
+					&{flash.error} <a href="#" class="close"></a>
+				</div>
+			#{/if}
+			#{if flash.success}
+				<div class="notif success">
+					&{flash.success} <a href="#" class="close"></a>
+				</div>
+			#{/if}
+			<div class="input">
+				<input type="text" name="username" id="username" placeholder="&{'secure.username'}" value="${flash.username}" />
+			</div>
+			<div class="input">
+				<input type="password" name="password" id="password" placeholder="&{'secure.password'}" value="" />
+			</div>
+			<div class="checkbox">
+				<input type="checkbox" name="remember" id="remember" value="true" ${flash.remember ? 'checked="true"' : ''} />
+				<label class="inline" for="remember">&{'secure.remember'}</label>
+			</div>
+			<div class="submit">
+				<input type="submit" id="signin" value="&{'secure.signin'}" />
+			</div>
+		#{/form}
+	</div>
+</body>
+</html>

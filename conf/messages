@@ -2,6 +2,9 @@
 # For example, for French create a messages.fr file
 #
 
+secure.username = Username
+secure.password = Password
+
 validation.required = Requis
 
 
