@@ -3,7 +3,7 @@
 #-----------------------------------
 User(nicogiard):
   login: nicogiard
-  password: nico
+  password: QQ7BUVOm3/C+2FFGcwm8vQ==    #crypto for nico
   firstName: Nicolas
   lastName: Giard
   email: nicogiard@gmail.com
@@ -13,7 +13,7 @@ User(nicogiard):
   
 User(fmeurisse):
   login: fmeurisse
-  password: fme
+  password: u9nOq/1jk8WmkwkdqXmxQg==    #crypto for fme
   firstName: Fabien
   lastName: Meurisse
   email: fabien.meurisse@gmail.com
