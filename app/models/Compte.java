@@ -12,6 +12,7 @@ import javax.persistence.Table;
 
 import play.data.validation.Required;
 import play.db.jpa.Model;
+import play.libs.Crypto;
 
 @Entity
 @Table(name = "COMPTE")
@@ -22,15 +23,15 @@ public class Compte extends Model {
 	public User user;
 
 	@Required
-	public String nom;
+	private String nom;
 
 	@Required
 	@Column(columnDefinition = "Decimal(10,2)")
 	public Float solde;
 
-	public String numero;
+	private String numero;
 
-	public String etablissement;
+	private String etablissement;
 
 	@OneToMany(mappedBy = "compte", fetch = FetchType.LAZY)
 	@OrderBy("id DESC")
@@ -38,4 +39,28 @@ public class Compte extends Model {
 
 	@OneToMany(mappedBy = "compte", fetch = FetchType.LAZY)
 	public List<Echeance> echances;
+
+	public String getNom() {
+		return Crypto.decryptAES(nom);
+	}
+
+	public void setNom(String nom) {
+		this.nom = Crypto.encryptAES(nom);
+	}
+
+	public String getNumero() {
+		return Crypto.decryptAES(numero);
+	}
+
+	public void setNumero(String numero) {
+		this.numero = Crypto.encryptAES(numero);
+	}
+
+	public String getEtablissement() {
+		return Crypto.decryptAES(etablissement);
+	}
+
+	public void setEtablissement(String etablissement) {
+		this.etablissement = Crypto.encryptAES(etablissement);
+	}
 }

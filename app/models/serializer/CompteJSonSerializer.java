@@ -25,10 +25,10 @@ public class CompteJSonSerializer implements JsonSerializer<Compte> {
 
 	public JsonElement serialize(Compte compte, Type type, JsonSerializationContext jsonSerializationContext) {
 		JsonObject obj = new JsonObject();
-		obj.addProperty("nom", compte.nom);
+		obj.addProperty("nom", compte.getNom());
 		obj.addProperty("solde", compte.solde);
-		obj.addProperty("numero", compte.numero);
-		obj.addProperty("etablissement", compte.etablissement);
+		obj.addProperty("numero", compte.getNumero());
+		obj.addProperty("etablissement", compte.getEtablissement());
 		return obj;
 	}
 }

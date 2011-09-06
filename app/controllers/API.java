@@ -69,7 +69,7 @@ public class API extends Controller {
 			renderJSON(validation.errorsMap());
 		}
 
-		if (!request.user.equals(operation.compte.user.login)) {
+		if (!request.user.equals(operation.compte.user.getLogin())) {
 			forbidden("Vous n'êtes pas le propriétaire de ce compte");
 		}
 
