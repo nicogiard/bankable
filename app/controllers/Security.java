@@ -20,4 +20,8 @@ public class Security extends Secure.Security {
 		}
 		return null;
 	}
+
+	static void onAuthenticated() {
+		redirect("Application.index");
+	}
 }
