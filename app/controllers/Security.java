@@ -1,6 +1,9 @@
 package controllers;
 
 import models.User;
+
+import org.apache.commons.lang.StringUtils;
+
 import play.libs.Crypto;
 
 public class Security extends Secure.Security {
@@ -11,7 +14,10 @@ public class Security extends Secure.Security {
 	}
 
 	public static User connectedUser() {
-		User user = User.find("byLogin", Crypto.encryptAES(connected())).<User> first();
-		return user;
+		if (StringUtils.isNotBlank(connected())) {
+			User user = User.find("byLogin", Crypto.encryptAES(connected())).<User> first();
+			return user;
+		}
+		return null;
 	}
 }
