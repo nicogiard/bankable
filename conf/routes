@@ -50,6 +50,8 @@ GET     /api/compte/{compteId}                                                  
 GET     /api/compte/{compteId}/operations                                          API.operations
 POST    /api/compte/{compteId}/operation/enregistrer                               API.enregistrerOperation
 
+*      	/admin                                                                     module:crud
+
 # Ignore favicon requests
 GET     /favicon.ico                                                               404
 
