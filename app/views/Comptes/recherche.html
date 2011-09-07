@@ -1,11 +1,12 @@
 #{extends 'Comptes/template.html' /}
-#{set title: compte != null ? compte.nom + ' | Résumé' : 'Comptes' /}
+#{set title: compte != null ? compte.nom + ' | Recherche' : 'Comptes' /}
 
 #{if compte}
 
 #{set 'moreScripts'}
 <script type="text/javascript" charset="UTF-8">
-$(document).ready(function() {	
+$(document).ready(function() {
+	
 	var listAction = #{jsAction @Operations.pointer(':compteId', ':operationId') /}
 	$("a.linkRapproche").click(function(e){
 		var linkRapproche = $(this);
@@ -37,8 +38,8 @@ $(document).ready(function() {
 </script>
 #{/set}
 
-<div class="bloc">
-    <div class="title">${compte.nom}<a href="@{Comptes.editer(compte.id)}">Editer</a></div>
+<div class="bloc left">
+    <div class="title">${compte.nom}<a href="@{Comptes.index(compte.id)}">Afficher</a></div>
     <div class="content">
 		<section id="infoCompte">
 			<p><label>Solde courant: </label>#{plusMinus compte.solde /}<span>${compte.solde.formatPositive('0.00')}&nbsp;&euro;</span></p>
@@ -48,21 +49,32 @@ $(document).ready(function() {
 	</div>
 </div>
 
+<div class="bloc right">
+    <div class="title">Crit&egrave;res de recherche</div>
+    <div class="content">
+		<section id="infoCompte">
+			#{form @Comptes.recherche(compte.id), id:'formFilter', enctype:'multipart/form-data', method:'GET'}
+				<p><label>Libell&eacute;: </label><input type="text" placeholder="Description" name="libelle" value="${libelle}"/></p>
+				<p><label>Tiers: </label><input type="text" placeholder="Tiers" name="tiers" value="${tiers}"/></p>
+				<p><label>Montant: </label><input type="text" placeholder="Montant" name="montant" value="${montant}"/></p>
+				<p><label>Tag: </label><input type="text" placeholder="Tag" name="tag" value="${tag}" /></p>
+				<p><label>Date: </label><input type="text" placeholder="Date" name="date" value="${date}" /></p>
+				<div class="submit center">
+					<input type="submit" value="Rechercher"/>&nbsp;
+					<a href="@{Comptes.recherche(compte.id)}" id="linkRechercheRAZ" class="button white">RAZ</a>
+				</div>
+			#{/form}
+		</section>
+	</div>
+</div>
+<div class="cb"></div>
+
 <div class="bloc">
     <div class="title">Op&eacute;rations</div>
     <div class="content">
 		<section>
-			<div class="submit">
-				<ul class="actions">
-					<li><a href="@{Operations.ajouter(compte.id)}" class="button">Ajouter une op&eacute;ration</a></li>
-					<li><a href="@{Operations.importer(compte.id)}" class="button">Importer des op&eacute;rations</a></li>
-					<li><a href="@{Comptes.rapprocher(compte.id)}" id="linkRapprocher" class="button">Rapprocher les op&eacute;rations point&eacute;es</a></li>
-					<li><a href="@{Comptes.recherche(compte.id)}" id="linkRecherche" class="button white">Rechercher des Op&eacute;rations</a></li>
-					<li><a href="@{Operations.operationsSansTag(compte.id)}" id="linkOperationsSansTag" class="button white">Op&eacute;rations sans Tag</a></li>
-				</ul>
-			</div>
 			#{if operations}
-			#{pagination pagination, url:actionBridge.Comptes.index(compte.id) /}
+			#{pagination pagination, url:actionBridge.Comptes.recherche(compte.id) /}
 			<table>
 				<thead>
 					<tr id="head">
@@ -85,7 +97,7 @@ $(document).ready(function() {
 				</tbody>
 				<tfoot></tfoot>
 			</table>
-			#{pagination pagination, url:actionBridge.Comptes.index(compte.id) /}
+			#{pagination pagination, url:actionBridge.Comptes.recherche(compte.id) /}
 			#{/if}
 			#{else}
 				<p>Aucune opération</p>

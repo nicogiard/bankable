@@ -73,7 +73,7 @@ public class Comptes extends Controller {
 		render(compte);
 	}
 
-	public static void filtrer(Long compteId, String libelle, String tiers, Float montant, String tag, Date date) {
+	public static void recherche(Long compteId, String libelle, String tiers, Float montant, String tag, Date date) {
 		User connectedUser = Security.connectedUser();
 
 		Compte compte = null;
@@ -83,31 +83,31 @@ public class Comptes extends Controller {
 		}
 
 		if (compte != null) {
-			StringBuilder sbCountOperations = new StringBuilder("select count(operation) from Operation operation where operation.compte=?");
-			StringBuilder sbOperations = new StringBuilder("compte=?");
+			StringBuilder sbCountOperations = new StringBuilder("SELECT count(DISTINCT operation) FROM Operation operation JOIN operation.tags tags WHERE operation.compte=?");
+			StringBuilder sbOperations = new StringBuilder("SELECT DISTINCT operation FROM Operation operation JOIN operation.tags tags WHERE operation.compte=?");
 
 			if (StringUtils.isNotBlank(libelle)) {
 				sbCountOperations.append(" AND operation.libelle LIKE '%").append(libelle).append("%'");
-				sbOperations.append(" AND libelle LIKE '%").append(libelle).append("%'");
+				sbOperations.append(" AND operation.libelle LIKE '%").append(libelle).append("%'");
 			}
 			if (StringUtils.isNotBlank(tiers)) {
 				sbCountOperations.append(" AND operation.tiers.designation LIKE '%").append(tiers).append("%'");
-				sbOperations.append(" AND tiers.designation LIKE '%").append(tiers).append("%'");
+				sbOperations.append(" AND operation.tiers.designation LIKE '%").append(tiers).append("%'");
 			}
 			if (montant != null) {
 				sbCountOperations.append(" AND operation.montant=").append(montant).append("");
-				sbOperations.append(" AND montant=").append(montant).append("");
+				sbOperations.append(" AND operation.montant=").append(montant).append("");
 			}
 			if (StringUtils.isNotBlank(tag)) {
-				sbCountOperations.append(" AND operation.tag LIKE '%").append(tag).append("%'");
-				sbOperations.append(" AND tag LIKE '%").append(tag).append("%'");
+				sbCountOperations.append(" AND tags.nom LIKE '%").append(tag).append("%'");
+				sbOperations.append(" AND tags.nom LIKE '%").append(tag).append("%'");
 			}
 			if (date != null) {
 				sbCountOperations.append(" AND operation.date='").append(date).append("'");
-				sbOperations.append(" AND date='").append(date).append("'");
+				sbOperations.append(" AND operation.date='").append(date).append("'");
 			}
 
-			sbOperations.append(" ORDER BY date DESC, id DESC");
+			sbOperations.append(" ORDER BY operation.date DESC, operation.id DESC");
 
 			Logger.debug("request CountOperations with filter : %s", sbCountOperations.toString());
 			Logger.debug("request Operations with filter : %s", sbCountOperations.toString());
@@ -118,9 +118,9 @@ public class Comptes extends Controller {
 			List<Operation> operations = Operation.find(sbOperations.toString(), compte).fetch(comptesPagination.getPage(), comptesPagination.getPageSize());
 
 			Pagination pagination = comptesPagination;
-			render("Comptes/index.html", compte, operations, pagination, libelle, montant, tag, date);
+			render("Comptes/recherche.html", compte, operations, pagination, libelle, montant, tag, date);
 		}
-		render("Comptes/index.html", compte);
+		render("Comptes/recherche.html");
 	}
 
 	public static void ajouter() {

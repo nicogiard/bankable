@@ -14,6 +14,9 @@ GET     /compte/{compteId}/editer                                               
 GET     /compte/{compteId}/vider                                                   Comptes.vider
 GET     /compte/{compteId}/rapprocher                                              Comptes.rapprocher
 
+GET     /compte/{compteId}/recherche                                               Comptes.recherche
+POST    /compte/{compteId}/recherche                                               Comptes.recherche
+
 GET     /compte/{compteId}/operation/ajouter                                       Operations.ajouter
 GET     /compte/{compteId}/operation/{operationId}/editer                          Operations.editer
 GET		/compte/{compteId}/operation/importer                                      Operations.importer
