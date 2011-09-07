@@ -21,8 +21,8 @@
     	
     	// Checkbox de la liste des Tags
     	var listAction = #{jsAction @TagsController.showTagOnGraph(':tagId', ':show') /}
-    	$("#sidebar ul.tagList input").click(function(e){
-    		$.get(listAction({tagId: $(this).val(), show: ($(this).attr('checked') == 'checked' ? true : false)}), function(data) {
+    	$("#sidebar ul.tagList input").bind('click', function(e) {
+    		$.get(listAction({tagId: $(this).val(), show: $(this).prop('checked')}), function(data) {
    			  document.location.href = "@{TagsController.index()}";
    			});
     	});
