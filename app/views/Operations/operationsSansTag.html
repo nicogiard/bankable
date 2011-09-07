@@ -1,0 +1,43 @@
+#{extends 'Operations/template.html' /}
+#{set title: compte.nom + ' | Opérations sans Tag' /}
+
+<div class="bloc">
+    <div class="title">Op&eacute;rations sans Tag</div>
+    <div class="content">
+		<section>
+			#{if operations}
+			#{pagination pagination, url:actionBridge.Comptes.index(compte.id) /}
+			#{form @Comptes.filtrer(), id:'formFilter', enctype:'multipart/form-data', method:'POST'}
+			<table>
+				<thead>
+					<tr id="head">
+						<th>&nbsp;<th>Description</th><th>Tiers</th><th class="debitCredit">Montant</th><th>Tags</th><th class="date">Date</th><th>&nbsp;</th>
+					</tr>
+				</thead>
+				<tbody>
+					#{list items:operations, as:'operation'}
+					<tr>
+						<td class="check"><input type="checkbox"></td>
+						<td class="libelle">${operation.libelle}</td>
+						<td class="tiers">${operation.tiers?.civilite?.abreviation} ${operation.tiers?.designation}</td>
+						<td class="debitCredit">#{if models.ETypeOperation.DEBIT == operation.type}#{plusMinus -1 /}#{/if}#{else}#{plusMinus 1 /}#{/else}${operation.montant.format('0.00')}&nbsp;&euro;</td>
+						<td class="tags">#{if operation.tags.size() > 0}${operation.tags.join('nom', ', ')}#{/if}#{else}<span class="noTag">(aucun)</span>#{/else}</td>
+						<td class="date"><span title="${operation.date.format('dd/MM/yyyy HH:mm:ss')}">${operation.date.format('dd/MM/yyyy')}</span></td>
+						<td class="actions">&nbsp;</td>
+					</tr>
+					#{/list}
+				</tbody>
+				<tfoot></tfoot>
+			</table>
+			#{/form}
+			#{pagination pagination, url:actionBridge.Comptes.index(compte.id) /}
+			#{/if}
+			#{else}
+				<p>Aucune opération</p>
+			#{/else}
+			<div class="submit">
+	            <a href="@{Comptes.index(compte.id)}" class="button white">Retour</a>
+	        </div>
+		</section>
+	</div>
+</div>

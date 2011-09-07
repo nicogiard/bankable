@@ -69,6 +69,7 @@ $(document).ready(function() {
 					<li><a href="@{Operations.ajouter(compte.id)}" class="button">Ajouter une op&eacute;ration</a></li>
 					<li><a href="@{Operations.importer(compte.id)}" class="button">Importer des op&eacute;rations</a></li>
 					<li><a href="@{Comptes.rapprocher(compte.id)}" id="linkRapprocher" class="button">Rapprocher les op&eacute;rations point&eacute;es</a></li>
+					<li><a href="@{Operations.operationsSansTag(compte.id)}" id="linkOperationsSansTag" class="button white">Op&eacute;rations sans Tag</a></li>
 				</ul>
 			</div>
 			#{if operations}

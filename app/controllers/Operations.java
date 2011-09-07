@@ -20,9 +20,12 @@ import play.mvc.With;
 import utils.LigneBudgetUtils;
 import utils.OperationUtils;
 import utils.csv.ImportCSVCaisseEpargne;
+import controllers.utils.Pagination;
 
 @With(Secure.class)
 public class Operations extends Controller {
+
+	private static final Pagination operationsPagination = new Pagination();
 
 	public static void ajouter(Long compteId) {
 		User connectedUser = Security.connectedUser();
@@ -195,5 +198,27 @@ public class Operations extends Controller {
 		LigneBudgetUtils.refreshAll();
 
 		Comptes.index(compte.id);
+	}
+
+	public static void operationsSansTag(Long compteId) {
+		User connectedUser = Security.connectedUser();
+
+		Compte compte = null;
+		if (compteId != null) {
+			compte = Compte.find("id=? AND user=?", compteId, connectedUser).first();
+			notFoundIfNull(compte);
+		}
+
+		if (compte != null) {
+			Long countOperation = Compte.find("SELECT count(operation) FROM Operation operation WHERE operation.compte=? and operation.tags IS EMPTY", compte).first();
+			operationsPagination.setElementCount(countOperation);
+
+			List<Operation> operations = Operation.find("SELECT operation FROM Operation operation WHERE operation.compte=? AND operation.tags IS EMPTY ORDER BY operation.date DESC, operation.id DESC", compte).fetch(operationsPagination.getPage(),
+					operationsPagination.getPageSize());
+
+			Pagination pagination = operationsPagination;
+			render(compte, operations, pagination);
+		}
+		render(compte);
 	}
 }
