@@ -83,8 +83,19 @@ public class Comptes extends Controller {
 		}
 
 		if (compte != null) {
-			StringBuilder sbCountOperations = new StringBuilder("SELECT count(DISTINCT operation) FROM Operation operation JOIN operation.tags tags WHERE operation.compte=?");
-			StringBuilder sbOperations = new StringBuilder("SELECT DISTINCT operation FROM Operation operation JOIN operation.tags tags WHERE operation.compte=?");
+			StringBuilder sbCountOperations = new StringBuilder("SELECT count(DISTINCT operation) FROM Operation operation");
+			StringBuilder sbOperations = new StringBuilder("SELECT DISTINCT operation FROM Operation operation");
+
+			if (StringUtils.isNotBlank(tag)) {
+				sbCountOperations.append(" JOIN operation.tags tags WHERE operation.compte=?");
+				sbOperations.append(" JOIN operation.tags tags WHERE operation.compte=?");
+
+				sbCountOperations.append(" AND tags.nom LIKE '%").append(tag).append("%'");
+				sbOperations.append(" AND tags.nom LIKE '%").append(tag).append("%'");
+			} else {
+				sbCountOperations.append(" WHERE operation.compte=?");
+				sbOperations.append(" WHERE operation.compte=?");
+			}
 
 			if (StringUtils.isNotBlank(libelle)) {
 				sbCountOperations.append(" AND operation.libelle LIKE '%").append(libelle).append("%'");
@@ -98,10 +109,6 @@ public class Comptes extends Controller {
 				sbCountOperations.append(" AND operation.montant=").append(montant).append("");
 				sbOperations.append(" AND operation.montant=").append(montant).append("");
 			}
-			if (StringUtils.isNotBlank(tag)) {
-				sbCountOperations.append(" AND tags.nom LIKE '%").append(tag).append("%'");
-				sbOperations.append(" AND tags.nom LIKE '%").append(tag).append("%'");
-			}
 			if (date != null) {
 				sbCountOperations.append(" AND operation.date='").append(date).append("'");
 				sbOperations.append(" AND operation.date='").append(date).append("'");
@@ -110,7 +117,7 @@ public class Comptes extends Controller {
 			sbOperations.append(" ORDER BY operation.date DESC, operation.id DESC");
 
 			Logger.debug("request CountOperations with filter : %s", sbCountOperations.toString());
-			Logger.debug("request Operations with filter : %s", sbCountOperations.toString());
+			Logger.debug("request Operations with filter : %s", sbOperations.toString());
 
 			Long countOperation = Compte.find(sbCountOperations.toString(), compte).first();
 			comptesPagination.setElementCount(countOperation);
