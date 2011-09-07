@@ -63,4 +63,24 @@ public class Operation extends Model {
 			return 0F;
 		}
 	}
+
+	public static Operation copyFromImport(OperationImport operationImport) {
+		Operation operation = new Operation();
+		operation.date = operationImport.date;
+		operation.numero = operationImport.numero;
+		operation.libelle = operationImport.libelle;
+		operation.montant = operationImport.montant;
+		operation.type = operationImport.type;
+		operation.detail = operationImport.detail;
+		operation.compte = operationImport.compte;
+
+		if (operation.type == ETypeOperation.DEBIT) {
+			operation.compte.solde = operation.compte.solde - operation.montant;
+		} else {
+			operation.compte.solde = operation.compte.solde + operation.montant;
+		}
+		operation.etat = EEtatOperation.NONPOINTEE;
+
+		return operation;
+	}
 }
