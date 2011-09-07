@@ -71,7 +71,7 @@ $(document).ready(function() {
 					<li><a href="@{Comptes.rapprocher(compte.id)}" id="linkRapprocher" class="button">Rapprocher les op&eacute;rations point&eacute;es</a></li>
 				</ul>
 			</div>
-			#{if compte.operations}
+			#{if operations}
 			#{pagination pagination, url:actionBridge.Comptes.index(compte.id) /}
 			#{form @Comptes.filtrer(), id:'formFilter', enctype:'multipart/form-data', method:'POST'}
 			<table>
