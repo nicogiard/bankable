@@ -62,10 +62,10 @@ public class Comptes extends Controller {
 		}
 
 		if (compte != null) {
-			Long countOperation = Compte.find("select count(operation) from Operation operation where operation.compte.id=?", compte.id).first();
+			Long countOperation = Compte.find("select count(operation) from Operation operation where operation.compte=?", compte).first();
 			comptesPagination.setElementCount(countOperation);
 
-			List<Operation> operations = Operation.find("compte.id=? ORDER BY date DESC, id DESC", compte.id).fetch(comptesPagination.getPage(), comptesPagination.getPageSize());
+			List<Operation> operations = Operation.find("compte=? ORDER BY date DESC, id DESC", compte).fetch(comptesPagination.getPage(), comptesPagination.getPageSize());
 
 			Pagination pagination = comptesPagination;
 			render(compte, operations, pagination);
@@ -83,8 +83,8 @@ public class Comptes extends Controller {
 		}
 
 		if (compte != null) {
-			StringBuilder sbCountOperations = new StringBuilder("select count(operation) from Operation operation where operation.compte.id=?");
-			StringBuilder sbOperations = new StringBuilder("compte.id=?");
+			StringBuilder sbCountOperations = new StringBuilder("select count(operation) from Operation operation where operation.compte=?");
+			StringBuilder sbOperations = new StringBuilder("compte=?");
 
 			if (StringUtils.isNotBlank(libelle)) {
 				sbCountOperations.append(" AND operation.libelle LIKE '%").append(libelle).append("%'");
@@ -112,10 +112,10 @@ public class Comptes extends Controller {
 			Logger.debug("request CountOperations with filter : %s", sbCountOperations.toString());
 			Logger.debug("request Operations with filter : %s", sbCountOperations.toString());
 
-			Long countOperation = Compte.find(sbCountOperations.toString(), compte.id).first();
+			Long countOperation = Compte.find(sbCountOperations.toString(), compte).first();
 			comptesPagination.setElementCount(countOperation);
 
-			List<Operation> operations = Operation.find(sbOperations.toString(), compte.id).fetch(comptesPagination.getPage(), comptesPagination.getPageSize());
+			List<Operation> operations = Operation.find(sbOperations.toString(), compte).fetch(comptesPagination.getPage(), comptesPagination.getPageSize());
 
 			Pagination pagination = comptesPagination;
 			render("Comptes/index.html", compte, operations, pagination, libelle, montant, tag, date);
