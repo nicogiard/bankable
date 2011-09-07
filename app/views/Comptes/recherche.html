@@ -74,7 +74,7 @@ $(document).ready(function() {
     <div class="content">
 		<section>
 			#{if operations}
-			#{pagination pagination, url:actionBridge.Comptes.recherche(compte.id) /}
+			#{pagination pagination, url:actionBridge.Comptes.recherche(compte.id, libelle, tiers, montant, tag, date) /}
 			<table>
 				<thead>
 					<tr id="head">
@@ -97,7 +97,7 @@ $(document).ready(function() {
 				</tbody>
 				<tfoot></tfoot>
 			</table>
-			#{pagination pagination, url:actionBridge.Comptes.recherche(compte.id) /}
+			#{pagination pagination, url:actionBridge.Comptes.recherche(compte.id, libelle, tiers, montant, tag, date) /}
 			#{/if}
 			#{else}
 				<p>Aucune opération</p>
