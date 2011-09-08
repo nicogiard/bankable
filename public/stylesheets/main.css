@@ -78,6 +78,10 @@ header .logout a {color: #0A93CC;}
 #content .bloc .title a {display: block; position: absolute; right: 10px; top: 0; text-shadow: none; -moz-text-shadow: none; -webkit-text-shadow: none; -o-text-shadow: none;}
 #content .bloc .content {background-color: #F7F7F7; padding: 10px;}
 
+#content .bloc .shortcut {border: 1px solid #D0D2D4; -moz-border-radius: 3px; -webkit-border-radius: 3px; -khtml-border-radius: 3px; border-radius: 3px 3px 3px 3px; color: #6D6D6D; display: inline-block; font-weight: bold; height: 75px; margin: 5px; position: relative; padding: 10px 0; text-align: center; text-decoration: none; vertical-align: top; width: 105px;}
+#content .bloc .shortcut:hover {background-color: #DBDCDE; border: 1px solid #6F7275; color: #2D2D2D;}
+#content .bloc .shortcut img {display: block; margin: 0 auto 10px; max-width: 48px; max-height: 48px;}
+
 #content strong {color: #1A1616; font-weight: bold;}
 
 #content .notif {background: white no-repeat 5px center; -moz-border-radius: 8px; -webkit-border-radius: 8px; -khtml-border-radius: 8px; border-radius: 8px 8px 8px 8px; padding: 20px 10px 20px 40px; position: relative; -moz-text-shadow: none; -webkit-text-shadow: none; -o-text-shadow: none; text-shadow: none;}

@@ -23,7 +23,7 @@ $(document).ready(function() {
 	
 	$("a#linkRapprocher").click(function(e){
 		e.preventDefault();
-		if (confirm('Etes vous sûr de vouloir rapprocher les opérations pointée ?')) {
+		if (confirm('Etes vous sûr de vouloir rapprocher les opérations pointées ?')) {
             document.location.href = $(this).attr("href");
         }
 	});
@@ -38,14 +38,26 @@ $(document).ready(function() {
 </script>
 #{/set}
 
-<div class="bloc left">
-    <div class="title">${compte.nom}<a href="@{Comptes.editer(compte.id)}">Editer</a></div>
-    <div class="content">
-		<section id="infoCompte">
-			<p><label>Solde courant: </label>#{plusMinus compte.solde /}<span>${compte.solde.formatPositive('0.00')}&nbsp;&euro;</span></p>
-			<p><label>Num&eacute;ro: </label><span>${compte.numero}&nbsp;</span></p>
-			<p><label>Etablissement: </label><span>${compte.etablissement}&nbsp;</span></p>
-		</section>
+<div class=" left">
+	<div class="bloc">
+	    <div class="title">${compte.nom}<a href="@{Comptes.editer(compte.id)}">Editer</a></div>
+	    <div class="content">
+			<section id="infoCompte">
+				<p><label>Solde courant: </label>#{plusMinus compte.solde /}<span>${compte.solde.formatPositive('0.00')}&nbsp;&euro;</span></p>
+				<p><label>Num&eacute;ro: </label><span>${compte.numero}&nbsp;</span></p>
+				<p><label>Etablissement: </label><span>${compte.etablissement}&nbsp;</span></p>
+			</section>
+		</div>
+	</div>
+
+	<div class="bloc">
+	    <div class="title">Actions</div>
+	    <div class="content">
+			<a href="@{Operations.ajouter(compte.id)}" class="shortcut"><img src="@{'/public/images/button-add.png'}" alt="">Ajouter une op&eacute;ration</a>
+			<a href="@{Operations.importer(compte.id)}" class="shortcut"><img src="@{'/public/images/file-receive.png'}" alt="">Importer des op&eacute;rations</a>
+			<a href="@{Comptes.rapprocher(compte.id)}" id="linkRapprocher" class="shortcut"><img src="@{'/public/images/button-check.png'}" alt="">Rapprocher les op&eacute;rations point&eacute;es</a>
+			<a href="@{Operations.operationsSansTag(compte.id)}" id="linkOperationsSansTag" class="shortcut"><img src="@{'/public/images/bookmarks-2.png'}" alt="">Op&eacute;rations sans Tag</a>
+		</div>
 	</div>
 </div>
 
@@ -73,14 +85,6 @@ $(document).ready(function() {
     <div class="title">Op&eacute;rations</div>
     <div class="content">
 		<section>
-			<div class="submit">
-				<ul class="actions">
-					<li><a href="@{Operations.ajouter(compte.id)}" class="button">Ajouter une op&eacute;ration</a></li>
-					<li><a href="@{Operations.importer(compte.id)}" class="button">Importer des op&eacute;rations</a></li>
-					<li><a href="@{Comptes.rapprocher(compte.id)}" id="linkRapprocher" class="button">Rapprocher les op&eacute;rations point&eacute;es</a></li>
-					<li><a href="@{Operations.operationsSansTag(compte.id)}" id="linkOperationsSansTag" class="button white">Op&eacute;rations sans Tag</a></li>
-				</ul>
-			</div>
 			#{if operations}
 			#{pagination pagination, url:actionBridge.Comptes.index(compte.id, libelle, tiers, montant, tag, date) /}
 			<table>
