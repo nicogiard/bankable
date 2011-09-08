@@ -15,6 +15,7 @@ import models.User;
 import play.data.validation.Required;
 import play.data.validation.Valid;
 import play.db.jpa.JPA;
+import play.mvc.Before;
 import play.mvc.Controller;
 import play.mvc.With;
 import utils.LigneBudgetUtils;
@@ -26,6 +27,21 @@ import controllers.utils.Pagination;
 public class Operations extends Controller {
 
 	private static final Pagination operationsPagination = new Pagination();
+
+	@Before
+	static void defaultData() {
+		// Récupération de la pagination
+		// Dans l'ordre params puis session
+		String pageParam = params.get("page");
+		if (pageParam == null) {
+			pageParam = session.get("operationsPagination.page");
+		}
+		if (pageParam == null) {
+			pageParam = "1";
+		}
+		operationsPagination.setPage(Integer.valueOf(pageParam));
+		session.put("operationsPagination.page", pageParam);
+	}
 
 	public static void ajouter(Long compteId) {
 		User connectedUser = Security.connectedUser();

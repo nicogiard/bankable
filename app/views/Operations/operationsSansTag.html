@@ -6,7 +6,7 @@
     <div class="content">
 		<section>
 			#{if operations}
-			#{pagination pagination, url:actionBridge.Comptes.index(compte.id) /}
+			#{pagination pagination, url:actionBridge.Operations.operationsSansTag(compte.id) /}
 			<table>
 				<thead>
 					<tr id="head">
@@ -28,7 +28,7 @@
 				</tbody>
 				<tfoot></tfoot>
 			</table>
-			#{pagination pagination, url:actionBridge.Comptes.index(compte.id) /}
+			#{pagination pagination, url:actionBridge.Operations.operationsSansTag(compte.id) /}
 			#{/if}
 			#{else}
 				<p>Aucune opération</p>
