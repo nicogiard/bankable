@@ -7,7 +7,6 @@
 		<section>
 			#{if operations}
 			#{pagination pagination, url:actionBridge.Comptes.index(compte.id) /}
-			#{form @Comptes.filtrer(), id:'formFilter', enctype:'multipart/form-data', method:'POST'}
 			<table>
 				<thead>
 					<tr id="head">
@@ -29,7 +28,6 @@
 				</tbody>
 				<tfoot></tfoot>
 			</table>
-			#{/form}
 			#{pagination pagination, url:actionBridge.Comptes.index(compte.id) /}
 			#{/if}
 			#{else}
