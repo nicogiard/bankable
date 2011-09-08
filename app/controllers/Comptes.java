@@ -52,28 +52,7 @@ public class Comptes extends Controller {
 		session.put("comptesPagination.page", pageParam);
 	}
 
-	public static void index(Long compteId) {
-		User connectedUser = Security.connectedUser();
-
-		Compte compte = null;
-		if (compteId != null) {
-			compte = Compte.find("id=? AND user=?", compteId, connectedUser).first();
-			notFoundIfNull(compte);
-		}
-
-		if (compte != null) {
-			Long countOperation = Compte.find("select count(operation) from Operation operation where operation.compte=?", compte).first();
-			comptesPagination.setElementCount(countOperation);
-
-			List<Operation> operations = Operation.find("compte=? ORDER BY date DESC, id DESC", compte).fetch(comptesPagination.getPage(), comptesPagination.getPageSize());
-
-			Pagination pagination = comptesPagination;
-			render(compte, operations, pagination);
-		}
-		render(compte);
-	}
-
-	public static void recherche(Long compteId, String libelle, String tiers, Float montant, String tag, Date date) {
+	public static void index(Long compteId, String libelle, String tiers, Float montant, String tag, Date date) {
 		User connectedUser = Security.connectedUser();
 
 		Compte compte = null;
@@ -87,16 +66,12 @@ public class Comptes extends Controller {
 			StringBuilder sbOperations = new StringBuilder("SELECT DISTINCT operation FROM Operation operation");
 
 			if (StringUtils.isNotBlank(tag)) {
-				sbCountOperations.append(" JOIN operation.tags tags WHERE operation.compte=?");
-				sbOperations.append(" JOIN operation.tags tags WHERE operation.compte=?");
-
-				sbCountOperations.append(" AND tags.nom LIKE '%").append(tag).append("%'");
-				sbOperations.append(" AND tags.nom LIKE '%").append(tag).append("%'");
+				sbCountOperations.append(" JOIN operation.tags tags WHERE operation.compte=?").append(" AND tags.nom LIKE '%").append(tag).append("%'");
+				sbOperations.append(" JOIN operation.tags tags WHERE operation.compte=?").append(" AND tags.nom LIKE '%").append(tag).append("%'");
 			} else {
 				sbCountOperations.append(" WHERE operation.compte=?");
 				sbOperations.append(" WHERE operation.compte=?");
 			}
-
 			if (StringUtils.isNotBlank(libelle)) {
 				sbCountOperations.append(" AND operation.libelle LIKE '%").append(libelle).append("%'");
 				sbOperations.append(" AND operation.libelle LIKE '%").append(libelle).append("%'");
@@ -125,9 +100,9 @@ public class Comptes extends Controller {
 			List<Operation> operations = Operation.find(sbOperations.toString(), compte).fetch(comptesPagination.getPage(), comptesPagination.getPageSize());
 
 			Pagination pagination = comptesPagination;
-			render("Comptes/recherche.html", compte, operations, pagination, libelle, montant, tag, date);
+			render(compte, operations, pagination, libelle, montant, tag, date);
 		}
-		render("Comptes/recherche.html");
+		render();
 	}
 
 	public static void ajouter() {
@@ -171,7 +146,7 @@ public class Comptes extends Controller {
 		}
 
 		compte.save();
-		index(compte.id);
+		index(compte.id, null, null, null, null, null);
 	}
 
 	public static void rapprocher(Long compteId) {
@@ -185,7 +160,7 @@ public class Comptes extends Controller {
 			operation.etat = EEtatOperation.RAPPROCHEE;
 			operation.save();
 		}
-		Comptes.index(compte.id);
+		index(compte.id, null, null, null, null, null);
 	}
 
 	public static void vider(Long compteId) {
@@ -203,9 +178,9 @@ public class Comptes extends Controller {
 		}
 		compte.save();
 
-		JPA.em().createNativeQuery("DELETE FROM Operation_Tags WHERE operation_id in (SELECT id FROM Operation WHERE compte_id=?)").setParameter(1, compteId).executeUpdate();
-		JPA.em().createNativeQuery("DELETE FROM Operation WHERE compte_id=?").setParameter(1, compteId).executeUpdate();
+		JPA.em().createNativeQuery("DELETE FROM Operation_Tags WHERE operation_id in (SELECT id FROM Operation WHERE compte_id=?)").setParameter(1, compte.id).executeUpdate();
+		JPA.em().createNativeQuery("DELETE FROM Operation WHERE compte_id=?").setParameter(1, compte.id).executeUpdate();
 
-		Comptes.index(compteId);
+		index(compte.id, null, null, null, null, null);
 	}
 }

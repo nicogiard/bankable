@@ -105,7 +105,7 @@ public class Operations extends Controller {
 			ajouter(operation.compte.id);
 		}
 		if (params._contains("validQuit")) {
-			Comptes.index(operation.compte.id);
+			Comptes.index(operation.compte.id, null, null, null, null, null);
 		}
 	}
 
@@ -129,7 +129,7 @@ public class Operations extends Controller {
 
 		LigneBudgetUtils.refreshAll();
 
-		Comptes.index(compteId);
+		Comptes.index(compte.id, null, null, null, null, null);
 	}
 
 	public static void pointer(Long compteId, Long operationId) {
@@ -197,7 +197,7 @@ public class Operations extends Controller {
 
 		LigneBudgetUtils.refreshAll();
 
-		Comptes.index(compte.id);
+		Comptes.index(compte.id, null, null, null, null, null);
 	}
 
 	public static void operationsSansTag(Long compteId) {

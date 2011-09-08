@@ -9,13 +9,11 @@ GET     /resume/compte/{compteId}                                               
 
 GET     /compte/ajouter                                                            Comptes.ajouter
 GET     /compte/{compteId}                                                         Comptes.index
+POST    /compte/{compteId}                                                         Comptes.index
 GET     /compte                                                                    Comptes.index
 GET     /compte/{compteId}/editer                                                  Comptes.editer
 GET     /compte/{compteId}/vider                                                   Comptes.vider
 GET     /compte/{compteId}/rapprocher                                              Comptes.rapprocher
-
-GET     /compte/{compteId}/recherche                                               Comptes.recherche
-POST    /compte/{compteId}/recherche                                               Comptes.recherche
 
 GET     /compte/{compteId}/operation/ajouter                                       Operations.ajouter
 GET     /compte/{compteId}/operation/{operationId}/editer                          Operations.editer
