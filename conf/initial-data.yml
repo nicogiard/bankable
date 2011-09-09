@@ -73,6 +73,7 @@ Tag(tagDAB2):
 Compte(compteCourant):
   nom: Compte Courant
   solde: 0
+  soldeRapproche: -900
   devise: euro
   numero: 12
   etablissement: Caisse d'Epargne Normandie
@@ -81,6 +82,7 @@ Compte(compteCourant):
 Compte(compteCourantFabien):
   nom: CC Fabien
   solde: 0
+  soldeRapproche: 0
   devise: euro
   numero: 12
   etablissement: Caisse d'Epargne Normandie

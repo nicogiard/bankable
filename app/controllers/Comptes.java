@@ -159,7 +159,15 @@ public class Comptes extends Controller {
 		for (Operation operation : operations) {
 			operation.etat = EEtatOperation.RAPPROCHEE;
 			operation.save();
+
+			if (ETypeOperation.DEBIT == operation.type) {
+				compte.soldeRapproche = compte.soldeRapproche - operation.montant;
+			} else {
+				compte.soldeRapproche = compte.soldeRapproche + operation.montant;
+			}
+			compte.save();
 		}
+
 		index(compte.id, null, null, null, null, null);
 	}
 

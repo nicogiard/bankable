@@ -9,7 +9,7 @@
 	<section>
 		<ul>
 		#{list items:comptes, as:'unCompte'}
-			<li #{if compte}${compte.id == unCompte.id ? "class='current'" : ""}#{/if}><a href="@{Comptes.index(unCompte.id)}"><span class="nomCompte">${unCompte.nom} : </span><span class="soldeCompte">#{plusMinus unCompte.solde /}${unCompte.solde.formatPositive('0.00')}&nbsp;&euro;</span></a></li>
+			<li #{if compte}${compte.id == unCompte.id ? "class='current'" : ""}#{/if}><a href="@{Comptes.index(unCompte.id)}"><span class="nomCompte">${unCompte.nom} : </span><span class="soldeCompte" title="Solde rapproch&eacute; : ${unCompte.soldeRapproche}&nbsp;&euro;">#{plusMinus unCompte.solde /}${unCompte.solde.formatPositive('0.00')}&nbsp;&euro;</span></a></li>
 		#{/list}
 			<li class="noLink"><span class="nomCompte">Total : </span><span class="soldeCompte">#{plusMinus total /}${total.formatPositive('0.00')} &euro;</span></li>
 		</ul>

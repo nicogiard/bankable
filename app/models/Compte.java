@@ -29,6 +29,10 @@ public class Compte extends Model {
 	@Column(columnDefinition = "Decimal(10,2)")
 	public Float solde;
 
+	@Required
+	@Column(columnDefinition = "Decimal(10,2)")
+	public Float soldeRapproche;
+
 	private String numero;
 
 	private String etablissement;
