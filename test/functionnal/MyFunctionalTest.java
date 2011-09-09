@@ -5,11 +5,19 @@ import java.util.HashMap;
 import java.util.Map;
 
 import play.Logger;
+import play.mvc.Before;
 import play.mvc.Http.Request;
 import play.mvc.Http.Response;
+import play.test.Fixtures;
 import play.test.FunctionalTest;
 
 public abstract class MyFunctionalTest extends FunctionalTest {
+
+	@Before
+	public void before() {
+		Fixtures.deleteAllModels();
+		Fixtures.loadModels("initial-data.yml");
+	}
 
 	Response login(String username, String password) {
 		Map<String, String> params = new HashMap<String, String>();
