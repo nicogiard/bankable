@@ -1,6 +1,20 @@
 #{extends 'Operations/template.html' /}
 #{set title: compte.nom + ' | Opérations sans Tag' /}
 
+#{set 'moreScripts'}
+<script type="text/javascript" charset="UTF-8">
+$(document).ready(function() {	
+	
+	$("a.supprimer").click(function(e){
+		e.preventDefault();
+		if (confirm('Etes vous sûr de vouloir supprimer cette opération ?')) {
+            document.location.href = $(this).attr("href");
+        }
+	});
+}); 
+</script>
+#{/set}
+
 <div class="bloc">
     <div class="title">Op&eacute;rations sans Tag</div>
     <div class="content">
@@ -22,7 +36,7 @@
 						<td class="debitCredit">#{if models.ETypeOperation.DEBIT == operation.type}#{plusMinus -1 /}#{/if}#{else}#{plusMinus 1 /}#{/else}${operation.montant.format('0.00')}&nbsp;&euro;</td>
 						<td class="tags">#{if operation.tags.size() > 0}${operation.tags.join('nom', ', ')}#{/if}#{else}<span class="noTag">(aucun)</span>#{/else}</td>
 						<td class="date"><span title="${operation.date.format('dd/MM/yyyy HH:mm:ss')}">${operation.date.format('dd/MM/yyyy')}</span></td>
-						<td class="actions">&nbsp;</td>
+						<td class="actions"><a href="@{Operations.editer(operation.compte.id, operation.id)}" title="Editer"><img src="@{'/public/images/edit.png'}" alt="Editer" class="editer"></a><a href="@{Operations.supprimer(operation.compte.id, operation.id)}" title="Supprimer" class="supprimer"><img src="@{'/public/images/delete.png'}" alt="Supprimer"></a></td>
 					</tr>
 					#{/list}
 				</tbody>
