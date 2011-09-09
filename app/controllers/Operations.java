@@ -12,6 +12,7 @@ import models.Operation;
 import models.OperationImport;
 import models.Tag;
 import models.User;
+import play.Logger;
 import play.data.validation.Required;
 import play.data.validation.Valid;
 import play.db.jpa.JPA;
@@ -100,7 +101,8 @@ public class Operations extends Controller {
 
 		Float oldMontant = operation.getMontantFromDatabase();
 
-		if (oldMontant != operation.montant) {
+		if (!oldMontant.equals(operation.montant)) {
+			Logger.debug("Le montant de l'opération d'id [%s] a changé : %s -> %s", operation.id, operation.montant, oldMontant);
 			if (operation.type == ETypeOperation.DEBIT) {
 				operation.compte.solde = (operation.compte.solde + oldMontant) - operation.montant;
 			} else {
