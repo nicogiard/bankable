@@ -15,6 +15,7 @@ public class OperationUtils {
 				if (tag == null) {
 					tag = new Tag();
 					tag.nom = stringTag.trim();
+					tag.user = operation.compte.user;
 					tag.save();
 				}
 				operation.tags.add(tag);
