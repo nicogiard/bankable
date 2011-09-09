@@ -5,11 +5,11 @@ import org.junit.Test;
 import play.mvc.Http.Request;
 import play.mvc.Http.Response;
 
-public class ComptesTest extends MyFunctionalTest {
+public class ApplicationTest extends MyFunctionalTest {
 
 	@Test
-	public void testThatHomeComptePageWorks() {
-		String url = "/compte";
+	public void testThatIndexPageWorks() {
+		String url = "/";
 		Response response = GET(url);
 		assertStatus(302, response);
 
@@ -23,8 +23,8 @@ public class ComptesTest extends MyFunctionalTest {
 	}
 
 	@Test
-	public void testThatComptePageWorks() {
-		String url = "/compte/1";
+	public void testThatResumeComptePageNotFound() {
+		String url = "/resume/compte/99";
 		Response response = GET(url);
 		assertStatus(302, response);
 
@@ -32,29 +32,12 @@ public class ComptesTest extends MyFunctionalTest {
 
 		Request request = requestAfterLogin(url, loginResponse);
 		response = makeRequest(request);
-		assertIsOk(response);
-		assertContentType("text/html", response);
-		assertCharset("utf-8", response);
+		assertIsNotFound(response);
 	}
 
 	@Test
-	public void testThatCompteAjouterPageWorks() {
-		String url = "/compte/ajouter";
-		Response response = GET(url);
-		assertStatus(302, response);
-
-		Response loginResponse = login("nicogiard", "nico");
-
-		Request request = requestAfterLogin(url, loginResponse);
-		response = makeRequest(request);
-		assertIsOk(response);
-		assertContentType("text/html", response);
-		assertCharset("utf-8", response);
-	}
-
-	@Test
-	public void testThatEditerComptePageWorks() {
-		String url = "/compte/1/editer";
+	public void testThatResumeComptePageWorks() {
+		String url = "/resume/compte/1";
 		Response response = GET(url);
 		assertStatus(302, response);
 
