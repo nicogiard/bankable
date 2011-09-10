@@ -74,7 +74,7 @@ public class Echeances extends Controller {
 		render("Echeances/editer.html", titre, comptes, tags);
 	}
 
-	public static void editer(Long echeanceId) {
+	public static void editer(Long compteId, Long echeanceId) {
 		User connectedUser = Security.connectedUser();
 
 		List<Compte> comptes = Compte.find("user=?", connectedUser).fetch();

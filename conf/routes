@@ -5,7 +5,7 @@
 *       /                                                                          module:secure
 
 GET     /                                                                          Application.index
-GET     /resume/compte/{compteId}                                                  Application.resume
+GET     /compte/{compteId}/resume                                                  Application.resume
 
 GET     /compte/ajouter                                                            Comptes.ajouter
 GET     /compte/{compteId}                                                         Comptes.index
@@ -23,23 +23,24 @@ GET     /compte/{compteId}/operation/{operationId}/supprimer                    
 GET     /compte/{compteId}/operation/{operationId}/pointer                         Operations.pointer
 GET     /compte/{compteId}/operations/sansTag                                      Operations.operationsSansTag
 
-GET     /budgets/compte/{compteId}                                                 Budgets.index
+GET     /compte/{compteId}/budgets                                                 Budgets.index
 GET     /budgets                                                                   Budgets.index
 GET     /budgets/ligne/ajouter                                                     Budgets.ajouterLigne
 GET     /budgets/ligne/{ligneBudgetId}/editer                                      Budgets.editerLigne
 GET     /budgets/ligne/{ligneBudgetId}/supprimer                                   Budgets.supprimerLigne
 
-GET     /echeance/compte/{compteId}                                                Echeances.index
-GET     /echeance                                                                  Echeances.index
-GET     /echeance/ajouter                                                          Echeances.ajouter
-GET     /echeance/{echeanceId}/editer                                              Echeances.editer
-GET     /echeance/compte/{compteId}/date/{date}                                    Echeances.calendrier
-GET     /echeance/compte/{compteId}/liste                                          Echeances.list
+GET     /compte/{compteId}/echeances                                               Echeances.index
+GET     /echeances                                                                 Echeances.index
+GET     /compte/{compteId}/echeance/ajouter                                        Echeances.ajouter
+GET     /compte/{compteId}/echeance/{echeanceId}/editer                            Echeances.editer
+GET     /compte/{compteId}/echeance/date/{date}                                    Echeances.calendrier
+GET     /compte/{compteId}/echeance/liste                                          Echeances.list
 
-GET     /tags/compte/{compteId}                                                    TagsController.index
+GET     /compte/{compteId}/tags                                                    TagsController.index
 GET     /tags                                                                      TagsController.index
-GET     /tag/{tagId}/compte/{compteId}                                             TagsController.detail
-GET     /tag/{tagId}/graph/{show}                                                  TagsController.showTagOnGraph
+GET     /compte/{compteId}/tag/{tagId}                                             TagsController.detail
+GET     /compte/{compteId}/tag/{tagId}/graph/{show}                                TagsController.showTagOnGraph
+GET     /compte/{compteId}/tag/{tagId}/supprimer                                   TagsController.supprimer
 
 GET     /tiers                                                                     Tiers.index
 GET     /tiers/ajouter                                                             Tiers.ajouter

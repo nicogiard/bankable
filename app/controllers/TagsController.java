@@ -8,6 +8,7 @@ import java.util.TreeMap;
 
 import models.Compte;
 import models.ETypeOperation;
+import models.Echeance;
 import models.Operation;
 import models.Tag;
 import models.User;
@@ -120,6 +121,19 @@ public class TagsController extends Controller {
 
 		Pagination pagination = tagsPagination;
 		render(compte, currentTag, operations, pagination, datas, color);
+	}
+
+	public static void supprimer(Long compteId, Long tagId) {
+		User connectedUser = Security.connectedUser();
+
+		Tag currentTag = Tag.find("id=? AND user=?", tagId, connectedUser).first();
+		notFoundIfNull(currentTag);
+
+		JPA.em().createNativeQuery("DELETE FROM OPERATION_TAGS WHERE tag_id=?").setParameter(1, currentTag.id).executeUpdate();
+		Echeance.delete("tag=?", currentTag);
+		currentTag.delete();
+
+		index(compteId);
 	}
 
 	public static void showTagOnGraph(Long tagId, boolean show) {

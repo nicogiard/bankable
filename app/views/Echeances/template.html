@@ -40,7 +40,7 @@ $(document).ready(function() {
 			#{if echeances}
 			<ul class="echeanceList">
 			#{list items:echeances, as:'uneEcheance'}
-				<li #{if echeance}${echeance.id == uneEcheance.id ? "class='current'" : ""}#{/if}><a href="@{Echeances.editer(uneEcheance.id)}">#{if models.ETypeEcheance.DEBIT == uneEcheance.type}#{plusMinus -1 /}#{/if}#{else}#{plusMinus 1 /}#{/else}${uneEcheance.description}</a></li>
+				<li #{if echeance}${echeance.id == uneEcheance.id ? "class='current'" : ""}#{/if}><a href="@{Echeances.editer(compte.id, uneEcheance.id)}">#{if models.ETypeEcheance.DEBIT == uneEcheance.type}#{plusMinus -1 /}#{/if}#{else}#{plusMinus 1 /}#{/else}${uneEcheance.description}</a></li>
 			#{/list}
 			</ul>
 			#{/if}

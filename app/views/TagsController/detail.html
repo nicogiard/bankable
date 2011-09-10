@@ -2,10 +2,12 @@
 #{set title:'Tags' /}
 
 #{if currentTag}
-#{set 'moreStyles'}
+#{set 'moreScripts'}
 <script type="text/javascript" src="http://www.google.com/jsapi"></script>
 <script type="text/javascript">google.load('visualization', '1', {packages: ['corechart']});</script>
 <script type="text/javascript">
+$(document).ready(function() {
+	
 	function drawTagResume() {
 	  var data = new google.visualization.DataTable();
 	  data.addColumn('string', 'Tag');
@@ -21,11 +23,19 @@
 	  chart.draw(data, {backgroundColor: '#F7F7F7' ${color}});
 	}
 	google.setOnLoadCallback(drawTagResume);
+	
+	$("a#linkSupprimerTag").click(function(e){
+		e.preventDefault();
+		if (confirm('Etes vous sûr de vouloir supprimer ce tag ? Ceci supprimera aussi les échances associées à ce tag.')) {
+            document.location.href = $(this).attr("href");
+        }
+	});
+}); 
 </script>
 #{/set}
 
 <div class="bloc">
-    <div class="title">R&eacute;sum&eacute; du tag "${currentTag.nom}"</div>
+    <div class="title">R&eacute;sum&eacute; du tag "${currentTag.nom}" <a href="@{TagsController.supprimer(compte.id, currentTag.id)}" id="linkSupprimerTag">Supprimer</a></div>
     <div class="content">
     	<div id="chartTagResume" style="height: 350px;"></div>
     </div>
