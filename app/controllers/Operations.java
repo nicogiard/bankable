@@ -1,6 +1,7 @@
 package controllers;
 
 import java.io.File;
+import java.util.Date;
 import java.util.List;
 
 import javax.activation.MimetypesFileTypeMap;
@@ -57,7 +58,7 @@ public class Operations extends Controller {
 		render("Operations/editer.html", titre, compte, allTags, allTiers);
 	}
 
-	public static void editer(Long compteId, Long operationId) {
+	public static void editer(Long compteId, Long operationId, String libelle, String tiers, Float montant, String tag, Date date) {
 		User connectedUser = Security.connectedUser();
 
 		Compte compte = Compte.find("id=? AND user=?", compteId, connectedUser).first();
@@ -70,10 +71,10 @@ public class Operations extends Controller {
 		List<models.Tiers> allTiers = models.Tiers.find("ORDER BY designation ASC").fetch();
 
 		String titre = "Editer";
-		render(titre, compte, operation, allTags, allTiers);
+		render(titre, compte, operation, allTags, allTiers, libelle, tiers, montant, tag, date);
 	}
 
-	public static void enregistrer(@Required @Valid Operation operation, String tags) {
+	public static void enregistrer(@Required @Valid Operation operation, String tags, String libelle, String tiers, Float montant, String tag, Date date) {
 		User connectedUser = Security.connectedUser();
 		if (validation.hasErrors()) {
 			if (operation.id != null && operation.id > 0) {
@@ -123,11 +124,11 @@ public class Operations extends Controller {
 			ajouter(operation.compte.id);
 		}
 		if (params._contains("validQuit")) {
-			Comptes.index(operation.compte.id, null, null, null, null, null);
+			Comptes.index(operation.compte.id, libelle, tiers, montant, tag, date);
 		}
 	}
 
-	public static void supprimer(Long compteId, Long operationId) {
+	public static void supprimer(Long compteId, Long operationId, String libelle, String tiers, Float montant, String tag, Date date) {
 		User connectedUser = Security.connectedUser();
 
 		Compte compte = Compte.find("id=? AND user=?", compteId, connectedUser).first();
@@ -147,7 +148,7 @@ public class Operations extends Controller {
 
 		LigneBudgetUtils.refreshAll();
 
-		Comptes.index(compte.id, null, null, null, null, null);
+		Comptes.index(compte.id, libelle, tiers, montant, tag, date);
 	}
 
 	public static void pointer(Long compteId, Long operationId) {

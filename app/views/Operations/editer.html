@@ -52,6 +52,11 @@ $(document).ready(function() {
 		        </div>
 			#{/ifErrors}
 			#{form @Operations.enregistrer()}
+				<input type="hidden" name="libelle" value="${libelle}"/>
+				<input type="hidden" name="tiers" value="${tiers}"/>
+				<input type="hidden" name="montant" value="${montant}"/>
+				<input type="hidden" name="tag" value="${tag}"/>
+				<input type="hidden" name="date" value="${date}"/>
 				#{if operation}
 				<input type="hidden" name="operation.id" value="${operation.id}"/>
 				#{/if}
@@ -112,7 +117,7 @@ $(document).ready(function() {
 				
 				<div class="submit">
 		            <input type="submit" name="valid"  value="Valider" />&nbsp;
-					<input type="submit" name="validQuit" value="Valider & Fermer" class="white" />&nbsp;<a href="@{Comptes.index(compte.id)}" class="button white">Annuler</a>
+					<input type="submit" name="validQuit" value="Valider & Fermer" class="white" />&nbsp;<a href="@{Comptes.index(compte.id, libelle, tiers, montant, tag, date)}" class="button white">Annuler</a>
 		        </div>
 			#{/form}
 		</section>
