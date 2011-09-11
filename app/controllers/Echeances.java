@@ -93,7 +93,7 @@ public class Echeances extends Controller {
 				String titre = "Editer";
 				List<Compte> comptes = Compte.findAll();
 				List<Tag> tags = Tag.findAll();
-				render(titre, echeance, comptes, tags);
+				render("Echeances/editer.html", titre, echeance, comptes, tags);
 			} else {
 				String titre = "Ajouter";
 				List<Compte> comptes = Compte.findAll();
