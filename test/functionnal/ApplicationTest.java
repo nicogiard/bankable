@@ -24,7 +24,7 @@ public class ApplicationTest extends MyFunctionalTest {
 
 	@Test
 	public void testThatResumeComptePageNotFound() {
-		String url = "/resume/compte/99";
+		String url = "/compte/99/resume";
 		Response response = GET(url);
 		assertStatus(302, response);
 
@@ -37,7 +37,7 @@ public class ApplicationTest extends MyFunctionalTest {
 
 	@Test
 	public void testThatResumeComptePageWorks() {
-		String url = "/resume/compte/1";
+		String url = "/compte/1/resume";
 		Response response = GET(url);
 		assertStatus(302, response);
 

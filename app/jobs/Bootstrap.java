@@ -16,6 +16,7 @@ public class Bootstrap extends Job {
 			Router.load("/bankable");
 		}
 		if (Compte.count() == 0) {
+			Fixtures.deleteAllModels();
 			Fixtures.loadModels("initial-data.yml");
 		}
 	}

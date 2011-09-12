@@ -9,7 +9,7 @@ public class EcheancesTest extends MyFunctionalTest {
 
 	@Test
 	public void testThatEcheancePageWorks() {
-		String url = "/echeance";
+		String url = "/echeances";
 		Response response = GET(url);
 		assertStatus(302, response);
 
@@ -22,7 +22,7 @@ public class EcheancesTest extends MyFunctionalTest {
 
 	@Test
 	public void testThatCompteEcheancePageNotFound() {
-		String url = "/echeance/compte/99";
+		String url = "/compte/99/echeances";
 		Response response = GET(url);
 		assertStatus(302, response);
 
@@ -35,7 +35,7 @@ public class EcheancesTest extends MyFunctionalTest {
 
 	@Test
 	public void testThatCompteEcheancePageWorks() {
-		String url = "/echeance/compte/1";
+		String url = "/compte/1/echeances";
 		Response response = GET(url);
 		assertStatus(302, response);
 
@@ -50,7 +50,7 @@ public class EcheancesTest extends MyFunctionalTest {
 
 	@Test
 	public void testThatAjouterEcheancePageWorks() {
-		String url = "/echeance/ajouter";
+		String url = "/compte/1/echeance/ajouter";
 		Response response = GET(url);
 		assertStatus(302, response);
 
@@ -65,7 +65,7 @@ public class EcheancesTest extends MyFunctionalTest {
 
 	@Test
 	public void testThatEditerEcheancePageNotFound() {
-		String url = "/echeance/99/editer";
+		String url = "/compte/1/echeance/99/editer";
 		Response response = GET(url);
 		assertStatus(302, response);
 
@@ -78,7 +78,7 @@ public class EcheancesTest extends MyFunctionalTest {
 
 	@Test
 	public void testThatEditerEcheancePageWorks() {
-		String url = "/echeance/1/editer";
+		String url = "/compte/1/echeance/1/editer";
 		Response response = GET(url);
 		assertStatus(302, response);
 
@@ -93,7 +93,7 @@ public class EcheancesTest extends MyFunctionalTest {
 
 	@Test
 	public void testThatCalendrierEcheancePageWorks() {
-		String url = "/echeance/compte/1/date/2011-08-17";
+		String url = "/compte/1/echeance/date/2011-08-17";
 		Response response = GET(url);
 		assertStatus(302, response);
 

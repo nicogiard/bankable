@@ -22,7 +22,7 @@ public class TagsTest extends MyFunctionalTest {
 
 	@Test
 	public void testThatCompteTagsPageNotFound() {
-		String url = "/tags/compte/99";
+		String url = "/compte/99/tags";
 		Response response = GET(url);
 		assertStatus(302, response);
 
@@ -35,7 +35,7 @@ public class TagsTest extends MyFunctionalTest {
 
 	@Test
 	public void testThatTagPageNotFound() {
-		String url = "/tag/99/compte/1";
+		String url = "/compte/1/tag/99";
 		Response response = GET(url);
 		assertStatus(302, response);
 
@@ -48,7 +48,7 @@ public class TagsTest extends MyFunctionalTest {
 
 	@Test
 	public void testThatTagPageNotFound2() {
-		String url = "/tag/1/compte/99";
+		String url = "/compte/99/tag/1";
 		Response response = GET(url);
 		assertStatus(302, response);
 
@@ -61,7 +61,7 @@ public class TagsTest extends MyFunctionalTest {
 
 	@Test
 	public void testThatTagPageWorks() {
-		String url = "/tag/1/compte/1";
+		String url = "/compte/1/tag/1";
 		Response response = GET(url);
 		assertStatus(302, response);
 
@@ -76,7 +76,7 @@ public class TagsTest extends MyFunctionalTest {
 
 	@Test
 	public void testThatTagShowInGraphPageWorks() {
-		String url = "/tag/1/graph/true";
+		String url = "/compte/1/tag/1/graph/true";
 		Response response = GET(url);
 		assertStatus(302, response);
 

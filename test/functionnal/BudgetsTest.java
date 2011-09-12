@@ -22,7 +22,7 @@ public class BudgetsTest extends MyFunctionalTest {
 
 	@Test
 	public void testThatCompteBudgetPageNotFound() {
-		String url = "/budgets/compte/99";
+		String url = "/compte/99/budgets";
 		Response response = GET(url);
 		assertStatus(302, response);
 
@@ -35,7 +35,7 @@ public class BudgetsTest extends MyFunctionalTest {
 
 	@Test
 	public void testThatCompteBudgetPageWorks() {
-		String url = "/budgets/compte/1";
+		String url = "/compte/1/budgets";
 		Response response = GET(url);
 		assertStatus(302, response);
 
